@@ -474,3 +474,74 @@ for (var district in votes) {
 		}
 	}
 }
+
+// Number of mandates in each district // TODO: calculate it based on inhabitants/area in https://www.regjeringen.no/no/dokumentarkiv/regjeringen-solberg/aktuelt-regjeringen-solberg/kmd/pressemeldinger/2020/fordeling-av-mandatene-ved-neste-stortingsvalg/id2699589/
+var districtMandates = {
+	"Østfold": 9,
+	"Akershus": 19,
+	"Oslo": 20,
+	"Hedmark": 7,
+	"Oppland": 6,
+	"Buskerud": 8,
+	"Vestfold": 7,
+	"Telemark": 6,
+	"Aust-Agder": 4,
+	"Vest-Agder": 6,
+	"Rogaland": 14,
+	"Hordaland": 16,
+	"Sogn og Fjordane": 4,
+	"Møre og Romsdal": 8,
+	"Sør-Trøndelag": 10,
+	"Nord-Trøndelag": 5,
+	"Nordland": 9,
+	"Troms Romsa": 6,
+	"Finnmark Finnmárku": 5,
+};
+
+function calculateMandates(votes, totalMandates) {
+	var mandates = {};
+	for (var party in votes) {
+		mandates[party] = 0;
+	}
+
+	while (totalMandates > 0) {
+		var bestScore = 0.0;
+		var bestParty = null;
+		for (var party in votes) {
+			var score = votes[party] / (2*mandates[party] + 1); // Sainte-Laguë method // TODO: modified first divisor // TODO: other methods
+			if (score > bestScore) {
+				bestScore = score;
+				bestParty = party;
+			}
+		}
+		mandates[bestParty] += 1;
+		totalMandates -= 1;
+	}
+
+	return mandates;
+};
+
+// Display votes for each party in each district in a table
+var mandateTable = document.getElementById("mandates");
+var head = mandateTable.tHead.insertRow();
+var cell = document.createElement("th");
+cell.innerHTML = "Valgdistrikt";
+head.appendChild(cell);
+for (var party of parties) {
+	var cell = document.createElement("th");
+	cell.innerHTML = party; // Use party name or fallback to party code
+	head.appendChild(cell);
+}
+for (var district in votes) {
+	var row = mandateTable.insertRow();
+	var cell = document.createElement("th");
+	cell.innerHTML = district;
+	row.appendChild(cell);
+	var mandates = calculateMandates(votes[district], districtMandates[district]);
+	for (var party of parties) {
+		var cell = row.insertCell();
+		if (party in mandates) {
+			cell.innerHTML = mandates[party];
+		}
+	}
+}
