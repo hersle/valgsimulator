@@ -442,26 +442,27 @@ var votes = {
 };
 
 // Number of mandates in each district // TODO: calculate it based on inhabitants/area in https://www.regjeringen.no/no/dokumentarkiv/regjeringen-solberg/aktuelt-regjeringen-solberg/kmd/pressemeldinger/2020/fordeling-av-mandatene-ved-neste-stortingsvalg/id2699589/
+// Subtracted 1 from the numbers in the official table, because it includes leveling mandates
 var districtMandates = {
-	"Østfold": 9,
-	"Akershus": 19,
-	"Oslo": 20,
-	"Hedmark": 7,
-	"Oppland": 6,
-	"Buskerud": 8,
-	"Vestfold": 7,
-	"Telemark": 6,
-	"Aust-Agder": 4,
-	"Vest-Agder": 6,
-	"Rogaland": 14,
-	"Hordaland": 16,
-	"Sogn og Fjordane": 4,
-	"Møre og Romsdal": 8,
-	"Sør-Trøndelag": 10,
-	"Nord-Trøndelag": 5,
-	"Nordland": 9,
-	"Troms Romsa": 6,
-	"Finnmark Finnmárku": 5,
+	"Østfold": 8,
+	"Akershus": 18,
+	"Oslo": 19,
+	"Hedmark": 6,
+	"Oppland": 5,
+	"Buskerud": 7,
+	"Vestfold": 6,
+	"Telemark": 5,
+	"Aust-Agder": 3,
+	"Vest-Agder": 5,
+	"Rogaland": 13,
+	"Hordaland": 15,
+	"Sogn og Fjordane": 3,
+	"Møre og Romsdal": 7,
+	"Sør-Trøndelag": 9,
+	"Nord-Trøndelag": 4,
+	"Nordland": 8,
+	"Troms Romsa": 5,
+	"Finnmark Finnmárku": 4,
 };
 
 // Build list of unique parties
