@@ -1,0 +1,22 @@
+body {
+	font-family: sans;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+th, td {
+	border: 1px solid lightgray;
+	padding: 0.25em;
+	text-align: right;
+	white-space: nowrap;
+}
+
+th:first-child {
+	text-align: left;
+}
+
+th {
+	background: whitesmoke;
+}
