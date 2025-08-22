@@ -399,7 +399,7 @@ var votes = {
 		"PS": 211,
 	},
 
-	"Troms Romsa": {
+	"Troms": {
 		"A": 25168,
 		"SV": 10029,
 		"RØDT": 4455,
@@ -420,7 +420,7 @@ var votes = {
 		"PS": 175,
 	},
 
-	"Finnmark Finnmárku": {
+	"Finnmark": {
 		"A": 12228,
 		"SV": 2415,
 		"RØDT": 1959,
