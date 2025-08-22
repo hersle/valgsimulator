@@ -513,7 +513,9 @@ function calculateMandates(votes, totalMandates) {
 		var bestScore = 0.0;
 		var bestParty = null;
 		for (var party in votes) {
-			var score = votes[party] / (2*mandates[party] + 1); // Sainte-Laguë method // TODO: modified first divisor // TODO: other methods
+			var s = mandates[party];
+			var divisor = s == 0 ? 1.4 : 2*s + 1; // modified first Sainte-Laguë divisor
+			var score = votes[party] / divisor; // Sainte-Laguë method // TODO: other methods
 			if (score > bestScore) {
 				bestScore = score;
 				bestParty = party;
