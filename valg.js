@@ -477,6 +477,7 @@ for (var district in votes) {
 }
 
 function fillTable(table, data, parties, partyTotal) {
+	const format = (x) => x.toLocaleString("no-NO");
 	var head = table.tHead.insertRow();
 	var cell = document.createElement("th");
 	cell.innerHTML = "Valgdistrikt";
@@ -494,7 +495,7 @@ function fillTable(table, data, parties, partyTotal) {
 		for (var party of parties) {
 			var cell = row.insertCell();
 			if (party in data[district]) {
-				cell.innerHTML = data[district][party];
+				cell.innerHTML = format(data[district][party]);
 			}
 		}
 	}
@@ -511,7 +512,7 @@ function fillTable(table, data, parties, partyTotal) {
 					total += data[district][party];
 				}
 			}
-			cell.innerHTML = total;
+			cell.innerHTML = format(total);
 			row.appendChild(cell);
 		}
 	}
