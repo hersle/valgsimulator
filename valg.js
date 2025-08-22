@@ -441,40 +441,6 @@ var votes = {
 	},
 };
 
-// Build list of unique parties
-var parties = [];
-for (var district in votes) {
-	for (var party in votes[district]) {
-		if (!parties.includes(party)) {
-			parties.push(party);
-		}
-	}
-}
-
-// Display votes for each party in each district in a table
-var voteTable = document.getElementById("votes");
-var head = voteTable.tHead.insertRow();
-var cell = document.createElement("th");
-cell.innerHTML = "Valgdistrikt";
-head.appendChild(cell);
-for (var party of parties) {
-	var cell = document.createElement("th");
-	cell.innerHTML = party; // Use party name or fallback to party code
-	head.appendChild(cell);
-}
-for (var district in votes) {
-	var row = voteTable.insertRow();
-	var cell = document.createElement("th");
-	cell.innerHTML = district;
-	row.appendChild(cell);
-	for (var party of parties) {
-		var cell = row.insertCell();
-		if (party in votes[district]) {
-			cell.innerHTML = votes[district][party];
-		}
-	}
-}
-
 // Number of mandates in each district // TODO: calculate it based on inhabitants/area in https://www.regjeringen.no/no/dokumentarkiv/regjeringen-solberg/aktuelt-regjeringen-solberg/kmd/pressemeldinger/2020/fordeling-av-mandatene-ved-neste-stortingsvalg/id2699589/
 var districtMandates = {
 	"Østfold": 9,
@@ -497,6 +463,44 @@ var districtMandates = {
 	"Troms Romsa": 6,
 	"Finnmark Finnmárku": 5,
 };
+
+// Build list of unique parties
+var parties = [];
+for (var district in votes) {
+	for (var party in votes[district]) {
+		if (!parties.includes(party)) {
+			parties.push(party);
+		}
+	}
+}
+
+function fillTable(table, data, parties) {
+	var head = table.tHead.insertRow();
+	var cell = document.createElement("th");
+	cell.innerHTML = "Valgdistrikt";
+	head.appendChild(cell);
+	for (var party of parties) {
+		var cell = document.createElement("th");
+		cell.innerHTML = party; // Use party name or fallback to party code
+		head.appendChild(cell);
+	}
+	for (var district in data) {
+		var row = table.insertRow();
+		var cell = document.createElement("th");
+		cell.innerHTML = district;
+		row.appendChild(cell);
+		for (var party of parties) {
+			var cell = row.insertCell();
+			if (party in data[district]) {
+				cell.innerHTML = data[district][party];
+			}
+		}
+	}
+}
+
+// Display votes for each party in each district in a table
+var voteTable = document.getElementById("votes");
+fillTable(voteTable, votes, parties);
 
 function calculateMandates(votes, totalMandates) {
 	var mandates = {};
@@ -521,27 +525,11 @@ function calculateMandates(votes, totalMandates) {
 	return mandates;
 };
 
+var mandates = {};
+for (var district in votes) {
+	mandates[district] = calculateMandates(votes[district], districtMandates[district]);
+}
+
 // Display votes for each party in each district in a table
 var mandateTable = document.getElementById("mandates");
-var head = mandateTable.tHead.insertRow();
-var cell = document.createElement("th");
-cell.innerHTML = "Valgdistrikt";
-head.appendChild(cell);
-for (var party of parties) {
-	var cell = document.createElement("th");
-	cell.innerHTML = party; // Use party name or fallback to party code
-	head.appendChild(cell);
-}
-for (var district in votes) {
-	var row = mandateTable.insertRow();
-	var cell = document.createElement("th");
-	cell.innerHTML = district;
-	row.appendChild(cell);
-	var mandates = calculateMandates(votes[district], districtMandates[district]);
-	for (var party of parties) {
-		var cell = row.insertCell();
-		if (party in mandates) {
-			cell.innerHTML = mandates[party];
-		}
-	}
-}
+fillTable(mandateTable, mandates, parties);
