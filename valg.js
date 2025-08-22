@@ -475,7 +475,7 @@ for (var district in votes) {
 	}
 }
 
-function fillTable(table, data, parties) {
+function fillTable(table, data, parties, partyTotal) {
 	var head = table.tHead.insertRow();
 	var cell = document.createElement("th");
 	cell.innerHTML = "Valgdistrikt";
@@ -497,11 +497,28 @@ function fillTable(table, data, parties) {
 			}
 		}
 	}
+	if (partyTotal) {
+		var row = table.insertRow();
+		var cell = document.createElement("th");
+		cell.innerHTML = "Totalt";
+		row.appendChild(cell);
+		for (var party of parties) {
+			var cell = document.createElement("th");
+			var total = 0;
+			for (var district in data) {
+				if (party in data[district]) {
+					total += data[district][party];
+				}
+			}
+			cell.innerHTML = total;
+			row.appendChild(cell);
+		}
+	}
 }
 
 // Display votes for each party in each district in a table
 var voteTable = document.getElementById("votes");
-fillTable(voteTable, votes, parties);
+fillTable(voteTable, votes, parties, true);
 
 function calculateMandates(votes, totalMandates) {
 	var mandates = {};
@@ -535,4 +552,4 @@ for (var district in votes) {
 
 // Display votes for each party in each district in a table
 var mandateTable = document.getElementById("mandates");
-fillTable(mandateTable, mandates, parties);
+fillTable(mandateTable, mandates, parties, true);
