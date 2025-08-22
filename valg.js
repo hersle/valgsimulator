@@ -464,6 +464,7 @@ var districtMandates = {
 	"Troms Romsa": 5,
 	"Finnmark Finnmárku": 4,
 };
+var totalLevelingMandates = 19;
 
 // Build list of unique parties
 var parties = [];
@@ -545,10 +546,100 @@ function calculateMandates(votes, totalMandates) {
 	return mandates;
 };
 
-var mandates = {};
-for (var district in votes) {
-	mandates[district] = calculateMandates(votes[district], districtMandates[district]);
-}
+function calculateDistrictMandates(votes, districtMandates) {
+	var mandates = {};
+	for (var district in votes) {
+		mandates[district] = calculateMandates(votes[district], districtMandates[district]);
+	}
+	return mandates;
+};
+
+function calculateLevelingMandates(localVotes, localMandates) {
+	// Accumulate votes from each district
+	var totalVotes = 0;
+	var globalVotes = {};
+	for (var party of parties) {
+		globalVotes[party] = 0;
+		for (var district in localVotes) {
+			if (party in localVotes[district]) {
+				globalVotes[party] += localVotes[district][party];
+			}
+		}
+		totalVotes += globalVotes[party];
+	}
+
+	// Decide which parties are eligible for leveling mandates. They must meet all of these conditions:
+	// * run for election in all districts
+	// * have at least 4% of the national votes (electoral threshold)
+	var eligible = {};
+	for (var party in globalVotes) {
+		eligible[party] = true; // eligible for leveling mandates?
+		for (var district in localVotes) {
+			if (!(party in localVotes[district])) {
+				eligible[party] = false; // party is not registered all districts
+			}
+		}
+		if (globalVotes[party] * 100 < 4 * totalVotes) {
+			eligible[party] = false; // party is below electoral threshold
+		}
+	}
+
+	// Nationwide results when leveling mandates are excluded
+	var mandatesWithoutLeveling = {};
+	for (var party in globalVotes) {
+		mandatesWithoutLeveling[party] = 0;
+		for (var district in localMandates) {
+			if (party in localMandates[district]) {
+				mandatesWithoutLeveling[party] += localMandates[district][party];
+			}
+		}
+	}
+
+	//console.log("Results without leveling mandates: ", mandatesWithoutLeveling);
+
+	do { // may have to repeat
+		// Allocate all seats including leveling mandates, but exclude ineligible parties
+		var totalMandatesToAllocate = totalLevelingMandates;
+		for (var party of parties) {
+			if (eligible[party]) {
+				totalMandatesToAllocate += mandatesWithoutLeveling[party]; // do not allocate their mandates
+			} else {
+				delete globalVotes[party]; // do not consider their votes
+			}
+		}
+
+		// Nationwide results when leveling mandates are included
+		var mandatesWithLeveling = calculateMandates(globalVotes, totalMandatesToAllocate);
+
+		//console.log("Allocating " + totalMandatesToAllocate + " mandates from votes", globalVotes);
+		//console.log("Allocated", mandatesWithLeveling);
+
+		// Check that no parties got fewer mandates with leveling mandates included; otherwise exclude them and repeat
+		success = true;
+		for (var party in mandatesWithLeveling) {
+			if (mandatesWithLeveling[party] < mandatesWithoutLeveling[party]) { // TODO: optionally disable
+				//console.log(party, "got fewer seats with leveling mandates included; repeating allocation with their seats reserved and without their nationwide votes");
+				eligible[party] = false;
+				success = false;
+			}
+		}
+	} while (!success);
+
+	// Set number of leveling mandates from difference between nationwide allocations with and without leveling mandates
+	var levelingMandates = {};
+	for (var party in mandatesWithLeveling) {
+		levelingMandates[party] = mandatesWithLeveling[party] - mandatesWithoutLeveling[party];
+	}
+	return levelingMandates;
+};
+
+function calculateAllMandates(votes, districtMandates) {
+	var mandates = calculateDistrictMandates(votes, districtMandates);
+	mandates["Utjevningsmandater"] = calculateLevelingMandates(votes, mandates);
+	return mandates;
+};
+
+var mandates = calculateAllMandates(votes, districtMandates);
 
 // Display votes for each party in each district in a table
 var mandateTable = document.getElementById("mandates");
