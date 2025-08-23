@@ -159,10 +159,10 @@ function calculateSeats(votes, seatCount, firstDivisor) {
 	return seats;
 };
 
-function calculateSeatCounts(districts, seatCount, minSeatsPerDistrict) {
+function calculateSeatCounts(districts, seatCount, areaFactor, minSeatsPerDistrict) {
 	var scores = {};
 	for (var district in districts) {
-		scores[district] = districts[district].population + 1.8*districts[district].area
+		scores[district] = districts[district].population + areaFactor*districts[district].area
 	}
 
 	var success = false;
@@ -190,12 +190,12 @@ function calculateSeatCounts(districts, seatCount, minSeatsPerDistrict) {
 	return finalSeatCounts;
 };
 
-function calculateAllSeatCounts(districts, localSeatCount, globalSeatsPerDistrict, minSeatsPerDistrict) {
+function calculateAllSeatCounts(districts, localSeatCount, globalSeatsPerDistrict, areaFactor, minSeatsPerDistrict) {
 	var districtCount = Object.keys(districts).length;
 	var globalSeatCount = globalSeatsPerDistrict * districtCount;
 	var totalSeatCount = localSeatCount + globalSeatCount;
 
-	var localSeatCounts = calculateSeatCounts(districts, totalSeatCount, minSeatsPerDistrict);
+	var localSeatCounts = calculateSeatCounts(districts, totalSeatCount, areaFactor, minSeatsPerDistrict);
 	for (var district in localSeatCounts) {
 		localSeatCounts[district] -= globalSeatsPerDistrict;
 	}
@@ -284,8 +284,9 @@ function update() {
 	var localSeatCount = parseInt(document.getElementById("localseats").value);
 	var globalSeatsPerDistrict = parseInt(document.getElementById("globalseatsperdistrict").value);
 	var negativeGlobalSeats = document.getElementById("negativeglobalseats").checked;
+	var areaFactor = parseFloat(document.getElementById("areafactor").value);
 
-	var [localSeatCounts, globalSeatCount] = calculateAllSeatCounts(districts, localSeatCount, globalSeatsPerDistrict, 0);
+	var [localSeatCounts, globalSeatCount] = calculateAllSeatCounts(districts, localSeatCount, globalSeatsPerDistrict, areaFactor, 0);
 	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, threshold, firstDivisor, negativeGlobalSeats);
 
 	var groupOtherParties = document.getElementById("groupotherparties").checked;
