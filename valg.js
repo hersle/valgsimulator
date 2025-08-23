@@ -466,7 +466,7 @@ var localSeatCounts = {
 	"Finnmark": 4,
 };
 
-function printTable(table, data, showColumnTotals, showRowTotals) {
+function printTable(table, data, hideParties, showColumnTotals, showRowTotals) {
 	// Build ordered list of unique parties
 	var parties = [];
 	for (var district in data) {
@@ -489,7 +489,14 @@ function printTable(table, data, showColumnTotals, showRowTotals) {
 	head.appendChild(cell);
 	for (var party of parties) {
 		var cell = document.createElement("th");
-		cell.innerHTML = party;
+		if (!hideParties.includes(party)) {
+			cell.innerHTML = party;
+			head.appendChild(cell);
+		}
+	}
+	if (hideParties.length > 0) {
+		var cell = document.createElement("th");
+		cell.innerHTML = "...";
 		head.appendChild(cell);
 	}
 	if (showRowTotals) {
@@ -504,11 +511,17 @@ function printTable(table, data, showColumnTotals, showRowTotals) {
 		row.appendChild(cell);
 		var total = 0;
 		for (var party of parties) {
-			var cell = row.insertCell();
-			if (party in data[district]) {
-				cell.innerHTML = format(data[district][party]);
-				total += data[district][party];
+			if (!hideParties.includes(party)) {
+				var cell = row.insertCell();
+				if (party in data[district]) {
+					cell.innerHTML = format(data[district][party]);
+					total += data[district][party];
+				}
 			}
+		}
+		if (hideParties.length > 0) {
+			var cell = row.insertCell();
+			cell.innerHTML = "...";
 		}
 		if (showRowTotals) {
 			var cell = document.createElement("th");
@@ -524,15 +537,22 @@ function printTable(table, data, showColumnTotals, showRowTotals) {
 		cell.innerHTML = "Totalt";
 		row.appendChild(cell);
 		for (var party of parties) {
-			var cell = document.createElement("th");
-			var total = 0;
-			for (var district in data) {
-				if (party in data[district]) {
-					total += data[district][party];
+			if (!hideParties.includes(party)) {
+				var cell = document.createElement("th");
+				var total = 0;
+				for (var district in data) {
+					if (party in data[district]) {
+						total += data[district][party];
+					}
 				}
+				globalTotal += total;
+				cell.innerHTML = format(total);
+				row.appendChild(cell);
 			}
-			globalTotal += total;
-			cell.innerHTML = format(total);
+		}
+		if (showRowTotals) {
+			var cell = document.createElement("th");
+			cell.innerHTML = "...";
 			row.appendChild(cell);
 		}
 		if (showRowTotals) {
@@ -671,10 +691,21 @@ function update() {
 
 	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, threshold, firstDivisor, negativeGlobalSeats);
 
+	var hidePartiesWithoutSeats = document.getElementById("hidepartieswithoutseats").checked; // TODO: group as "Andre" instead
+	var totalSeats = sumLocal(seats);
+	var hideParties = [];
+	if (hidePartiesWithoutSeats) {
+		for (var party in totalSeats) {
+			if (totalSeats[party] == 0) {
+				hideParties.push(party);
+			}
+		}
+	}
+
 	var voteTable = document.getElementById("votes");
 	var seatTable = document.getElementById("seats");
-	printTable(voteTable, votes, true, true);
-	printTable(seatTable, seats, true, true);
+	printTable(voteTable, votes, hideParties, true, true);
+	printTable(seatTable, seats, hideParties, true, true);
 };
 
 update(); // run once on page load
