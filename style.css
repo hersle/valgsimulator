@@ -1,5 +1,9 @@
 body {
-	font-family: sans;
+	font-family: sans-serif;
+}
+
+.tablecontainer {
+	overflow-x: auto;
 }
 
 table {
@@ -11,6 +15,7 @@ th, td {
 	padding: 0.25em;
 	text-align: right;
 	white-space: nowrap;
+	min-width: 2em;
 }
 
 th:first-child {
@@ -29,6 +34,7 @@ fieldset {
 	row-gap: 0.75em;
 	column-gap: 2em;
 }
+
 fieldset > p{
 	width: 100%;
 	margin: 0;
