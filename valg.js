@@ -1,4 +1,5 @@
 // https://valgresultat.no/valg/2021/st
+// https://lovdata.no/lov/2023-06-16-62
 
 var partyNames = {
 	"A": "Arbeiderpartiet",
@@ -443,7 +444,7 @@ var votes = {
 
 // Number of mandates in each district // TODO: calculate it based on inhabitants/area in https://www.regjeringen.no/no/dokumentarkiv/regjeringen-solberg/aktuelt-regjeringen-solberg/kmd/pressemeldinger/2020/fordeling-av-mandatene-ved-neste-stortingsvalg/id2699589/
 // Subtracted 1 from the numbers in the official table, because it includes leveling mandates
-var districtMandates = {
+var localSeatCounts = {
 	"Østfold": 8,
 	"Akershus": 18,
 	"Oslo": 19,
@@ -461,22 +462,23 @@ var districtMandates = {
 	"Sør-Trøndelag": 9,
 	"Nord-Trøndelag": 4,
 	"Nordland": 8,
-	"Troms Romsa": 5,
-	"Finnmark Finnmárku": 4,
+	"Troms": 5,
+	"Finnmark": 4,
 };
-var totalLevelingMandates = 19;
+var globalSeatCount = 19;
 
-// Build list of unique parties
-var parties = [];
-for (var district in votes) {
-	for (var party in votes[district]) {
-		if (!parties.includes(party)) {
-			parties.push(party);
+function printTable(table, data, showColumnTotals) {
+	// Build ordered list of unique parties
+	var parties = [];
+	for (var district in data) {
+		for (var party in data[district]) {
+			if (!parties.includes(party)) {
+				parties.push(party);
+			}
 		}
 	}
-}
 
-function fillTable(table, data, parties, partyTotal) {
+	// Print table
 	const format = (x) => x.toLocaleString("no-NO");
 	var head = table.tHead.insertRow();
 	var cell = document.createElement("th");
@@ -484,7 +486,7 @@ function fillTable(table, data, parties, partyTotal) {
 	head.appendChild(cell);
 	for (var party of parties) {
 		var cell = document.createElement("th");
-		cell.innerHTML = party; // Use party name or fallback to party code
+		cell.innerHTML = party;
 		head.appendChild(cell);
 	}
 	for (var district in data) {
@@ -499,7 +501,8 @@ function fillTable(table, data, parties, partyTotal) {
 			}
 		}
 	}
-	if (partyTotal) {
+
+	if (showColumnTotals) {
 		var row = table.insertRow();
 		var cell = document.createElement("th");
 		cell.innerHTML = "Totalt";
@@ -518,21 +521,37 @@ function fillTable(table, data, parties, partyTotal) {
 	}
 }
 
-// Display votes for each party in each district in a table
-var voteTable = document.getElementById("votes");
-fillTable(voteTable, votes, parties, true);
+function sumLocal(local) {
+	var global = {};
+	for (var district in local) {
+		for (var party in local[district]) {
+			if (!(party in global)) {
+				global[party] = 0;
+			}
+			global[party] += local[district][party];
+		}
+	}
+	return global;
+};
+function sumGlobal(global) {
+	var total = 0;
+	for (var party in global) {
+		total += global[party];
+	}
+	return total;
+}
 
-function calculateMandates(votes, totalMandates) {
-	var mandates = {};
+function calculateSeats(votes, seatCount) {
+	var seats = {};
 	for (var party in votes) {
-		mandates[party] = 0;
+		seats[party] = 0;
 	}
 
-	while (totalMandates > 0) {
+	while (seatCount > 0) {
 		var bestScore = 0.0;
 		var bestParty = null;
 		for (var party in votes) {
-			var s = mandates[party];
+			var s = seats[party];
 			var divisor = s == 0 ? 1.4 : 2*s + 1; // modified first Sainte-Laguë divisor
 			var score = votes[party] / divisor; // Sainte-Laguë method // TODO: other methods
 			if (score > bestScore) {
@@ -540,34 +559,26 @@ function calculateMandates(votes, totalMandates) {
 				bestParty = party;
 			}
 		}
-		mandates[bestParty] += 1;
-		totalMandates -= 1;
+		seats[bestParty] += 1;
+		seatCount -= 1;
 	}
 
-	return mandates;
+	return seats;
 };
 
-function calculateDistrictMandates(votes, districtMandates) {
-	var mandates = {};
+function calculateLocalSeats(votes, localSeatCounts) {
+	var seats = {};
 	for (var district in votes) {
-		mandates[district] = calculateMandates(votes[district], districtMandates[district]);
+		seats[district] = calculateSeats(votes[district], localSeatCounts[district]);
 	}
-	return mandates;
+	return seats;
 };
 
-function calculateLevelingMandates(localVotes, localMandates) {
-	// Accumulate votes from each district
-	var totalVotes = 0;
-	var globalVotes = {};
-	for (var party of parties) {
-		globalVotes[party] = 0;
-		for (var district in localVotes) {
-			if (party in localVotes[district]) {
-				globalVotes[party] += localVotes[district][party];
-			}
-		}
-		totalVotes += globalVotes[party];
-	}
+function calculateGlobalSeats(localVotes, localSeats, globalSeatCount) {
+	// Accumulate votes from each district into nationwide results
+	var globalVotes = sumLocal(localVotes);
+
+	var totalVotes = sumGlobal(globalVotes);
 
 	// Decide which parties are eligible for leveling mandates. They must meet all of these conditions:
 	// * run for election in all districts
@@ -586,62 +597,53 @@ function calculateLevelingMandates(localVotes, localMandates) {
 	}
 
 	// Nationwide results when leveling mandates are excluded
-	var mandatesWithoutLeveling = {};
-	for (var party in globalVotes) {
-		mandatesWithoutLeveling[party] = 0;
-		for (var district in localMandates) {
-			if (party in localMandates[district]) {
-				mandatesWithoutLeveling[party] += localMandates[district][party];
-			}
-		}
-	}
+	localSeats = sumLocal(localSeats);
 
-	//console.log("Results without leveling mandates: ", mandatesWithoutLeveling);
+	//console.log("Results without leveling mandates: ", localSeats);
 
-	do { // may have to repeat
+	while (true) { // may have to repeat
 		// Allocate all seats including leveling mandates, but exclude ineligible parties
-		var totalMandatesToAllocate = totalLevelingMandates;
-		for (var party of parties) {
+		var totalSeatCount = globalSeatCount;
+		for (var party in globalVotes) {
 			if (eligible[party]) {
-				totalMandatesToAllocate += mandatesWithoutLeveling[party]; // do not allocate their mandates
+				totalSeatCount += localSeats[party]; // do not allocate their mandates
 			} else {
 				delete globalVotes[party]; // do not consider their votes
 			}
 		}
 
 		// Nationwide results when leveling mandates are included
-		var mandatesWithLeveling = calculateMandates(globalVotes, totalMandatesToAllocate);
+		var globalSeats = calculateSeats(globalVotes, totalSeatCount);
 
-		//console.log("Allocating " + totalMandatesToAllocate + " mandates from votes", globalVotes);
-		//console.log("Allocated", mandatesWithLeveling);
+		//console.log("Allocating " + totalSeatCount + " mandates from votes", globalVotes);
+		//console.log("Allocated", globalSeats);
 
+		// Set number of leveling mandates from difference between nationwide allocations with and without leveling mandates
 		// Check that no parties got fewer mandates with leveling mandates included; otherwise exclude them and repeat
 		success = true;
-		for (var party in mandatesWithLeveling) {
-			if (mandatesWithLeveling[party] < mandatesWithoutLeveling[party]) { // TODO: optionally disable
+		for (var party in globalSeats) {
+			globalSeats[party] = globalSeats[party] - localSeats[party];
+			if (globalSeats[party] < 0) { // TODO: optionally disable
 				//console.log(party, "got fewer seats with leveling mandates included; repeating allocation with their seats reserved and without their nationwide votes");
 				eligible[party] = false;
 				success = false;
 			}
 		}
-	} while (!success);
-
-	// Set number of leveling mandates from difference between nationwide allocations with and without leveling mandates
-	var levelingMandates = {};
-	for (var party in mandatesWithLeveling) {
-		levelingMandates[party] = mandatesWithLeveling[party] - mandatesWithoutLeveling[party];
+		if (success) {
+			return globalSeats;
+		}
 	}
-	return levelingMandates;
 };
 
-function calculateAllMandates(votes, districtMandates) {
-	var mandates = calculateDistrictMandates(votes, districtMandates);
-	mandates["Utjevningsmandater"] = calculateLevelingMandates(votes, mandates);
-	return mandates;
+function calculateAllSeats(votes, localSeatCounts, globalSeatCount) {
+	var seats = calculateLocalSeats(votes, localSeatCounts);
+	seats["Utjevningsmandater"] = calculateGlobalSeats(votes, seats, globalSeatCount);
+	return seats;
 };
 
-var mandates = calculateAllMandates(votes, districtMandates);
+var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount);
 
-// Display votes for each party in each district in a table
-var mandateTable = document.getElementById("mandates");
-fillTable(mandateTable, mandates, parties, true);
+var voteTable = document.getElementById("votes");
+var seatTable = document.getElementById("seats");
+printTable(voteTable, votes, true);
+printTable(seatTable, seats, true);
