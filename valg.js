@@ -478,6 +478,10 @@ function printTable(table, data, showColumnTotals, showRowTotals) {
 		}
 	}
 
+	// Reset table
+	table.tHead.innerHTML = "";
+	table.tBodies[0].innerHTML = "";
+
 	// Print table
 	const format = (x) => x.toLocaleString("no-NO");
 	var head = table.tHead.insertRow();
@@ -593,7 +597,7 @@ function calculateLocalSeats(votes, localSeatCounts) {
 	return seats;
 };
 
-function calculateGlobalSeats(localVotes, localSeats, globalSeatCount) {
+function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThreshold) {
 	// Accumulate votes from each district into nationwide results
 	var globalVotes = sumLocal(localVotes);
 
@@ -610,7 +614,7 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount) {
 				eligible[party] = false; // party is not registered all districts
 			}
 		}
-		if (globalVotes[party] * 100 < 4 * totalVotes) {
+		if (globalVotes[party] * 100 < globalThreshold * totalVotes) { // globalThreshold is in percent
 			eligible[party] = false; // party is below electoral threshold
 		}
 	}
@@ -654,15 +658,20 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount) {
 	}
 };
 
-function calculateAllSeats(votes, localSeatCounts, globalSeatCount) {
+function calculateAllSeats(votes, localSeatCounts, globalSeatCount, globalThreshold) {
 	var seats = calculateLocalSeats(votes, localSeatCounts);
-	seats["Utjevningsmandater"] = calculateGlobalSeats(votes, seats, globalSeatCount);
+	seats["Utjevningsmandater"] = calculateGlobalSeats(votes, seats, globalSeatCount, globalThreshold);
 	return seats;
 };
 
-var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount);
+function update() {
+	var threshold = parseFloat(document.getElementById("threshold").value);
+	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, threshold);
 
-var voteTable = document.getElementById("votes");
-var seatTable = document.getElementById("seats");
-printTable(voteTable, votes, true, true);
-printTable(seatTable, seats, true, true);
+	var voteTable = document.getElementById("votes");
+	var seatTable = document.getElementById("seats");
+	printTable(voteTable, votes, true, true);
+	printTable(seatTable, seats, true, true);
+};
+
+update(); // run once on page load
