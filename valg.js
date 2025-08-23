@@ -150,6 +150,8 @@ function calculateSeats(votes, seatCount, firstDivisor) {
 			if (score > bestScore) {
 				bestScore = score;
 				bestParty = party;
+			} else if (score == bestScore) {
+				alert("Error: " + bestparty + " and " + party + " tied. Don't know how to handle this."); // TODO: implement edge case handling
 			}
 		}
 		seats[bestParty] += 1;
