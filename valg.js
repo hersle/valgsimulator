@@ -465,7 +465,6 @@ var localSeatCounts = {
 	"Troms": 5,
 	"Finnmark": 4,
 };
-var globalSeatCount = 19;
 
 function printTable(table, data, showColumnTotals, showRowTotals) {
 	// Build ordered list of unique parties
@@ -667,6 +666,7 @@ function calculateAllSeats(votes, localSeatCounts, globalSeatCount, globalThresh
 function update() {
 	var threshold = parseFloat(document.getElementById("threshold").value);
 	var firstDivisor = parseFloat(document.getElementById("firstdivisor").value);
+	var globalSeatCount = parseInt(document.getElementById("globalseats").value);
 
 	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, threshold, firstDivisor);
 
