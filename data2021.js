@@ -439,26 +439,25 @@ var votes = {
 	},
 };
 
-// Number of mandates in each district // TODO: calculate it based on inhabitants/area in https://www.regjeringen.no/no/dokumentarkiv/regjeringen-solberg/aktuelt-regjeringen-solberg/kmd/pressemeldinger/2020/fordeling-av-mandatene-ved-neste-stortingsvalg/id2699589/
-// Subtracted 1 from the numbers in the official table, because it includes leveling mandates
-var localSeatCounts = {
-	"Østfold": 8,
-	"Akershus": 18,
-	"Oslo": 19,
-	"Hedmark": 6,
-	"Oppland": 5,
-	"Buskerud": 7,
-	"Vestfold": 6,
-	"Telemark": 5,
-	"Aust-Agder": 3,
-	"Vest-Agder": 5,
-	"Rogaland": 13,
-	"Hordaland": 15,
-	"Sogn og Fjordane": 3,
-	"Møre og Romsdal": 7,
-	"Sør-Trøndelag": 9,
-	"Nord-Trøndelag": 4,
-	"Nordland": 8,
-	"Troms": 5,
-	"Finnmark": 4,
+// https://www.regjeringen.no/no/dokumentarkiv/regjeringen-solberg/aktuelt-regjeringen-solberg/kmd/pressemeldinger/2020/fordeling-av-mandatene-ved-neste-stortingsvalg/id2699589/
+var districts = {
+	"Østfold": {"population": 299447, "area": 4004},
+	"Akershus": {"population": 675240, "area": 5669},
+	"Oslo": {"population": 693494, "area": 454},
+	"Hedmark": {"population": 197920, "area": 27398},
+	"Oppland": {"population": 173465, "area": 24675},
+	"Buskerud": {"population": 266478, "area": 14920},
+	"Vestfold": {"population": 246041, "area": 2168},
+	"Telemark": {"population": 173355, "area": 15298},
+	"Aust-Agder": {"population": 118273, "area": 9155},
+	"Vest-Agder": {"population": 188958, "area": 7278},
+	"Rogaland": {"population": 479892, "area": 9377},
+	"Hordaland": {"population": 528127, "area": 15438},
+	"Sogn og Fjordane": {"population": 108404, "area": 18433},
+	"Møre og Romsdal": {"population": 265238, "area": 14356},
+	"Sør-Trøndelag": {"population": 334514, "area": 20257},
+	"Nord-Trøndelag": {"population": 134188, "area": 21944},
+	"Nordland": {"population": 241235, "area": 38155},
+	"Troms": {"population": 167839, "area": 26198},
+	"Finnmark": {"population": 75472, "area": 48631},
 };

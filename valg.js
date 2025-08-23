@@ -159,6 +159,50 @@ function calculateSeats(votes, seatCount, firstDivisor) {
 	return seats;
 };
 
+function calculateSeatCounts(districts, seatCount, minSeatsPerDistrict) {
+	var scores = {};
+	for (var district in districts) {
+		scores[district] = districts[district].population + 1.8*districts[district].area
+	}
+
+	var success = false;
+	var finalSeatCounts = {};
+	while (!success) {
+		var seatCounts = calculateSeats(scores, seatCount, 1);
+
+		success = true;
+		for (var district in seatCounts) {
+			if (seatCounts[district] < minSeatsPerDistrict) {
+				finalSeatCounts[district] = minSeatsPerDistrict;
+				seatCount -= minSeatsPerDistrict;
+				delete scores[district];
+				success = false;
+			}
+		}
+
+		if (success) {
+			for (var district in seatCounts) {
+				finalSeatCounts[district] = seatCounts[district];
+			}
+		}
+	}
+
+	return finalSeatCounts;
+};
+
+function calculateAllSeatCounts(districts, localSeatCount, globalSeatsPerDistrict, minSeatsPerDistrict) {
+	var districtCount = Object.keys(districts).length;
+	var globalSeatCount = globalSeatsPerDistrict * districtCount;
+	var totalSeatCount = localSeatCount + globalSeatCount;
+
+	var localSeatCounts = calculateSeatCounts(districts, totalSeatCount, minSeatsPerDistrict);
+	for (var district in localSeatCounts) {
+		localSeatCounts[district] -= globalSeatsPerDistrict;
+	}
+
+	return [localSeatCounts, globalSeatCount];
+};
+
 function calculateLocalSeats(votes, localSeatCounts, firstDivisor) {
 	var seats = {};
 	for (var district in votes) {
@@ -237,9 +281,11 @@ function calculateAllSeats(votes, localSeatCounts, globalSeatCount, globalThresh
 function update() {
 	var threshold = parseFloat(document.getElementById("threshold").value);
 	var firstDivisor = parseFloat(document.getElementById("firstdivisor").value);
-	var globalSeatCount = parseInt(document.getElementById("globalseatsperdistrict").value) * Object.keys(localSeatCounts).length;
+	var localSeatCount = parseInt(document.getElementById("localseats").value);
+	var globalSeatsPerDistrict = parseInt(document.getElementById("globalseatsperdistrict").value);
 	var negativeGlobalSeats = document.getElementById("negativeglobalseats").checked;
 
+	var [localSeatCounts, globalSeatCount] = calculateAllSeatCounts(districts, localSeatCount, globalSeatsPerDistrict, 0);
 	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, threshold, firstDivisor, negativeGlobalSeats);
 
 	var groupOtherParties = document.getElementById("groupotherparties").checked;
