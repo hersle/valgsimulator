@@ -467,7 +467,7 @@ var localSeatCounts = {
 };
 var globalSeatCount = 19;
 
-function printTable(table, data, showColumnTotals) {
+function printTable(table, data, showColumnTotals, showRowTotals) {
 	// Build ordered list of unique parties
 	var parties = [];
 	for (var district in data) {
@@ -489,20 +489,33 @@ function printTable(table, data, showColumnTotals) {
 		cell.innerHTML = party;
 		head.appendChild(cell);
 	}
+	if (showRowTotals) {
+		var cell = document.createElement("th");
+		cell.innerHTML = "Totalt";
+		head.appendChild(cell);
+	}
 	for (var district in data) {
 		var row = table.insertRow();
 		var cell = document.createElement("th");
 		cell.innerHTML = district;
 		row.appendChild(cell);
+		var total = 0;
 		for (var party of parties) {
 			var cell = row.insertCell();
 			if (party in data[district]) {
 				cell.innerHTML = format(data[district][party]);
+				total += data[district][party];
 			}
+		}
+		if (showRowTotals) {
+			var cell = document.createElement("th");
+			cell.innerHTML = format(total);
+			row.appendChild(cell);
 		}
 	}
 
 	if (showColumnTotals) {
+		var globalTotal = 0;
 		var row = table.insertRow();
 		var cell = document.createElement("th");
 		cell.innerHTML = "Totalt";
@@ -515,7 +528,13 @@ function printTable(table, data, showColumnTotals) {
 					total += data[district][party];
 				}
 			}
+			globalTotal += total;
 			cell.innerHTML = format(total);
+			row.appendChild(cell);
+		}
+		if (showRowTotals) {
+			var cell = document.createElement("th");
+			cell.innerHTML = format(globalTotal);
 			row.appendChild(cell);
 		}
 	}
@@ -645,5 +664,5 @@ var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount);
 
 var voteTable = document.getElementById("votes");
 var seatTable = document.getElementById("seats");
-printTable(voteTable, votes, true);
-printTable(seatTable, seats, true);
+printTable(voteTable, votes, true, true);
+printTable(seatTable, seats, true, true);
