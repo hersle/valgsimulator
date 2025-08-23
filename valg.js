@@ -466,7 +466,23 @@ var localSeatCounts = {
 	"Finnmark": 4,
 };
 
-function printTable(table, data, hideParties, showColumnTotals, showRowTotals) {
+function printTable(table, data, mergeParties, showColumnTotals, showRowTotals) {
+	if (mergeParties.length > 0) {
+		var newData = {};
+		for (var district in data) {
+			newData[district] = {"ANDRE": 0};
+			for (var party in data[district]) {
+				if (mergeParties.includes(party)) {
+					newData[district]["ANDRE"] += data[district][party];
+				} else {
+					newData[district][party] = data[district][party];
+				}
+			}
+		}
+		return printTable(table, newData, [], showColumnTotals, showRowTotals);
+	}
+
+
 	// Build ordered list of unique parties
 	var parties = [];
 	for (var district in data) {
@@ -475,6 +491,11 @@ function printTable(table, data, hideParties, showColumnTotals, showRowTotals) {
 				parties.push(party);
 			}
 		}
+	}
+	if (parties.includes("ANDRE")) {
+		// Make ANDRE always appear last
+		parties.splice(parties.indexOf("ANDRE"), 1);
+		parties.push("ANDRE");
 	}
 
 	// Reset table
@@ -489,14 +510,7 @@ function printTable(table, data, hideParties, showColumnTotals, showRowTotals) {
 	head.appendChild(cell);
 	for (var party of parties) {
 		var cell = document.createElement("th");
-		if (!hideParties.includes(party)) {
-			cell.innerHTML = party;
-			head.appendChild(cell);
-		}
-	}
-	if (hideParties.length > 0) {
-		var cell = document.createElement("th");
-		cell.innerHTML = "...";
+		cell.innerHTML = party;
 		head.appendChild(cell);
 	}
 	if (showRowTotals) {
@@ -511,17 +525,11 @@ function printTable(table, data, hideParties, showColumnTotals, showRowTotals) {
 		row.appendChild(cell);
 		var total = 0;
 		for (var party of parties) {
-			if (!hideParties.includes(party)) {
-				var cell = row.insertCell();
-				if (party in data[district]) {
-					cell.innerHTML = format(data[district][party]);
-					total += data[district][party];
-				}
-			}
-		}
-		if (hideParties.length > 0) {
 			var cell = row.insertCell();
-			cell.innerHTML = "...";
+			if (party in data[district]) {
+				cell.innerHTML = format(data[district][party]);
+				total += data[district][party];
+			}
 		}
 		if (showRowTotals) {
 			var cell = document.createElement("th");
@@ -537,22 +545,15 @@ function printTable(table, data, hideParties, showColumnTotals, showRowTotals) {
 		cell.innerHTML = "Totalt";
 		row.appendChild(cell);
 		for (var party of parties) {
-			if (!hideParties.includes(party)) {
-				var cell = document.createElement("th");
-				var total = 0;
-				for (var district in data) {
-					if (party in data[district]) {
-						total += data[district][party];
-					}
-				}
-				globalTotal += total;
-				cell.innerHTML = format(total);
-				row.appendChild(cell);
-			}
-		}
-		if (showRowTotals) {
 			var cell = document.createElement("th");
-			cell.innerHTML = "...";
+			var total = 0;
+			for (var district in data) {
+				if (party in data[district]) {
+					total += data[district][party];
+				}
+			}
+			globalTotal += total;
+			cell.innerHTML = format(total);
 			row.appendChild(cell);
 		}
 		if (showRowTotals) {
@@ -691,21 +692,21 @@ function update() {
 
 	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, threshold, firstDivisor, negativeGlobalSeats);
 
-	var hidePartiesWithoutSeats = document.getElementById("hidepartieswithoutseats").checked; // TODO: group as "Andre" instead
+	var groupOtherParties = document.getElementById("groupotherparties").checked;
 	var totalSeats = sumLocal(seats);
-	var hideParties = [];
-	if (hidePartiesWithoutSeats) {
+	var mergeParties = [];
+	if (groupOtherParties) {
 		for (var party in totalSeats) {
 			if (totalSeats[party] == 0) {
-				hideParties.push(party);
+				mergeParties.push(party);
 			}
 		}
 	}
 
 	var voteTable = document.getElementById("votes");
 	var seatTable = document.getElementById("seats");
-	printTable(voteTable, votes, hideParties, true, true);
-	printTable(seatTable, seats, hideParties, true, true);
+	printTable(voteTable, votes, mergeParties, true, true);
+	printTable(seatTable, seats, mergeParties, true, true);
 };
 
 update(); // run once on page load
