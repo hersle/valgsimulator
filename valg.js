@@ -466,7 +466,7 @@ var localSeatCounts = {
 	"Finnmark": 4,
 };
 
-function printTable(table, data, mergeParties, showColumnTotals, showRowTotals) {
+function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLabel, showColumnTotals, showRowTotals) {
 	if (mergeParties.length > 0) {
 		var newData = {};
 		for (var district in data) {
@@ -479,7 +479,23 @@ function printTable(table, data, mergeParties, showColumnTotals, showRowTotals) 
 				}
 			}
 		}
-		return printTable(table, newData, [], showColumnTotals, showRowTotals);
+		return printTable(table, newData, [], mergeDistricts, mergedDistrictLabel, showColumnTotals, showRowTotals);
+	} else if (mergeDistricts.length > 0) {
+		var newData = {};
+		newData[mergedDistrictLabel] = {};
+		for (var district in data) {
+			if (mergeDistricts.includes(district)) {
+				for (var party in data[district]) {
+					if (!(party in newData[mergedDistrictLabel])) {
+						newData[mergedDistrictLabel][party] = 0;
+					}
+					newData[mergedDistrictLabel][party] += data[district][party];
+				}
+			} else {
+				newData[district] = data[district];
+			}
+		}
+		return printTable(table, newData, mergeParties, [], mergedDistrictLabel, showColumnTotals, showRowTotals);
 	}
 
 
@@ -703,10 +719,19 @@ function update() {
 		}
 	}
 
+	var groupLocalVotes = document.getElementById("grouplocalvotes").checked;
+	var groupLocalSeats = document.getElementById("grouplocalseats").checked;
+	var mergeDistricts = [];
+	for (var district in votes) {
+		mergeDistricts.push(district);
+	}
+	var mergeLocalVotes = groupLocalVotes ? mergeDistricts : [];
+	var mergeLocalSeats = groupLocalSeats ? mergeDistricts : [];
+
 	var voteTable = document.getElementById("votes");
 	var seatTable = document.getElementById("seats");
-	printTable(voteTable, votes, mergeParties, true, true);
-	printTable(seatTable, seats, mergeParties, true, true);
+	printTable(voteTable, votes, mergeParties, mergeLocalVotes, "Distriktsstemmer", true, true);
+	printTable(seatTable, seats, mergeParties, mergeLocalSeats, "Distriktsmandater", true, true);
 };
 
 update(); // run once on page load
