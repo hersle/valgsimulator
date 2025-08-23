@@ -1,4 +1,4 @@
-function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLabel, showColumnTotals, showRowTotals) {
+function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals) {
 	if (mergeParties.length > 0) {
 		var newData = {};
 		for (var district in data) {
@@ -11,7 +11,7 @@ function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLab
 				}
 			}
 		}
-		return printTable(table, newData, [], mergeDistricts, mergedDistrictLabel, showColumnTotals, showRowTotals);
+		return printTable(table, newData, [], mergeDistricts, mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals);
 	} else if (mergeDistricts.length > 0) {
 		var newData = {};
 		newData[mergedDistrictLabel] = {};
@@ -27,7 +27,7 @@ function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLab
 				newData[district] = data[district];
 			}
 		}
-		return printTable(table, newData, mergeParties, [], mergedDistrictLabel, showColumnTotals, showRowTotals);
+		return printTable(table, newData, mergeParties, [], mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals);
 	}
 
 
@@ -51,7 +51,7 @@ function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLab
 	table.tBodies[0].innerHTML = "";
 
 	// Print table
-	const format = (x) => x.toLocaleString("no-NO");
+	const format = (x, total) => showFraction ? ((Math.floor(1000*x/total)/10).toFixed(1) + " %") : x.toLocaleString("no-NO"); // floor instead of rounding, so parties slightly below threshold cannot seem to be above it (e.g. show 3.999% as 3.9% instead of 4.0%)
 	var head = table.tHead.insertRow();
 	var cell = document.createElement("th");
 	cell.innerHTML = "Valgdistrikt";
@@ -66,28 +66,31 @@ function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLab
 		cell.innerHTML = "Totalt";
 		head.appendChild(cell);
 	}
+	var globalTotal = 0;
 	for (var district in data) {
 		var row = table.insertRow();
 		var cell = document.createElement("th");
 		cell.innerHTML = district;
 		row.appendChild(cell);
 		var total = 0;
+		for (var party in data[district]) {
+			total += data[district][party];
+		}
+		globalTotal += total;
 		for (var party of parties) {
 			var cell = row.insertCell();
 			if (party in data[district]) {
-				cell.innerHTML = format(data[district][party]);
-				total += data[district][party];
+				cell.innerHTML = format(data[district][party], total);
 			}
 		}
 		if (showRowTotals) {
 			var cell = document.createElement("th");
-			cell.innerHTML = format(total);
+			cell.innerHTML = format(total, total);
 			row.appendChild(cell);
 		}
 	}
 
 	if (showColumnTotals) {
-		var globalTotal = 0;
 		var row = table.insertRow();
 		var cell = document.createElement("th");
 		cell.innerHTML = "Totalt";
@@ -100,13 +103,12 @@ function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLab
 					total += data[district][party];
 				}
 			}
-			globalTotal += total;
-			cell.innerHTML = format(total);
+			cell.innerHTML = format(total, globalTotal);
 			row.appendChild(cell);
 		}
 		if (showRowTotals) {
 			var cell = document.createElement("th");
-			cell.innerHTML = format(globalTotal);
+			cell.innerHTML = format(globalTotal, globalTotal);
 			row.appendChild(cell);
 		}
 	}
@@ -260,10 +262,12 @@ function update() {
 	var mergeLocalVotes = groupLocalVotes ? mergeDistricts : [];
 	var mergeLocalSeats = groupLocalSeats ? mergeDistricts : [];
 
+	var showFraction = document.getElementById("showfraction").checked;
+
 	var voteTable = document.getElementById("votes");
 	var seatTable = document.getElementById("seats");
-	printTable(voteTable, votes, mergeParties, mergeLocalVotes, "Distriktsstemmer", true, true);
-	printTable(seatTable, seats, mergeParties, mergeLocalSeats, "Distriktsmandater", true, true);
+	printTable(voteTable, votes, mergeParties, mergeLocalVotes, "Distriktsstemmer", showFraction, true, true);
+	printTable(seatTable, seats, mergeParties, mergeLocalSeats, "Distriktsmandater", false, true, true);
 };
 
 update(); // run once on page load

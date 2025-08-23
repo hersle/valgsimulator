@@ -40,6 +40,10 @@
 		<legend>Visningsalternativer</legend>
 		<p>Påvirker <strong>ikke</strong> beregningen av valgresultatet, men kun visningen av tabellene.</p>
 		<span>
+			<input type="checkbox" id="showfraction" oninput="update();"/>
+			<label for="showfraction">Vis stemmeandeler (rundet <strong>ned</strong> til én desimal)</label>
+		</span>
+		<span>
 			<input type="checkbox" id="groupotherparties" oninput="update();"/>
 			<label for="groupotherparties">Slå sammen partier uten mandater</label>
 		</span>
