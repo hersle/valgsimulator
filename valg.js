@@ -596,7 +596,7 @@ function calculateLocalSeats(votes, localSeatCounts, firstDivisor) {
 	return seats;
 };
 
-function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThreshold, firstDivisor) {
+function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats) {
 	// Accumulate votes from each district into nationwide results
 	var globalVotes = sumLocal(localVotes);
 
@@ -645,7 +645,7 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 		success = true;
 		for (var party in globalSeats) {
 			globalSeats[party] = globalSeats[party] - localSeats[party];
-			if (globalSeats[party] < 0) { // TODO: optionally disable
+			if (!negativeGlobalSeats && globalSeats[party] < 0) {
 				//console.log(party, "got fewer seats with leveling mandates included; repeating allocation with their seats reserved and without their nationwide votes");
 				eligible[party] = false;
 				success = false;
@@ -657,9 +657,9 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 	}
 };
 
-function calculateAllSeats(votes, localSeatCounts, globalSeatCount, globalThreshold, firstDivisor) {
+function calculateAllSeats(votes, localSeatCounts, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats) {
 	var seats = calculateLocalSeats(votes, localSeatCounts, firstDivisor);
-	seats["Utjevningsmandater"] = calculateGlobalSeats(votes, seats, globalSeatCount, globalThreshold, firstDivisor);
+	seats["Utjevningsmandater"] = calculateGlobalSeats(votes, seats, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats);
 	return seats;
 };
 
@@ -667,8 +667,9 @@ function update() {
 	var threshold = parseFloat(document.getElementById("threshold").value);
 	var firstDivisor = parseFloat(document.getElementById("firstdivisor").value);
 	var globalSeatCount = parseInt(document.getElementById("globalseats").value);
+	var negativeGlobalSeats = document.getElementById("negativeglobalseats").checked;
 
-	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, threshold, firstDivisor);
+	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, threshold, firstDivisor, negativeGlobalSeats);
 
 	var voteTable = document.getElementById("votes");
 	var seatTable = document.getElementById("seats");
