@@ -237,7 +237,7 @@ function calculateAllSeats(votes, localSeatCounts, globalSeatCount, globalThresh
 function update() {
 	var threshold = parseFloat(document.getElementById("threshold").value);
 	var firstDivisor = parseFloat(document.getElementById("firstdivisor").value);
-	var globalSeatCount = parseInt(document.getElementById("globalseats").value);
+	var globalSeatCount = parseInt(document.getElementById("globalseatsperdistrict").value) * Object.keys(localSeatCounts).length;
 	var negativeGlobalSeats = document.getElementById("negativeglobalseats").checked;
 
 	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, threshold, firstDivisor, negativeGlobalSeats);
