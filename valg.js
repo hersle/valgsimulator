@@ -3,7 +3,12 @@ var seatTable = document.getElementById("seats");
 var voteLink = document.getElementById("voteslink");
 var seatLink = document.getElementById("seatslink");
 
-function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals) {
+function roundDown(number, decimals) {
+	number = Math.floor(number * 10**decimals) / 10**decimals;
+	return number.toFixed(decimals);
+};
+
+function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals, decimals) {
 	if (mergeParties.length > 0) {
 		var newData = {};
 		for (var district in data) {
@@ -16,7 +21,7 @@ function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLab
 				}
 			}
 		}
-		return printTable(table, newData, [], mergeDistricts, mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals);
+		return printTable(table, newData, [], mergeDistricts, mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals, decimals);
 	} else if (mergeDistricts.length > 0) {
 		var newData = {};
 		newData[mergedDistrictLabel] = {};
@@ -32,9 +37,8 @@ function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLab
 				newData[district] = data[district];
 			}
 		}
-		return printTable(table, newData, mergeParties, [], mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals);
+		return printTable(table, newData, mergeParties, [], mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals, decimals);
 	}
-
 
 	// Build ordered list of unique parties
 	var parties = [];
@@ -56,7 +60,7 @@ function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLab
 	table.tBodies[0].innerHTML = "";
 
 	// Print table
-	const format = (x, total) => showFraction ? ((Math.floor(1000*x/total)/10).toFixed(1) + " %") : x.toLocaleString("no-NO"); // floor instead of rounding, so parties slightly below threshold cannot seem to be above it (e.g. show 3.999% as 3.9% instead of 4.0%)
+	const format = (x, total) => showFraction ? (roundDown(100*x/total, decimals) + " %") : x.toLocaleString("no-NO"); // round *down* so parties slightly below threshold cannot seem to be above it (e.g. show 3.999% as 3.9% instead of 4.0%)
 	var head = table.tHead.insertRow();
 	var cell = document.createElement("th");
 	cell.innerHTML = "Valgdistrikt";
@@ -317,9 +321,10 @@ function update() {
 	}
 
 	var showFraction = document.getElementById("showfraction").checked;
+	var decimals = parseInt(document.getElementById("decimals").value);
 
-	printTable(voteTable, votes, mergeParties, mergeDistricts, "Distriktsstemmer", showFraction, true, true);
-	printTable(seatTable, seats, mergeParties, mergeDistricts, "Distriktsmandater", showFraction, true, true);
+	printTable(voteTable, votes, mergeParties, mergeDistricts, "Distriktsstemmer", showFraction, true, true, decimals);
+	printTable(seatTable, seats, mergeParties, mergeDistricts, "Distriktsmandater", showFraction, true, true, decimals);
 };
 
 function showTables(showVotes, showSeats) {

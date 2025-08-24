@@ -54,7 +54,9 @@
 		<p>Påvirker <strong>ikke</strong> beregningen av valgresultatet, men kun visningen av tabellene.</p>
 		<span>
 			<input type="checkbox" id="showfraction" oninput="update();"/>
-			<label for="showfraction">Vis andeler (rundet <strong>ned</strong> til én desimal)</label>
+			<label for="showfraction">Vis andeler rundet <strong>ned</strong> til</label>
+			<input type="number" id="decimals" value="1" min="0" max="9" step="1" oninput="update();" style="width: 2.5em"/>
+			<label for="decimals">desimaler</label>
 		</span>
 		<span>
 			<input type="checkbox" id="groupotherparties" oninput="update();"/>
