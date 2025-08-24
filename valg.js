@@ -1,3 +1,8 @@
+var voteTable = document.getElementById("votes");
+var seatTable = document.getElementById("seats");
+var voteLink = document.getElementById("voteslink");
+var seatLink = document.getElementById("seatslink");
+
 function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals) {
 	if (mergeParties.length > 0) {
 		var newData = {};
@@ -314,10 +319,16 @@ function update() {
 
 	var showFraction = document.getElementById("showfraction").checked;
 
-	var voteTable = document.getElementById("votes");
-	var seatTable = document.getElementById("seats");
 	printTable(voteTable, votes, mergeParties, mergeLocalVotes, "Distriktsstemmer", showFraction, true, true);
 	printTable(seatTable, seats, mergeParties, mergeLocalSeats, "Distriktsmandater", false, true, true);
 };
 
+function showTables(showVotes, showSeats) {
+	voteTable.style["display"] = showVotes ? "block" : "none";
+	seatTable.style["display"] = showSeats ? "block" : "none";
+	voteLink.style["color"] =  showVotes ? "black" : "gray";
+	seatLink.style["color"] =  showSeats ? "black" : "gray";
+};
+
+showTables(true, false);
 update(); // run once on page load

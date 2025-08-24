@@ -39,3 +39,9 @@ fieldset > p{
 	width: 100%;
 	margin: 0;
 }
+
+h2 > a {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
