@@ -45,3 +45,8 @@ h2 > a {
 	text-decoration: none;
 	cursor: pointer;
 }
+
+h2 {
+	white-space: nowrap;
+	overflow-x: auto;
+}

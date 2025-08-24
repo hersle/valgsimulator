@@ -1,14 +1,16 @@
 var voteTable = document.getElementById("votes");
 var seatTable = document.getElementById("seats");
+var teamTable = document.getElementById("teams");
 var voteLink = document.getElementById("voteslink");
 var seatLink = document.getElementById("seatslink");
+var teamLink = document.getElementById("teamslink");
 
 function roundDown(number, decimals) {
 	number = Math.floor(number * 10**decimals) / 10**decimals;
 	return number.toFixed(decimals);
 };
 
-function printTable(table, data, parties, mergeParties, mergeDistricts, mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals, decimals) {
+function printTable(table, data, parties, mergeParties, mergeDistricts, mergedDistrictLabel, firstHeader, showFraction, showColumnTotals, showRowTotals, decimals) {
 	if (mergeParties.length > 0) {
 		var newData = {};
 		for (var district in data) {
@@ -26,8 +28,9 @@ function printTable(table, data, parties, mergeParties, mergeDistricts, mergedDi
 				parties.splice(parties.indexOf(party), 1); // remove from list of sorted parties
 			}
 		}
+		parties = parties.slice(); // make copy
 		parties.push("ANDRE"); // always last
-		return printTable(table, newData, parties, [], mergeDistricts, mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals, decimals);
+		return printTable(table, newData, parties, [], mergeDistricts, mergedDistrictLabel, firstHeader, showFraction, showColumnTotals, showRowTotals, decimals);
 	} else if (mergeDistricts.length > 0) {
 		var newData = {};
 		newData[mergedDistrictLabel] = {};
@@ -43,7 +46,7 @@ function printTable(table, data, parties, mergeParties, mergeDistricts, mergedDi
 				newData[district] = data[district];
 			}
 		}
-		return printTable(table, newData, parties, mergeParties, [], mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals, decimals);
+		return printTable(table, newData, parties, mergeParties, [], mergedDistrictLabel, firstHeader, showFraction, showColumnTotals, showRowTotals, decimals);
 	}
 
 	// Make ANDRE always appear last
@@ -60,7 +63,7 @@ function printTable(table, data, parties, mergeParties, mergeDistricts, mergedDi
 	const format = (x, total) => showFraction ? (roundDown(100*x/total, decimals) + " %") : x.toLocaleString("no-NO"); // round *down* so parties slightly below threshold cannot seem to be above it (e.g. show 3.999% as 3.9% instead of 4.0%)
 	var head = table.tHead.insertRow();
 	var cell = document.createElement("th");
-	cell.innerHTML = "Valgdistrikt";
+	cell.innerHTML = firstHeader;
 	head.appendChild(cell);
 	for (var party of parties) {
 		var cell = document.createElement("th");
@@ -286,6 +289,46 @@ function calculateAllSeats(votes, localSeatCounts, globalSeatCount, globalThresh
 	return seats;
 };
 
+function calculateTeams(friends) {
+	function dfs(team, teams) {
+		for (var team2 of teams) {
+			if (team.length == team2.length) {
+				var isSubset = true;
+				for (var party of team) {
+					if (!team2.includes(party)) {
+						isSubset = false;
+						break;
+					}
+				}
+				if (isSubset) {
+					return; // team already explored
+				}
+			}
+		}
+
+		teams.push(team.slice()); // register team
+
+		// Explore new teams by adding parties that are friends with everyone already in the team
+		for (var newParty in friends) {
+			var friendsWithEveryone = true;
+			for (var party of team) {
+				if (!friends[party].includes(newParty)) {
+					friendsWithEveryone = false;
+					break;
+				}
+			}
+			if (friendsWithEveryone) {
+				team.push(newParty);
+				dfs(team, teams);
+				team.splice(team.indexOf(newParty), 1);
+			}
+		}
+		return teams;
+	};
+
+	return dfs([], []).slice(1); // drop empty team
+};
+
 function update() {
 	var threshold = parseFloat(document.getElementById("threshold").value);
 	var firstDivisor = parseFloat(document.getElementById("firstdivisor").value);
@@ -297,6 +340,7 @@ function update() {
 
 	var [localSeatCounts, globalSeatCount] = calculateAllSeatCounts(districts, localSeatCount, globalSeatsPerDistrict, areaFactor, minSeatsPerDistrict);
 	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, threshold, firstDivisor, negativeGlobalSeats);
+	var globalSeats = sumLocal(seats);
 
 	var groupOtherParties = document.getElementById("groupotherparties").checked;
 	var totalSeats = sumLocal(seats);
@@ -337,7 +381,6 @@ function update() {
 		var globalVotes = sumLocal(votes);
 		parties.sort((party1, party2) => compare(party1, party2, globalVotes));
 	} else if (sortParties == "Mandater") {
-		var globalSeats = sumLocal(seats);
 		parties.sort((party1, party2) => compare(party1, party2, globalSeats));
 	} else if (sortParties == "Farge (subjektivt)") {
 		var spectrum = ["NKP", "RØDT", "SV", "A", "SP", "MDG", "KYST", "KRF", "V", "H", "FRP", "KRISTNE", "LIBS", "DEMN", "AAN"];
@@ -348,16 +391,74 @@ function update() {
 		parties.sort((party1, party2) => compare(party2, party1, rightism));
 	}
 
-	printTable(voteTable, votes, parties, mergeParties, mergeDistricts, "Distriktsstemmer", showFraction, true, true, decimals);
-	printTable(seatTable, seats, parties, mergeParties, mergeDistricts, "Distriktsmandater", showFraction, true, true, decimals);
+	printTable(voteTable, votes, parties, mergeParties, mergeDistricts, "Distriktsstemmer", "Valgdistrikt", showFraction, true, true, decimals);
+	printTable(seatTable, seats, parties, mergeParties, mergeDistricts, "Distriktsmandater", "Valgdistrikt", showFraction, true, true, decimals);
+
+	// Read graph of friend parties
+	var friendsInput = document.getElementById("friends");
+	var friendsText = friendsInput.value.trim();
+	var friends = {};
+	for (var party of parties) {
+		friends[party] = [];
+	}
+	var valid = true;
+	if (friendsText.length > 0) {
+		for (var text of friendsText.split(/\s*,\s*/)) {
+			var friendList = text.split(/\s*\+\s*/);
+			for (var party1 of friendList) {
+				if (!parties.includes(party1)) {
+					valid = false;
+					break;
+				}
+				for (var party2 of friendList) {
+					if (party1 != party2 && !friends[party1].includes(party2)) { // don't be friends with oneself
+						friends[party1].push(party2);
+					}
+				}
+			}
+		}
+	}
+
+	// Do not let unrepresented parties be part of coalitions
+	for (var party in friends) {
+		if (globalSeats[party] == 0) {
+			delete friends[party];
+		}
+	}
+
+	// Color input field depending on validity of input formatting
+	friendsInput.style["background-color"] = valid ? "limegreen" : "crimson";
+
+	if (valid) {
+		var teams = calculateTeams(friends);
+
+		var teamSeats = {};
+		for (var team of teams) {
+			teamSeats[team] = 0;
+			for (var party of team) {
+				teamSeats[team] += globalSeats[party];
+			}
+		}
+
+		teams.sort((team1, team2) => teamSeats[team2] - teamSeats[team1]); // TODO: guarantee sorting order in table output of teams (and districts above)
+
+		var teamsDict = {};
+		totalSeats = sumGlobal(totalSeats);
+		for (var team of teams) {
+			teamsDict[team.join(" + ")] = {"Posisjon": teamSeats[team], "Opposisjon": totalSeats - teamSeats[team]};
+		}
+		printTable(teamTable, teamsDict, ["Posisjon", "Opposisjon"], [], [], "", "Partier i posisjon", showFraction, false, true, decimals);
+	}
 };
 
-function showTables(showVotes, showSeats) {
+function showTables(showVotes, showSeats, showTeams) {
 	voteTable.style["display"] = showVotes ? "block" : "none";
 	seatTable.style["display"] = showSeats ? "block" : "none";
+	teamTable.style["display"] = showTeams ? "block" : "none";
 	voteLink.style["color"] =  showVotes ? "black" : "gray";
 	seatLink.style["color"] =  showSeats ? "black" : "gray";
+	teamLink.style["color"] =  showTeams ? "black" : "gray";
 };
 
-showTables(true, false);
+showTables(true, false, false);
 update(); // run once on page load
