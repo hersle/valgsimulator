@@ -53,6 +53,14 @@
 		<legend>Visningsalternativer</legend>
 		<p>Påvirker <strong>ikke</strong> beregningen av valgresultatet, men kun visningen av tabellene.</p>
 		<span>
+			<label for="sortparties">Sortér partier etter</label>
+			<select id="sortparties" oninput="update();">
+				<option>Navn</option>
+				<option>Stemmer</option>
+				<option>Mandater</option>
+			</select>
+		</span>
+		<span>
 			<input type="checkbox" id="showfraction" oninput="update();"/>
 			<label for="showfraction">Vis andeler rundet <strong>ned</strong> til</label>
 			<input type="number" id="decimals" value="1" min="0" max="9" step="1" oninput="update();" style="width: 2.5em"/>

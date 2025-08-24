@@ -8,7 +8,7 @@ function roundDown(number, decimals) {
 	return number.toFixed(decimals);
 };
 
-function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals, decimals) {
+function printTable(table, data, parties, mergeParties, mergeDistricts, mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals, decimals) {
 	if (mergeParties.length > 0) {
 		var newData = {};
 		for (var district in data) {
@@ -21,7 +21,13 @@ function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLab
 				}
 			}
 		}
-		return printTable(table, newData, [], mergeDistricts, mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals, decimals);
+		for (var party of mergeParties) {
+			if (parties.includes(party)) {
+				parties.splice(parties.indexOf(party), 1); // remove from list of sorted parties
+			}
+		}
+		parties.push("ANDRE"); // always last
+		return printTable(table, newData, parties, [], mergeDistricts, mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals, decimals);
 	} else if (mergeDistricts.length > 0) {
 		var newData = {};
 		newData[mergedDistrictLabel] = {};
@@ -37,20 +43,11 @@ function printTable(table, data, mergeParties, mergeDistricts, mergedDistrictLab
 				newData[district] = data[district];
 			}
 		}
-		return printTable(table, newData, mergeParties, [], mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals, decimals);
+		return printTable(table, newData, parties, mergeParties, [], mergedDistrictLabel, showFraction, showColumnTotals, showRowTotals, decimals);
 	}
 
-	// Build ordered list of unique parties
-	var parties = [];
-	for (var district in data) {
-		for (var party in data[district]) {
-			if (!parties.includes(party)) {
-				parties.push(party);
-			}
-		}
-	}
+	// Make ANDRE always appear last
 	if (parties.includes("ANDRE")) {
-		// Make ANDRE always appear last
 		parties.splice(parties.indexOf("ANDRE"), 1);
 		parties.push("ANDRE");
 	}
@@ -323,8 +320,29 @@ function update() {
 	var showFraction = document.getElementById("showfraction").checked;
 	var decimals = parseInt(document.getElementById("decimals").value);
 
-	printTable(voteTable, votes, mergeParties, mergeDistricts, "Distriktsstemmer", showFraction, true, true, decimals);
-	printTable(seatTable, seats, mergeParties, mergeDistricts, "Distriktsmandater", showFraction, true, true, decimals);
+	// Build sorted list of unique parties
+	var sortParties = document.getElementById("sortparties").value;
+	var parties = [];
+	for (var district in votes) {
+		for (var party in votes[district]) {
+			if (!parties.includes(party)) {
+				parties.push(party);
+			}
+		}
+	}
+	var compare = (party1, party2, data) => data[party2] == data[party1] ? (party1 < party2 ? -1 : +1) : (data[party2] - data[party1]); // sort by value in "data", but by name if values are equal
+	if (sortParties == "Navn") {
+		parties.sort();
+	} else if (sortParties == "Stemmer") {
+		var globalVotes = sumLocal(votes);
+		parties.sort((party1, party2) => compare(party1, party2, globalVotes));
+	} else if (sortParties == "Mandater") {
+		var globalSeats = sumLocal(seats);
+		parties.sort((party1, party2) => compare(party1, party2, globalSeats));
+	}
+
+	printTable(voteTable, votes, parties, mergeParties, mergeDistricts, "Distriktsstemmer", showFraction, true, true, decimals);
+	printTable(seatTable, seats, parties, mergeParties, mergeDistricts, "Distriktsmandater", showFraction, true, true, decimals);
 };
 
 function showTables(showVotes, showSeats) {
