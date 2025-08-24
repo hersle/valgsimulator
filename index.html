@@ -54,19 +54,15 @@
 		<p>Påvirker <strong>ikke</strong> beregningen av valgresultatet, men kun visningen av tabellene.</p>
 		<span>
 			<input type="checkbox" id="showfraction" oninput="update();"/>
-			<label for="showfraction">Vis stemmeandeler (rundet <strong>ned</strong> til én desimal)</label>
+			<label for="showfraction">Vis andeler (rundet <strong>ned</strong> til én desimal)</label>
 		</span>
 		<span>
 			<input type="checkbox" id="groupotherparties" oninput="update();"/>
-			<label for="groupotherparties">Slå sammen partier uten mandater</label>
+			<label for="groupotherparties">Samle partier uten mandater</label>
 		</span>
 		<span>
-			<input type="checkbox" id="grouplocalvotes" oninput="update();"/>
-			<label for="grouplocalvotes">Slå sammen distriktsstemmer</label>
-		</span>
-		<span>
-			<input type="checkbox" id="grouplocalseats" oninput="update();"/>
-			<label for="grouplocalseats">Slå sammen distriktsmandater</label>
+			<input type="checkbox" id="grouplocal" oninput="update();"/>
+			<label for="grouplocal">Samle distrikter</label>
 		</span>
 	</fieldset>
 	<h2><a id="voteslink" onclick="showTables(true, false);" style="margin-right: 1em">Stemmer</a><a id="seatslink" onclick="showTables(false, true);">Mandater</a></h2>

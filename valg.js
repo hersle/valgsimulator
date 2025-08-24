@@ -308,19 +308,18 @@ function update() {
 		}
 	}
 
-	var groupLocalVotes = document.getElementById("grouplocalvotes").checked;
-	var groupLocalSeats = document.getElementById("grouplocalseats").checked;
+	var groupLocal = document.getElementById("grouplocal").checked;
 	var mergeDistricts = [];
-	for (var district in votes) {
-		mergeDistricts.push(district);
+	if (groupLocal) {
+		for (var district in votes) {
+			mergeDistricts.push(district);
+		}
 	}
-	var mergeLocalVotes = groupLocalVotes ? mergeDistricts : [];
-	var mergeLocalSeats = groupLocalSeats ? mergeDistricts : [];
 
 	var showFraction = document.getElementById("showfraction").checked;
 
-	printTable(voteTable, votes, mergeParties, mergeLocalVotes, "Distriktsstemmer", showFraction, true, true);
-	printTable(seatTable, seats, mergeParties, mergeLocalSeats, "Distriktsmandater", false, true, true);
+	printTable(voteTable, votes, mergeParties, mergeDistricts, "Distriktsstemmer", showFraction, true, true);
+	printTable(seatTable, seats, mergeParties, mergeDistricts, "Distriktsmandater", showFraction, true, true);
 };
 
 function showTables(showVotes, showSeats) {
