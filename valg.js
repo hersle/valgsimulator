@@ -339,6 +339,13 @@ function update() {
 	} else if (sortParties == "Mandater") {
 		var globalSeats = sumLocal(seats);
 		parties.sort((party1, party2) => compare(party1, party2, globalSeats));
+	} else if (sortParties == "Farge (subjektivt)") {
+		var spectrum = ["NKP", "RØDT", "SV", "A", "SP", "MDG", "KYST", "KRF", "V", "H", "FRP", "KRISTNE", "LIBS", "DEMN", "AAN"];
+		var rightism = {};
+		for (var party of parties) {
+			rightism[party] = spectrum.includes(party) ? spectrum.indexOf(party) : 10000;
+		}
+		parties.sort((party1, party2) => compare(party2, party1, rightism));
 	}
 
 	printTable(voteTable, votes, parties, mergeParties, mergeDistricts, "Distriktsstemmer", showFraction, true, true, decimals);
