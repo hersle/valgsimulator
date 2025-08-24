@@ -287,8 +287,9 @@ function update() {
 	var globalSeatsPerDistrict = parseInt(document.getElementById("globalseatsperdistrict").value);
 	var negativeGlobalSeats = document.getElementById("negativeglobalseats").checked;
 	var areaFactor = parseFloat(document.getElementById("areafactor").value);
+	var minSeatsPerDistrict = parseInt(document.getElementById("minlocalseats").value);
 
-	var [localSeatCounts, globalSeatCount] = calculateAllSeatCounts(districts, localSeatCount, globalSeatsPerDistrict, areaFactor, 0);
+	var [localSeatCounts, globalSeatCount] = calculateAllSeatCounts(districts, localSeatCount, globalSeatsPerDistrict, areaFactor, minSeatsPerDistrict);
 	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, threshold, firstDivisor, negativeGlobalSeats);
 
 	var groupOtherParties = document.getElementById("groupotherparties").checked;
