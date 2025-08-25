@@ -203,10 +203,9 @@ function calculateSeatCounts(districts, seatCount, areaFactor, minSeatsPerDistri
 	return finalSeatCounts;
 };
 
-function calculateAllSeatCounts(districts, localSeatCount, globalSeatsPerDistrict, areaFactor, minSeatsPerDistrict) {
+function calculateAllSeatCounts(districts, totalSeatCount, globalSeatsPerDistrict, areaFactor, minSeatsPerDistrict) {
 	var districtCount = Object.keys(districts).length;
 	var globalSeatCount = globalSeatsPerDistrict * districtCount;
-	var totalSeatCount = localSeatCount + globalSeatCount;
 
 	var localSeatCounts = calculateSeatCounts(districts, totalSeatCount, areaFactor, minSeatsPerDistrict);
 	for (var district in localSeatCounts) {
@@ -334,22 +333,22 @@ function calculateTeams(friends) {
 function update() {
 	var threshold = parseFloat(document.getElementById("threshold").value);
 	var firstDivisor = parseFloat(document.getElementById("firstdivisor").value);
-	var localSeatCount = parseInt(document.getElementById("localseats").value);
+	var totalSeatCount = parseInt(document.getElementById("totalseats").value);
 	var globalSeatsPerDistrict = parseInt(document.getElementById("globalseatsperdistrict").value);
 	var negativeGlobalSeats = document.getElementById("negativeglobalseats").checked;
 	var areaFactor = parseFloat(document.getElementById("areafactor").value);
 	var minSeatsPerDistrict = parseInt(document.getElementById("minlocalseats").value);
 
-	var [localSeatCounts, globalSeatCount] = calculateAllSeatCounts(districts, localSeatCount, globalSeatsPerDistrict, areaFactor, minSeatsPerDistrict);
+	var [localSeatCounts, globalSeatCount] = calculateAllSeatCounts(districts, totalSeatCount, globalSeatsPerDistrict, areaFactor, minSeatsPerDistrict);
 	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, threshold, firstDivisor, negativeGlobalSeats);
 	var globalSeats = sumLocal(seats);
 
 	var groupOtherParties = document.getElementById("groupotherparties").checked;
-	var totalSeats = sumLocal(seats);
+
 	var mergeParties = [];
 	if (groupOtherParties) {
-		for (var party in totalSeats) {
-			if (totalSeats[party] == 0) {
+		for (var party in globalSeats) {
+			if (globalSeats[party] == 0) {
 				mergeParties.push(party);
 			}
 		}
@@ -480,10 +479,9 @@ function update() {
 
 		var teamsDict = {};
 		var teamNames = [];
-		totalSeats = sumGlobal(totalSeats);
 		for (var team of teams) {
 			var teamName = team.join(" + ");
-			teamsDict[teamName] = {"Posisjon": teamSeats[team], "Opposisjon": totalSeats - teamSeats[team]};
+			teamsDict[teamName] = {"Posisjon": teamSeats[team], "Opposisjon": totalSeatCount - teamSeats[team]};
 			teamNames.push(teamName);
 		}
 		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon"], [], [], "", "Partier i posisjon", showFraction, false, true, decimals);
