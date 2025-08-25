@@ -1,3 +1,6 @@
+var voteTab = document.getElementById("votestab");
+var seatTab = document.getElementById("seatstab");
+var teamTab = document.getElementById("teamstab");
 var voteTable = document.getElementById("votes");
 var seatTable = document.getElementById("seats");
 var teamTable = document.getElementById("teams");
@@ -499,9 +502,9 @@ function update() {
 };
 
 function showTables(showVotes, showSeats, showTeams) {
-	voteTable.style["display"] = showVotes ? "block" : "none";
-	seatTable.style["display"] = showSeats ? "block" : "none";
-	teamTable.style["display"] = showTeams ? "block" : "none";
+	voteTab.style["display"] = showVotes ? "block" : "none";
+	seatTab.style["display"] = showSeats ? "block" : "none";
+	teamTab.style["display"] = showTeams ? "block" : "none";
 	voteLink.style["color"] =  showVotes ? "black" : "gray";
 	seatLink.style["color"] =  showSeats ? "black" : "gray";
 	teamLink.style["color"] =  showTeams ? "black" : "gray";
