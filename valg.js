@@ -13,6 +13,7 @@ function roundDown(number, decimals) {
 function printTable(table, data, districts, parties, mergeParties, mergeDistricts, mergedDistrictLabel, firstHeader, showFraction, showColumnTotals, showRowTotals, decimals) {
 	if (mergeParties.length > 0) {
 		var newData = {};
+		parties = parties.slice(); // make copy
 		for (var district in data) {
 			newData[district] = {"ANDRE": 0};
 			for (var party in data[district]) {
@@ -28,7 +29,6 @@ function printTable(table, data, districts, parties, mergeParties, mergeDistrict
 				parties.splice(parties.indexOf(party), 1); // remove from list of sorted parties
 			}
 		}
-		parties = parties.slice(); // make copy
 		parties.push("ANDRE"); // always last
 		return printTable(table, newData, districts, parties, [], mergeDistricts, mergedDistrictLabel, firstHeader, showFraction, showColumnTotals, showRowTotals, decimals);
 	} else if (mergeDistricts.length > 0) {
