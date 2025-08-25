@@ -230,18 +230,18 @@ function calculateLocalSeats(votes, localSeatCounts, firstDivisor, threshold) {
 	return seats;
 };
 
-function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats) {
+function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation) {
 	// Accumulate votes from each district
 	var globalVotes = sumLocal(localVotes);
 	var totalVotes = sumGlobal(globalVotes);
 
 	// Decide which parties are eligible for leveling mandates. They must meet all of these conditions:
-	// * run for election in all districts
+	// * run for election in all districts (can be turned off)
 	// * have at least 4% of the national votes (electoral threshold)
 	for (var party in globalVotes) {
 		if (globalVotes[party] * 100 < globalThreshold * totalVotes) { // globalThreshold is in percent
 			delete globalVotes[party]; // party is below electoral threshold
-		} else {
+		} else if (requireGlobalRepresentation) {
 			for (var district in localVotes) {
 				if (!(party in localVotes[district])) {
 					delete globalVotes[party]; // party is not registered all districts
@@ -250,6 +250,7 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 			}
 		}
 	}
+	//console.log("Eligible for global seats:", globalVotes);
 
 	// Nationwide results when leveling mandates are excluded
 	localSeats = sumLocal(localSeats);
@@ -286,9 +287,9 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 	}
 };
 
-function calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, firstDivisor, negativeGlobalSeats) {
+function calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation) {
 	var seats = calculateLocalSeats(votes, localSeatCounts, firstDivisor, localThreshold);
-	seats["Utjevningsmandater"] = calculateGlobalSeats(votes, seats, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats);
+	seats["Utjevningsmandater"] = calculateGlobalSeats(votes, seats, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation);
 	return seats;
 };
 
@@ -341,9 +342,10 @@ function update() {
 	var negativeGlobalSeats = document.getElementById("negativeglobalseats").checked;
 	var areaFactor = parseFloat(document.getElementById("areafactor").value);
 	var minSeatsPerDistrict = parseInt(document.getElementById("minlocalseats").value);
+	var requireGlobalRepresentation = document.getElementById("requireglobalrepresentation").checked;
 
 	var [localSeatCounts, globalSeatCount] = calculateAllSeatCounts(districts, totalSeatCount, globalSeatsPerDistrict, areaFactor, minSeatsPerDistrict);
-	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, firstDivisor, negativeGlobalSeats);
+	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation);
 	var globalSeats = sumLocal(seats);
 
 	var showFraction = document.getElementById("showfraction").checked;
