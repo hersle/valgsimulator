@@ -224,24 +224,23 @@ function calculateLocalSeats(votes, localSeatCounts, firstDivisor) {
 };
 
 function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats) {
-	// Accumulate votes from each district into nationwide results
+	// Accumulate votes from each district
 	var globalVotes = sumLocal(localVotes);
-
 	var totalVotes = sumGlobal(globalVotes);
 
 	// Decide which parties are eligible for leveling mandates. They must meet all of these conditions:
 	// * run for election in all districts
 	// * have at least 4% of the national votes (electoral threshold)
-	var eligible = {};
 	for (var party in globalVotes) {
-		eligible[party] = true; // eligible for leveling mandates?
-		for (var district in localVotes) {
-			if (!(party in localVotes[district])) {
-				eligible[party] = false; // party is not registered all districts
-			}
-		}
 		if (globalVotes[party] * 100 < globalThreshold * totalVotes) { // globalThreshold is in percent
-			eligible[party] = false; // party is below electoral threshold
+			delete globalVotes[party]; // party is below electoral threshold
+		} else {
+			for (var district in localVotes) {
+				if (!(party in localVotes[district])) {
+					delete globalVotes[party]; // party is not registered all districts
+					break;
+				}
+			}
 		}
 	}
 
@@ -254,11 +253,7 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 		// Allocate all seats including leveling mandates, but exclude ineligible parties
 		var totalSeatCount = globalSeatCount;
 		for (var party in globalVotes) {
-			if (eligible[party]) {
-				totalSeatCount += localSeats[party]; // do not allocate their mandates
-			} else {
-				delete globalVotes[party]; // do not consider their votes
-			}
+			totalSeatCount += localSeats[party]; // allocate mandates for eligible parties only
 		}
 
 		// Nationwide results when leveling mandates are included
@@ -269,12 +264,12 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 
 		// Set number of leveling mandates from difference between nationwide allocations with and without leveling mandates
 		// Check that no parties got fewer mandates with leveling mandates included; otherwise exclude them and repeat
-		success = true;
+		var success = true;
 		for (var party in globalSeats) {
 			globalSeats[party] = globalSeats[party] - localSeats[party];
 			if (!negativeGlobalSeats && globalSeats[party] < 0) {
 				//console.log(party, "got fewer seats with leveling mandates included; repeating allocation with their seats reserved and without their nationwide votes");
-				eligible[party] = false;
+				delete globalVotes[party];
 				success = false;
 			}
 		}
