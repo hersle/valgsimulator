@@ -230,17 +230,25 @@ function calculateLocalSeats(votes, localSeatCounts, firstDivisor, threshold) {
 	return seats;
 };
 
-function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation) {
+function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats) {
 	// Accumulate votes from each district
 	var globalVotes = sumLocal(localVotes);
 	var totalVotes = sumGlobal(globalVotes);
+
+	// Nationwide results when leveling mandates are excluded
+	localSeats = sumLocal(localSeats);
 
 	// Decide which parties are eligible for leveling mandates. They must meet all of these conditions:
 	// * run for election in all districts (can be turned off)
 	// * have at least 4% of the national votes (electoral threshold)
 	for (var party in globalVotes) {
 		if (globalVotes[party] * 100 < globalThreshold * totalVotes) { // globalThreshold is in percent
-			delete globalVotes[party]; // party is below electoral threshold
+			var exempt = exemptGlobalThresholdIflocalSeats && (party in localSeats) && localSeats[party] > 0;
+			if (exempt) {
+				//console.log(party, "is exempt from threshold");
+			} else {
+				delete globalVotes[party]; // party is below electoral threshold
+			}
 		} else if (requireGlobalRepresentation) {
 			for (var district in localVotes) {
 				if (!(party in localVotes[district])) {
@@ -251,9 +259,6 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 		}
 	}
 	//console.log("Eligible for global seats:", globalVotes);
-
-	// Nationwide results when leveling mandates are excluded
-	localSeats = sumLocal(localSeats);
 
 	//console.log("Results without leveling mandates: ", localSeats);
 
@@ -287,9 +292,9 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 	}
 };
 
-function calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation) {
+function calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats) {
 	var seats = calculateLocalSeats(votes, localSeatCounts, firstDivisor, localThreshold);
-	seats["Utjevningsmandater"] = calculateGlobalSeats(votes, seats, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation);
+	seats["Utjevningsmandater"] = calculateGlobalSeats(votes, seats, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats);
 	return seats;
 };
 
@@ -343,9 +348,10 @@ function update() {
 	var areaFactor = parseFloat(document.getElementById("areafactor").value);
 	var minSeatsPerDistrict = parseInt(document.getElementById("minlocalseats").value);
 	var requireGlobalRepresentation = document.getElementById("requireglobalrepresentation").checked;
+	var exemptGlobalThresholdIflocalSeats = document.getElementById("exemptglobalthresholdiflocalseats").checked;
 
 	var [localSeatCounts, globalSeatCount] = calculateAllSeatCounts(districts, totalSeatCount, globalSeatsPerDistrict, areaFactor, minSeatsPerDistrict);
-	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation);
+	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats);
 	var globalSeats = sumLocal(seats);
 
 	var showFraction = document.getElementById("showfraction").checked;
