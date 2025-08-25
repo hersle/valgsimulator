@@ -215,10 +215,17 @@ function calculateAllSeatCounts(districts, totalSeatCount, globalSeatsPerDistric
 	return [localSeatCounts, globalSeatCount];
 };
 
-function calculateLocalSeats(votes, localSeatCounts, firstDivisor) {
+function calculateLocalSeats(votes, localSeatCounts, firstDivisor, threshold) {
 	var seats = {};
 	for (var district in votes) {
-		seats[district] = calculateSeats(votes[district], localSeatCounts[district], firstDivisor);
+		var totalVotes = sumGlobal(votes[district]);
+		var votesAboveThreshold = {};
+		for (var party in votes[district]) {
+			if (votes[district][party] * 100 >= threshold * totalVotes) {
+				votesAboveThreshold[party] = votes[district][party];
+			}
+		}
+		seats[district] = calculateSeats(votesAboveThreshold, localSeatCounts[district], firstDivisor);
 	}
 	return seats;
 };
@@ -279,8 +286,8 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 	}
 };
 
-function calculateAllSeats(votes, localSeatCounts, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats) {
-	var seats = calculateLocalSeats(votes, localSeatCounts, firstDivisor);
+function calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, firstDivisor, negativeGlobalSeats) {
+	var seats = calculateLocalSeats(votes, localSeatCounts, firstDivisor, localThreshold);
 	seats["Utjevningsmandater"] = calculateGlobalSeats(votes, seats, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats);
 	return seats;
 };
@@ -326,7 +333,8 @@ function calculateTeams(friends) {
 };
 
 function update() {
-	var threshold = parseFloat(document.getElementById("threshold").value);
+	var localThreshold = parseFloat(document.getElementById("localthreshold").value);
+	var globalThreshold = parseFloat(document.getElementById("globalthreshold").value);
 	var firstDivisor = parseFloat(document.getElementById("firstdivisor").value);
 	var totalSeatCount = parseInt(document.getElementById("totalseats").value);
 	var globalSeatsPerDistrict = parseInt(document.getElementById("globalseatsperdistrict").value);
@@ -335,27 +343,8 @@ function update() {
 	var minSeatsPerDistrict = parseInt(document.getElementById("minlocalseats").value);
 
 	var [localSeatCounts, globalSeatCount] = calculateAllSeatCounts(districts, totalSeatCount, globalSeatsPerDistrict, areaFactor, minSeatsPerDistrict);
-	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, threshold, firstDivisor, negativeGlobalSeats);
+	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, firstDivisor, negativeGlobalSeats);
 	var globalSeats = sumLocal(seats);
-
-	var groupOtherParties = document.getElementById("groupotherparties").checked;
-
-	var mergeParties = [];
-	if (groupOtherParties) {
-		for (var party in globalSeats) {
-			if (globalSeats[party] == 0) {
-				mergeParties.push(party);
-			}
-		}
-	}
-
-	var groupLocal = document.getElementById("grouplocal").checked;
-	var mergeDistricts = [];
-	if (groupLocal) {
-		for (var district in votes) {
-			mergeDistricts.push(district);
-		}
-	}
 
 	var showFraction = document.getElementById("showfraction").checked;
 	var decimals = parseInt(document.getElementById("decimals").value);
@@ -420,6 +409,24 @@ function update() {
 	}
 	var districtListWithGlobal = districtList.slice();
 	districtListWithGlobal.push("Utjevningsmandater");
+
+	var groupOtherParties = document.getElementById("groupotherparties").checked;
+	var mergeParties = [];
+	if (groupOtherParties) {
+		for (var party of parties) { // all parties are not necessarily in globalSeats (e.g. if under thresholds), so loop over parties instead
+			if (globalSeats[party] == 0 || !(party in globalSeats)) {
+				mergeParties.push(party);
+			}
+		}
+	}
+
+	var groupLocal = document.getElementById("grouplocal").checked;
+	var mergeDistricts = [];
+	if (groupLocal) {
+		for (var district in votes) {
+			mergeDistricts.push(district);
+		}
+	}
 
 	printTable(voteTable, votes, districtList, parties, mergeParties, mergeDistricts, "Distriktsstemmer", "Valgdistrikt", showFraction, true, true, decimals);
 	printTable(seatTable, seats, districtListWithGlobal, parties, mergeParties, mergeDistricts, "Distriktsmandater", "Valgdistrikt", showFraction, true, true, decimals);

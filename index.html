@@ -20,9 +20,14 @@
 			</select>
 		</span>
 		<span>
-			<label for="threshold">Sperregrense utjevningsmandater:</label>
-			<input type="number" id="threshold" value="4" min="0" max="100" step="0.1" oninput="update();" style="width: 3.5em"/>
-			<label for="threshold">%</label>
+			<label for="localthreshold">Sperregrense distriktsmandater:</label>
+			<input type="number" id="localthreshold" value="0" min="0" max="100" step="0.1" oninput="update();" style="width: 3.5em"/>
+			<label for="localthreshold">%</label>
+		</span>
+		<span>
+			<label for="globalthreshold">Sperregrense utjevningsmandater:</label>
+			<input type="number" id="globalthreshold" value="4" min="0" max="100" step="0.1" oninput="update();" style="width: 3.5em"/>
+			<label for="globalthreshold">%</label>
 		</span>
 		<span>
 			<label for="firstdivisor">Første deletall:</label>
