@@ -287,7 +287,9 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 		// Check that no parties got fewer mandates with leveling mandates included; otherwise exclude them and repeat
 		var success = true;
 		for (var party in globalSeats) {
-			globalSeats[party] = globalSeats[party] - localSeats[party];
+			if (party in localSeats) {
+				globalSeats[party] = globalSeats[party] - localSeats[party];
+			}
 			if (!negativeGlobalSeats && globalSeats[party] < 0) {
 				//console.log(party, "got fewer seats with leveling mandates included; repeating allocation with their seats reserved and without their nationwide votes");
 				delete globalVotes[party];
@@ -474,7 +476,7 @@ function update() {
 
 	// Do not let unrepresented parties be part of coalitions
 	for (var party in friends) {
-		if (globalSeats[party] == 0) {
+		if (globalSeats[party] == 0 || !(party in globalSeats)) {
 			delete friends[party];
 		}
 	}
@@ -489,7 +491,9 @@ function update() {
 		for (var team of teams) {
 			teamSeats[team] = 0;
 			for (var party of team) {
-				teamSeats[team] += globalSeats[party];
+				if (party in globalSeats) {
+					teamSeats[team] += globalSeats[party];
+				}
 			}
 		}
 
@@ -509,7 +513,7 @@ function update() {
 	var LSq = 0.0;
 	var LH = 0.0;
 	for (var party of parties) {
-		var fracSeats = globalSeats[party] / totalSeatCount;
+		var fracSeats = party in globalSeats ? globalSeats[party] / totalSeatCount : 0.0;
 		var fracVotes = globalVotes[party] / totalVotes;
 		LSq += (fracVotes - fracSeats)**2;
 		LH += Math.abs(fracVotes - fracSeats);
