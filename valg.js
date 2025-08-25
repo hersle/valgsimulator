@@ -1,12 +1,17 @@
 var voteTab = document.getElementById("votestab");
 var seatTab = document.getElementById("seatstab");
 var teamTab = document.getElementById("teamstab");
+var statTab = document.getElementById("statstab");
 var voteTable = document.getElementById("votes");
 var seatTable = document.getElementById("seats");
 var teamTable = document.getElementById("teams");
+var statTable = document.getElementById("stats");
 var voteLink = document.getElementById("voteslink");
 var seatLink = document.getElementById("seatslink");
 var teamLink = document.getElementById("teamslink");
+var statLink = document.getElementById("statslink");
+
+var LANG = "no-NO";
 
 function roundDown(number, decimals) {
 	number = Math.floor(number * 10**decimals) / 10**decimals;
@@ -65,7 +70,7 @@ function printTable(table, data, districts, parties, mergeParties, mergeDistrict
 	table.tBodies[0].innerHTML = "";
 
 	// Print table
-	const format = (x, total) => showFraction ? (roundDown(100*x/total, decimals) + " %") : x.toLocaleString("no-NO"); // round *down* so parties slightly below threshold cannot seem to be above it (e.g. show 3.999% as 3.9% instead of 4.0%)
+	const format = (x, total) => showFraction ? (roundDown(100*x/total, decimals) + " %") : x.toLocaleString(LANG); // round *down* so parties slightly below threshold cannot seem to be above it (e.g. show 3.999% as 3.9% instead of 4.0%)
 	var head = table.tHead.insertRow();
 	var cell = document.createElement("th");
 	cell.innerHTML = firstHeader;
@@ -370,11 +375,11 @@ function update() {
 			}
 		}
 	}
+	var globalVotes = sumLocal(votes);
 	var compare = (party1, party2, data) => data[party2] == data[party1] ? (party1 < party2 ? -1 : +1) : (data[party2] - data[party1]); // sort by value in "data", but by name if values are equal
 	if (sortParties == "Navn") {
 		parties.sort();
 	} else if (sortParties == "Stemmer") {
-		var globalVotes = sumLocal(votes);
 		parties.sort((party1, party2) => compare(party1, party2, globalVotes));
 	} else if (sortParties == "Mandater") {
 		parties.sort((party1, party2) => compare(party1, party2, globalSeats));
@@ -499,15 +504,34 @@ function update() {
 		}
 		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon"], [], [], "", "Partier i posisjon", showFraction, false, true, decimals);
 	}
+
+	var totalVotes = sumGlobal(globalVotes);
+	var LSq = 0.0;
+	var LH = 0.0;
+	for (var party of parties) {
+		var fracSeats = globalSeats[party] / totalSeatCount;
+		var fracVotes = globalVotes[party] / totalVotes;
+		LSq += (fracVotes - fracSeats)**2;
+		LH += Math.abs(fracVotes - fracSeats);
+	}
+	LSq = Math.sqrt(LSq / 2);
+	LH = LH / 2;
+	var data = {
+		"Disproporsjonalitet (Gallagher)": {"Verdi": (100*LSq).toLocaleString(LANG) + " %"},
+		"Disproporsjonalitet (Loosemore-Hanby)": {"Verdi": (100*LH).toLocaleString(LANG) + " %"},
+	};
+	printTable(statTable, data, Object.keys(data), ["Verdi"], [], [], "", "Variabel", false, false, false, 0);
 };
 
-function showTables(showVotes, showSeats, showTeams) {
+function showTables(showVotes, showSeats, showTeams, showStats) {
 	voteTab.style["display"] = showVotes ? "block" : "none";
 	seatTab.style["display"] = showSeats ? "block" : "none";
 	teamTab.style["display"] = showTeams ? "block" : "none";
+	statTab.style["display"] = showStats ? "block" : "none";
 	voteLink.style["color"] =  showVotes ? "black" : "gray";
 	seatLink.style["color"] =  showSeats ? "black" : "gray";
 	teamLink.style["color"] =  showTeams ? "black" : "gray";
+	statLink.style["color"] =  showStats ? "black" : "gray";
 };
 
 showTables(true, false, false);

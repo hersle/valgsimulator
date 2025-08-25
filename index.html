@@ -105,9 +105,10 @@
 		</span>
 	</fieldset>
 	<h2>
-		<a id="voteslink" onclick="showTables(true, false, false);" style="margin-right: 0.3em">Stemmer</a>
-		<a id="seatslink" onclick="showTables(false, true, false);" style="margin-right: 0.3em">Mandater</a>
-		<a id="teamslink" onclick="showTables(false, false, true);">Koalisjoner</a>
+		<a id="voteslink" onclick="showTables(true, false, false, false);" style="margin-right: 0.3em">Stemmer</a>
+		<a id="seatslink" onclick="showTables(false, true, false, false);" style="margin-right: 0.3em">Mandater</a>
+		<a id="teamslink" onclick="showTables(false, false, true, false);" style="margin-right: 0.3em">Koalisjoner</a>
+		<a id="statslink" onclick="showTables(false, false, false, true);">Statistikk</a>
 	</h2>
 	<div id="votestab" class="tablecontainer">
 		<table id="votes">
@@ -123,6 +124,12 @@
 	</div>
 	<div id="teamstab" class="tablecontainer">
 		<table id="teams">
+			<thead></thead>
+			<tbody></tbody>
+		</table>
+	</div>
+	<div id="statstab" class="tablecontainer">
+		<table id="stats">
 			<thead></thead>
 			<tbody></tbody>
 		</table>
