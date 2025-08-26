@@ -162,6 +162,9 @@ function sainteLague12(votes, s) {
 function sainteLague10(votes, s) {
 	return votes / (2*s + 1);
 }
+function dHondt(votes, s) {
+	return votes / (s + 1);
+}
 
 function calculateSeats(votes, seatCount, scoreFunction) {
 	var seats = {};
@@ -375,6 +378,8 @@ function update() {
 		var scoreFunction = sainteLague12;
 	} else	if (method == "Sainte-Laguë fra 1,0") {
 		var scoreFunction = sainteLague10;
+	} else if (method == "D’Hondt") {
+		var scoreFunction = dHondt;
 	} else {
 		alert("Unknown method " + method);
 	}
