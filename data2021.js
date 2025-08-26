@@ -1,4 +1,4 @@
-var partyNames = {
+var partyNames2021 = {
 	"A": "Arbeiderpartiet",
 	"SV": "SV - Sosialistisk Venstreparti",
 	"RØDT": "Rødt",
@@ -20,7 +20,7 @@ var partyNames = {
 	"PS": "Partiet Sentrum",
 };
 
-var votes = {
+var votes2021 = {
 	"Østfold": {
 		"A": 49345,
 		"SV": 9840,
@@ -440,7 +440,7 @@ var votes = {
 };
 
 // https://www.regjeringen.no/no/dokumentarkiv/regjeringen-solberg/aktuelt-regjeringen-solberg/kmd/pressemeldinger/2020/fordeling-av-mandatene-ved-neste-stortingsvalg/id2699589/
-var districts = {
+var districts2021 = {
 	"Østfold": {"population": 299447, "area": 4004},
 	"Akershus": {"population": 675240, "area": 5669},
 	"Oslo": {"population": 693494, "area": 454},

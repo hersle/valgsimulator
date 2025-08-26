@@ -67,6 +67,14 @@
 			<input type="checkbox" id="requireglobalrepresentation" oninput="update();"/>
 			<label for="requireglobalrepresentation">Utjevningsmandater krever deltakelse i alle distrikter</label>
 		</span>
+		<span>
+			<label for="extravotes">Gi</label>
+			<input type="number" id="extravotes" style="width: 6em" value="0" step="1" oninput="update();"/>
+			<label for="extraparty">ekstra stemmer til</label>
+			<select id="extraparty" oninput="update();"></select>
+			<label for="extradistrict">i</label>
+			<select id="extradistrict" oninput="update();"></select>
+		</span>
 	</fieldset>
 	<fieldset>
 		<legend>Visningsalternativer</legend>

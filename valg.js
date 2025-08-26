@@ -364,6 +364,15 @@ function calculateTeams(friends) {
 };
 
 function update() {
+	var districts = districts2021;
+	var votes = {};	// deep copy votes, so extra votes doesn't modify original data
+	for (var district in votes2021) {
+		votes[district] = {};
+		for (var party in votes2021[district]) {
+			votes[district][party] = votes2021[district][party];
+		}
+	}
+
 	var localThreshold = parseFloat(document.getElementById("localthreshold").value);
 	var globalThreshold = parseFloat(document.getElementById("globalthreshold").value);
 	var totalSeatCount = parseInt(document.getElementById("totalseats").value);
@@ -387,6 +396,19 @@ function update() {
 		var scoreFunction = hamilton;
 	} else {
 		alert("Unknown method " + method);
+	}
+
+	var extraVotesInput = document.getElementById("extravotes");
+	var extraPartyInput = document.getElementById("extraparty");
+	var extraDistrictInput = document.getElementById("extradistrict");
+	var extraVotes = parseInt(extraVotesInput.value);
+	var extraParty = extraPartyInput.value;
+	var extraDistrict = extraDistrictInput.value;
+	if (extraParty && extraDistrict && !isNaN(extraVotes)) {
+		if (!(extraParty in votes[extraDistrict])) {
+			votes[extraDistrict][extraParty] = 0; // if party did not run in that district originally, make it run
+		}
+		votes[extraDistrict][extraParty] += extraVotes;
 	}
 
 	var [localSeatCounts, globalSeatCount] = calculateAllSeatCounts(districts, totalSeatCount, globalSeatsPerDistrict, areaFactor, minSeatsPerDistrict);
@@ -554,6 +576,22 @@ function update() {
 		"Disproporsjonalitet (Loosemore-Hanby)": {"Verdi": (100*LH).toLocaleString(LANG) + " %"},
 	};
 	printTable(statTable, data, Object.keys(data), ["Verdi"], [], [], "", "Variabel", false, false, false, 0);
+
+	extraPartyInput.innerHTML = "";
+	for (var party of parties) {
+		var el = document.createElement("option");
+		el.innerHTML = party;
+		extraPartyInput.appendChild(el);
+	}
+	extraPartyInput.value = extraParty; // restore selection
+
+	extraDistrictInput.innerHTML = "";
+	for (var district of districtList) {
+		var el = document.createElement("option");
+		el.innerHTML = district;
+		extraDistrictInput.appendChild(el);
+	}
+	extraDistrictInput.value = extraDistrict; // restore selection
 };
 
 function showTables(showVotes, showSeats, showTeams, showStats) {
