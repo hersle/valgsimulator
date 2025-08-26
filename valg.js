@@ -153,7 +153,17 @@ function sumGlobal(global) {
 	return total;
 }
 
-function calculateSeats(votes, seatCount, firstDivisor) {
+function sainteLague14(votes, s) {
+	return votes / (s == 0 ? 1.4 : (2*s + 1));
+}
+function sainteLague12(votes, s) {
+	return votes / (s == 0 ? 1.2 : (2*s + 1));
+}
+function sainteLague10(votes, s) {
+	return votes / (2*s + 1);
+}
+
+function calculateSeats(votes, seatCount, scoreFunction) {
 	var seats = {};
 	for (var party in votes) {
 		seats[party] = 0;
@@ -164,13 +174,12 @@ function calculateSeats(votes, seatCount, firstDivisor) {
 		var bestParty = null;
 		for (var party in votes) {
 			var s = seats[party];
-			var divisor = s == 0 ? firstDivisor : 2*s + 1; // modified first Sainte-Laguë divisor
-			var score = votes[party] / divisor; // Sainte-Laguë method // TODO: other methods
+			var score = scoreFunction(votes[party], s); // TODO: other methods
 			if (score > bestScore) {
 				bestScore = score;
 				bestParty = party;
 			} else if (score == bestScore) {
-				alert("Error: " + bestparty + " and " + party + " tied. Don't know how to handle this."); // TODO: implement edge case handling
+				alert("Error: " + bestParty + " and " + party + " tied with score " + score + ". Don't know how to handle this."); // TODO: implement edge case handling
 			}
 		}
 		seats[bestParty] += 1;
@@ -189,7 +198,7 @@ function calculateSeatCounts(districts, seatCount, areaFactor, minSeatsPerDistri
 	var success = false;
 	var finalSeatCounts = {};
 	while (!success) {
-		var seatCounts = calculateSeats(scores, seatCount, 1);
+		var seatCounts = calculateSeats(scores, seatCount, sainteLague10);
 
 		success = true;
 		for (var district in seatCounts) {
@@ -223,7 +232,7 @@ function calculateAllSeatCounts(districts, totalSeatCount, globalSeatsPerDistric
 	return [localSeatCounts, globalSeatCount];
 };
 
-function calculateLocalSeats(votes, localSeatCounts, firstDivisor, threshold) {
+function calculateLocalSeats(votes, localSeatCounts, scoreFunction, threshold) {
 	var seats = {};
 	for (var district in votes) {
 		var totalVotes = sumGlobal(votes[district]);
@@ -233,12 +242,12 @@ function calculateLocalSeats(votes, localSeatCounts, firstDivisor, threshold) {
 				votesAboveThreshold[party] = votes[district][party];
 			}
 		}
-		seats[district] = calculateSeats(votesAboveThreshold, localSeatCounts[district], firstDivisor);
+		seats[district] = calculateSeats(votesAboveThreshold, localSeatCounts[district], scoreFunction);
 	}
 	return seats;
 };
 
-function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats) {
+function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThreshold, scoreFunction, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats) {
 	// Accumulate votes from each district
 	var globalVotes = sumLocal(localVotes);
 	var totalVotes = sumGlobal(globalVotes);
@@ -278,7 +287,7 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 		}
 
 		// Nationwide results when leveling mandates are included
-		var globalSeats = calculateSeats(globalVotes, totalSeatCount, firstDivisor);
+		var globalSeats = calculateSeats(globalVotes, totalSeatCount, scoreFunction);
 
 		//console.log("Allocating " + totalSeatCount + " mandates from votes", globalVotes);
 		//console.log("Allocated", globalSeats);
@@ -302,9 +311,9 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 	}
 };
 
-function calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats) {
-	var seats = calculateLocalSeats(votes, localSeatCounts, firstDivisor, localThreshold);
-	seats["Utjevningsmandater"] = calculateGlobalSeats(votes, seats, globalSeatCount, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats);
+function calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, scoreFunction, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats) {
+	var seats = calculateLocalSeats(votes, localSeatCounts, scoreFunction, localThreshold);
+	seats["Utjevningsmandater"] = calculateGlobalSeats(votes, seats, globalSeatCount, globalThreshold, scoreFunction, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats);
 	return seats;
 };
 
@@ -351,7 +360,6 @@ function calculateTeams(friends) {
 function update() {
 	var localThreshold = parseFloat(document.getElementById("localthreshold").value);
 	var globalThreshold = parseFloat(document.getElementById("globalthreshold").value);
-	var firstDivisor = parseFloat(document.getElementById("firstdivisor").value);
 	var totalSeatCount = parseInt(document.getElementById("totalseats").value);
 	var globalSeatsPerDistrict = parseInt(document.getElementById("globalseatsperdistrict").value);
 	var negativeGlobalSeats = document.getElementById("negativeglobalseats").checked;
@@ -360,8 +368,19 @@ function update() {
 	var requireGlobalRepresentation = document.getElementById("requireglobalrepresentation").checked;
 	var exemptGlobalThresholdIflocalSeats = document.getElementById("exemptglobalthresholdiflocalseats").checked;
 
+	var method = document.getElementById("method").value;
+	if (method == "Sainte-Laguë fra 1,4") {
+		var scoreFunction = sainteLague14;
+	} else	if (method == "Sainte-Laguë fra 1,2") {
+		var scoreFunction = sainteLague12;
+	} else	if (method == "Sainte-Laguë fra 1,0") {
+		var scoreFunction = sainteLague10;
+	} else {
+		alert("Unknown method " + method);
+	}
+
 	var [localSeatCounts, globalSeatCount] = calculateAllSeatCounts(districts, totalSeatCount, globalSeatsPerDistrict, areaFactor, minSeatsPerDistrict);
-	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, firstDivisor, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats);
+	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, scoreFunction, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats);
 	var globalSeats = sumLocal(seats);
 
 	var showFraction = document.getElementById("showfraction").checked;
