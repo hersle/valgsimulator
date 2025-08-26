@@ -153,31 +153,35 @@ function sumGlobal(global) {
 	return total;
 }
 
-function sainteLague14(votes, s) {
-	return votes / (s == 0 ? 1.4 : (2*s + 1));
+function sainteLague14(votes, seats, totalVotes, totalSeats) {
+	return votes / (seats == 0 ? 1.4 : (2*seats + 1));
 }
-function sainteLague12(votes, s) {
-	return votes / (s == 0 ? 1.2 : (2*s + 1));
+function sainteLague12(votes, seats, totalVotes, totalSeats) {
+	return votes / (seats == 0 ? 1.2 : (2*seats + 1));
 }
-function sainteLague10(votes, s) {
-	return votes / (2*s + 1);
+function sainteLague10(votes, seats, totalVotes, totalSeats) {
+	return votes / (2*seats + 1);
 }
-function dHondt(votes, s) {
-	return votes / (s + 1);
+function dHondt(votes, seats, totalVotes, totalSeats) {
+	return votes / (seats + 1);
+}
+function hamilton(votes, seats, totalVotes, totalSeats) {
+	return votes * totalSeats - seats * totalVotes; // equivalent to votes/totalVotes * totalSeats - seats, but avoids any divison by zero
 }
 
-function calculateSeats(votes, seatCount, scoreFunction) {
+function calculateSeats(votes, totalSeats, scoreFunction) {
 	var seats = {};
 	for (var party in votes) {
 		seats[party] = 0;
 	}
 
-	while (seatCount > 0) {
-		var bestScore = 0.0;
+	var totalVotes = sumGlobal(votes);
+
+	for (var seat = 1; seat <= totalSeats; seat++) {
+		var bestScore = Number.MIN_VALUE;
 		var bestParty = null;
 		for (var party in votes) {
-			var s = seats[party];
-			var score = scoreFunction(votes[party], s); // TODO: other methods
+			var score = scoreFunction(votes[party], seats[party], totalVotes, totalSeats);
 			if (score > bestScore) {
 				bestScore = score;
 				bestParty = party;
@@ -186,7 +190,6 @@ function calculateSeats(votes, seatCount, scoreFunction) {
 			}
 		}
 		seats[bestParty] += 1;
-		seatCount -= 1;
 	}
 
 	return seats;
@@ -380,6 +383,8 @@ function update() {
 		var scoreFunction = sainteLague10;
 	} else if (method == "D’Hondt") {
 		var scoreFunction = dHondt;
+	} else if (method == "Hare/Hamilton") {
+		var scoreFunction = hamilton;
 	} else {
 		alert("Unknown method " + method);
 	}
