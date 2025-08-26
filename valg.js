@@ -592,6 +592,8 @@ function update() {
 		extraDistrictInput.appendChild(el);
 	}
 	extraDistrictInput.value = extraDistrict; // restore selection
+
+	extraVotesInput.step = extraVotes == 0 ? 1 : 10 ** Math.floor(Math.log10(Math.abs(extraVotes)));;
 };
 
 function showTables(showVotes, showSeats, showTeams, showStats) {
