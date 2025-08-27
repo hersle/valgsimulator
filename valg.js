@@ -363,9 +363,31 @@ function calculateTeams(friends) {
 	return dfs([], []).slice(1); // drop empty team
 };
 
+function mergeDistrictData(datasets, districts, newDistrict) {
+	for (var dataset of datasets) {
+		dataset[newDistrict] = {};
+		for (var district of districts) {
+			for (var party in dataset[district]) {
+				if (!(party in dataset[newDistrict])) {
+					dataset[newDistrict][party] = 0;
+				}
+				dataset[newDistrict][party] += dataset[district][party];
+			}
+			delete dataset[district];
+		}
+	}
+};
+
 function update() {
-	var districts = districts2021;
-	var votes = {};	// deep copy votes, so extra votes doesn't modify original data
+	// Deep copy votes, so original data is not modified
+	var districts = {};
+	for (var district in districts2021) {
+		districts[district] = {};
+		for (var key in districts2021[district]) {
+			districts[district][key] = districts2021[district][key];
+		}
+	}
+	var votes = {};
 	for (var district in votes2021) {
 		votes[district] = {};
 		for (var party in votes2021[district]) {
@@ -404,6 +426,20 @@ function update() {
 	var extraVotes = parseInt(extraVotesInput.value);
 	var extraParty = extraPartyInput.value;
 	var extraDistrict = extraDistrictInput.value;
+
+	if (document.getElementById("mergedistricts").checked) {
+		mergeDistrictData([votes, districts], ["Buskerud", "Akershus", "Østfold"], "Viken");
+		mergeDistrictData([votes, districts], ["Oppland", "Hedmark"], "Innlandet");
+		mergeDistrictData([votes, districts], ["Vestfold", "Telemark"], "Vestfold og Telemark");
+		mergeDistrictData([votes, districts], ["Aust-Agder", "Vest-Agder"], "Agder");
+		mergeDistrictData([votes, districts], ["Sogn og Fjordane", "Hordaland"], "Vestland");
+		mergeDistrictData([votes, districts], ["Troms", "Finnmark"], "Troms og Finnmark");
+		mergeDistrictData([votes, districts], ["Sør-Trøndelag", "Nord-Trøndelag"], "Trøndelag");
+		if (!(extraDistrict in Object.keys(districts))) {
+			extraDistrictInput.value = ""; // de-select invalid extra vote district if not part of new merged districts
+		}
+	}
+
 	if (extraParty && extraDistrict && !isNaN(extraVotes)) {
 		if (!(extraParty in votes[extraDistrict])) {
 			votes[extraDistrict][extraParty] = 0; // if party did not run in that district originally, make it run
