@@ -17,13 +17,17 @@ var logLink = document.getElementById("loglink");
 
 var LANG = "no-NO";
 
-function roundDown(number, decimals) {
+// Cut off remaining decimals
+function truncate(number, decimals) {
+	if (number < 0) {
+		return -truncate(-number, decimals);
+	}
 	number = Math.floor(number * 10**decimals) / 10**decimals;
 	return number.toFixed(decimals);
 };
 
 function formatFraction(x, total, decimals) {
-	return roundDown(100*x/total, decimals) + " %"; // round *down* so parties slightly below threshold cannot seem to be above it (e.g. show 3.999% as 3.9% instead of 4.0%)
+	return truncate(100*x/total, decimals) + " %"; // round *down* so parties slightly below threshold cannot seem to be above it (e.g. show 3.999% as 3.9% instead of 4.0%)
 }
 function formatCount(x, total) {
 	return x.toLocaleString(LANG);
@@ -652,7 +656,7 @@ function update() {
 		"Disproporsjonalitet (Gallagher)": {"Verdi": LSq},
 		"Disproporsjonalitet (Loosemore-Hanby)": {"Verdi": LH},
 	};
-	var format = (frac, total) => roundDown(frac, decimals) + " %";
+	var format = (frac, total) => truncate(frac, decimals) + " %";
 	printTable(statTable, data, Object.keys(data), ["Verdi"], [], [], "", "Sammendragsvariabel", false, false, format);
 	printTable(partyStatTable, partyStats, Object.keys(partyStats), ["Andel mandater", "Andel stemmer", "Overrepresentasjon"], [], mergeParties, "ANDRE", "Parti", false, false, format);
 
