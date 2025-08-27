@@ -2,20 +2,30 @@ var voteTab = document.getElementById("votestab");
 var seatTab = document.getElementById("seatstab");
 var teamTab = document.getElementById("teamstab");
 var statTab = document.getElementById("statstab");
+var logTab = document.getElementById("logtab");
 var voteTable = document.getElementById("votes");
 var seatTable = document.getElementById("seats");
 var teamTable = document.getElementById("teams");
 var statTable = document.getElementById("stats");
+var log = document.getElementById("log");
 var voteLink = document.getElementById("voteslink");
 var seatLink = document.getElementById("seatslink");
 var teamLink = document.getElementById("teamslink");
 var statLink = document.getElementById("statslink");
+var logLink = document.getElementById("loglink");
 
 var LANG = "no-NO";
 
 function roundDown(number, decimals) {
 	number = Math.floor(number * 10**decimals) / 10**decimals;
 	return number.toFixed(decimals);
+};
+
+function clearLog() {
+	log.innerHTML = "";
+};
+function printLog(line) {
+	log.innerHTML += line + '\n';
 };
 
 function printTable(table, data, districts, parties, mergeParties, mergeDistricts, mergedDistrictLabel, firstHeader, showFraction, showColumnTotals, showRowTotals, decimals) {
@@ -189,6 +199,7 @@ function calculateSeats(votes, totalSeats, scoreFunction) {
 				alert("Error: " + bestParty + " and " + party + " tied with score " + score + ". Don't know how to handle this."); // TODO: implement edge case handling
 			}
 		}
+		printLog("  " + seat + ". mandat til " + bestParty + " med " + bestScore + " poeng (" + seats[bestParty] + " mandater fra før)");
 		seats[bestParty] += 1;
 	}
 
@@ -203,12 +214,14 @@ function calculateSeatCounts(districts, seatCount, areaFactor, minSeatsPerDistri
 
 	var success = false;
 	var finalSeatCounts = {};
-	while (!success) {
+	for (var attempt = 1; !success; attempt++) {
+		printLog(attempt + ". forsøk: Fordeler " + seatCount + " seter mellom " + Object.keys(districts).length + " distrikter med arealfaktor " + areaFactor + " og minst " + minSeatsPerDistrict + " seter til hvert distrikt");
 		var seatCounts = calculateSeats(scores, seatCount, sainteLague10);
 
 		success = true;
 		for (var district in seatCounts) {
 			if (seatCounts[district] < minSeatsPerDistrict) {
+				printLog("  " + district + " fikk bare " + seatCounts[district] + " seter; reserverer " + minSeatsPerDistrict + " seter og holder dem utenfor kommende omfordeling");
 				finalSeatCounts[district] = minSeatsPerDistrict;
 				seatCount -= minSeatsPerDistrict;
 				delete scores[district];
@@ -220,6 +233,8 @@ function calculateSeatCounts(districts, seatCount, areaFactor, minSeatsPerDistri
 			for (var district in seatCounts) {
 				finalSeatCounts[district] = seatCounts[district];
 			}
+		} else {
+			printLog("");
 		}
 	}
 
@@ -231,7 +246,9 @@ function calculateAllSeatCounts(districts, totalSeatCount, globalSeatsPerDistric
 	var globalSeatCount = globalSeatsPerDistrict * districtCount;
 
 	var localSeatCounts = calculateSeatCounts(districts, totalSeatCount, areaFactor, minSeatsPerDistrict);
+	printLog("");
 	for (var district in localSeatCounts) {
+		printLog("Deler " + localSeatCounts[district] + " mandater i " + district + " mellom " + (localSeatCounts[district] - globalSeatsPerDistrict) + " distriktsmandater og " + globalSeatsPerDistrict + " utjevningsmandater");
 		localSeatCounts[district] -= globalSeatsPerDistrict;
 	}
 
@@ -248,12 +265,16 @@ function calculateLocalSeats(votes, localSeatCounts, scoreFunction, threshold) {
 				votesAboveThreshold[party] = votes[district][party];
 			}
 		}
+		printLog("");
+		printLog("Fordeler " + localSeatCounts[district] + " distriktsmandater i " + district + " mellom " + Object.keys(votesAboveThreshold).join(", ") + " (fikk minst " + threshold + " % av stemmene)");
 		seats[district] = calculateSeats(votesAboveThreshold, localSeatCounts[district], scoreFunction);
 	}
 	return seats;
 };
 
 function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThreshold, scoreFunction, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats) {
+	printLog("");
+
 	// Accumulate votes from each district
 	var globalVotes = sumLocal(localVotes);
 	var totalVotes = sumGlobal(globalVotes);
@@ -268,35 +289,34 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 		if (globalVotes[party] * 100 < globalThreshold * totalVotes) { // globalThreshold is in percent
 			var exempt = exemptGlobalThresholdIflocalSeats && (party in localSeats) && localSeats[party] > 0;
 			if (exempt) {
-				//console.log(party, "is exempt from threshold");
+				printLog(party + " unntas fra sperregrensen for utjevningsmandater fordi de har minst ett distriktsmandat");
 			} else {
+				printLog(party + " (" + (globalVotes[party]*100/totalVotes) + " % av nasjonale stemmer) kom under sperregrensen (" + globalThreshold + " %) og holdes utenfor fordelingen av utjevningsmandater");
 				delete globalVotes[party]; // party is below electoral threshold
 			}
 		} else if (requireGlobalRepresentation) {
 			for (var district in localVotes) {
 				if (!(party in localVotes[district])) {
+					printLog(party + " stiller ikke til valg i alle distrikter og holdes utenfor fordelingen av utjevningsmandater")
 					delete globalVotes[party]; // party is not registered all districts
 					break;
 				}
 			}
 		}
 	}
-	//console.log("Eligible for global seats:", globalVotes);
 
-	//console.log("Results without leveling mandates: ", localSeats);
-
-	while (true) { // may have to repeat
+	for (var attempt = 1; true; attempt++) { // may have to repeat
 		// Allocate all seats including leveling mandates, but exclude ineligible parties
 		var totalSeatCount = globalSeatCount;
 		for (var party in globalVotes) {
 			totalSeatCount += localSeats[party]; // allocate mandates for eligible parties only
 		}
 
+		printLog("");
+		printLog(attempt + ". forsøk: Fordeler " + totalSeatCount + " mandater nasjonalt mellom " + Object.keys(globalVotes).join(", ") + " (" + (totalSeatCount - globalSeatCount) + " distriktsmandater + " + globalSeatCount + " utjevningsmandater)");
+
 		// Nationwide results when leveling mandates are included
 		var globalSeats = calculateSeats(globalVotes, totalSeatCount, scoreFunction);
-
-		//console.log("Allocating " + totalSeatCount + " mandates from votes", globalVotes);
-		//console.log("Allocated", globalSeats);
 
 		// Set number of leveling mandates from difference between nationwide allocations with and without leveling mandates
 		// Check that no parties got fewer mandates with leveling mandates included; otherwise exclude them and repeat
@@ -305,8 +325,9 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 			if (party in localSeats) {
 				globalSeats[party] = globalSeats[party] - localSeats[party];
 			}
+			printLog(party + " fikk " + globalSeats[party] + " utjevningsmandater (" + (localSeats[party] + globalSeats[party]) + " mandater i nasjonal fordeling - " + localSeats[party] + " distriktsmandater fra før)");
 			if (!negativeGlobalSeats && globalSeats[party] < 0) {
-				//console.log(party, "got fewer seats with leveling mandates included; repeating allocation with their seats reserved and without their nationwide votes");
+				printLog(party + " fikk færre mandater i den nasjonale fordelingen med utjevningsmandater enn de har distriktsmandater fra før; holder dem utenfor kommende omfordeling");
 				delete globalVotes[party];
 				success = false;
 			}
@@ -379,6 +400,8 @@ function mergeDistrictData(datasets, districts, newDistrict) {
 };
 
 function update() {
+	clearLog();
+
 	// Deep copy votes, so original data is not modified
 	var districts = {};
 	for (var district in districts2021) {
@@ -632,16 +655,18 @@ function update() {
 	extraVotesInput.step = extraVotes == 0 ? 1 : 10 ** Math.floor(Math.log10(Math.abs(extraVotes)));;
 };
 
-function showTables(showVotes, showSeats, showTeams, showStats) {
+function showTables(showVotes, showSeats, showTeams, showStats, showLog) {
 	voteTab.style["display"] = showVotes ? "block" : "none";
 	seatTab.style["display"] = showSeats ? "block" : "none";
 	teamTab.style["display"] = showTeams ? "block" : "none";
 	statTab.style["display"] = showStats ? "block" : "none";
+	logTab.style["display"] = showLog ? "block" : "none";
 	voteLink.style["color"] =  showVotes ? "black" : "gray";
 	seatLink.style["color"] =  showSeats ? "black" : "gray";
 	teamLink.style["color"] =  showTeams ? "black" : "gray";
 	statLink.style["color"] =  showStats ? "black" : "gray";
+	logLink.style["color"] =  showLog ? "black" : "gray";
 };
 
-showTables(true, false, false);
+showTables(true, false, false, false, false);
 update(); // run once on page load

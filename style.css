@@ -50,3 +50,9 @@ h2 {
 	white-space: nowrap;
 	overflow-x: auto;
 }
+
+#log {
+	width: 100%;
+	box-sizing: border-box;
+	resize: vertical;
+}

@@ -123,10 +123,11 @@
 		</span>
 	</fieldset>
 	<h2>
-		<a id="voteslink" onclick="showTables(true, false, false, false);" style="margin-right: 0.3em">Stemmer</a>
-		<a id="seatslink" onclick="showTables(false, true, false, false);" style="margin-right: 0.3em">Mandater</a>
-		<a id="teamslink" onclick="showTables(false, false, true, false);" style="margin-right: 0.3em">Koalisjoner</a>
-		<a id="statslink" onclick="showTables(false, false, false, true);">Statistikk</a>
+		<a id="voteslink" onclick="showTables(true, false, false, false, false);" style="margin-right: 0.3em">Stemmer</a>
+		<a id="seatslink" onclick="showTables(false, true, false, false, false);" style="margin-right: 0.3em">Mandater</a>
+		<a id="teamslink" onclick="showTables(false, false, true, false, false);" style="margin-right: 0.3em">Koalisjoner</a>
+		<a id="statslink" onclick="showTables(false, false, false, true, false);" style="margin-right: 0.3em">Statistikk</a>
+		<a id="loglink" onclick="showTables(false, false, false, false, true);">Logg</a>
 	</h2>
 	<div id="votestab" class="tablecontainer">
 		<table id="votes">
@@ -151,6 +152,9 @@
 			<thead></thead>
 			<tbody></tbody>
 		</table>
+	</div>
+	<div id="logtab" class="tablecontainer">
+		<textarea id="log" rows="25" readonly></textarea>
 	</div>
 	<h2>Kilder</h2>
 	<ul>
