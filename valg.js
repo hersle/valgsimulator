@@ -7,6 +7,7 @@ var voteTable = document.getElementById("votes");
 var seatTable = document.getElementById("seats");
 var teamTable = document.getElementById("teams");
 var statTable = document.getElementById("stats");
+var partyStatTable = document.getElementById("partystats");
 var log = document.getElementById("log");
 var voteLink = document.getElementById("voteslink");
 var seatLink = document.getElementById("seatslink");
@@ -622,19 +623,28 @@ function update() {
 	var totalVotes = sumGlobal(globalVotes);
 	var LSq = 0.0;
 	var LH = 0.0;
+	var partyStats = {};
 	for (var party of parties) {
-		var fracSeats = party in globalSeats ? globalSeats[party] / totalSeatCount : 0.0;
-		var fracVotes = globalVotes[party] / totalVotes;
-		LSq += (fracVotes - fracSeats)**2;
-		LH += Math.abs(fracVotes - fracSeats);
+		partyStats[party] = {
+			"Andel mandater": party in globalSeats ? globalSeats[party] / totalSeatCount * 100 : 0,
+			"Andel stemmer": globalVotes[party] / totalVotes * 100,
+		};
+		partyStats[party]["Overrepresentasjon"] = partyStats[party]["Andel mandater"] - partyStats[party]["Andel stemmer"];
+		var diff = partyStats[party]["Andel stemmer"] - partyStats[party]["Andel mandater"];
+		LSq += diff**2;
+		LH += Math.abs(diff);
+		partyStats[party]["Andel stemmer"] = partyStats[party]["Andel stemmer"].toLocaleString(LANG) + " %";
+		partyStats[party]["Andel mandater"] = partyStats[party]["Andel mandater"].toLocaleString(LANG) + " %";
+		partyStats[party]["Overrepresentasjon"] = (partyStats[party]["Overrepresentasjon"] > 0 ? "+" : "") + partyStats[party]["Overrepresentasjon"].toLocaleString(LANG) + " %";
 	}
 	LSq = Math.sqrt(LSq / 2);
 	LH = LH / 2;
 	var data = {
-		"Disproporsjonalitet (Gallagher)": {"Verdi": (100*LSq).toLocaleString(LANG) + " %"},
-		"Disproporsjonalitet (Loosemore-Hanby)": {"Verdi": (100*LH).toLocaleString(LANG) + " %"},
+		"Disproporsjonalitet (Gallagher)": {"Verdi": LSq.toLocaleString(LANG) + " %"},
+		"Disproporsjonalitet (Loosemore-Hanby)": {"Verdi": LH.toLocaleString(LANG) + " %"},
 	};
 	printTable(statTable, data, Object.keys(data), ["Verdi"], [], [], "", "Variabel", false, false, false, 0);
+	printTable(partyStatTable, partyStats, Object.keys(partyStats), ["Andel mandater", "Andel stemmer", "Overrepresentasjon"], [], mergeParties, "ANDRE", "Parti", false, false, false, 0);
 
 	extraPartyInput.innerHTML = "";
 	for (var party of parties) {
