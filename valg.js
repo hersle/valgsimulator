@@ -22,6 +22,13 @@ function roundDown(number, decimals) {
 	return number.toFixed(decimals);
 };
 
+function formatFraction(x, total, decimals) {
+	return roundDown(100*x/total, decimals) + " %"; // round *down* so parties slightly below threshold cannot seem to be above it (e.g. show 3.999% as 3.9% instead of 4.0%)
+}
+function formatCount(x, total) {
+	return x.toLocaleString(LANG);
+}
+
 function clearLog() {
 	log.innerHTML = "";
 };
@@ -29,7 +36,7 @@ function printLog(line) {
 	log.innerHTML += line + '\n';
 };
 
-function printTable(table, data, districts, parties, mergeParties, mergeDistricts, mergedDistrictLabel, firstHeader, showFraction, showColumnTotals, showRowTotals, decimals) {
+function printTable(table, data, districts, parties, mergeParties, mergeDistricts, mergedDistrictLabel, firstHeader, showColumnTotals, showRowTotals, format) {
 	if (mergeParties.length > 0) {
 		var newData = {};
 		parties = parties.slice(); // make copy
@@ -49,11 +56,11 @@ function printTable(table, data, districts, parties, mergeParties, mergeDistrict
 			}
 		}
 		parties.push("ANDRE"); // always last
-		return printTable(table, newData, districts, parties, [], mergeDistricts, mergedDistrictLabel, firstHeader, showFraction, showColumnTotals, showRowTotals, decimals);
+		return printTable(table, newData, districts, parties, [], mergeDistricts, mergedDistrictLabel, firstHeader, showColumnTotals, showRowTotals, format);
 	} else if (mergeDistricts.length > 0) {
 		var newData = {};
 		newData[mergedDistrictLabel] = {};
-		var newDistricts = [mergedDistrictLabel];
+		var newDistricts = [];
 		for (var district in data) {
 			if (mergeDistricts.includes(district)) {
 				for (var party in data[district]) {
@@ -67,7 +74,12 @@ function printTable(table, data, districts, parties, mergeParties, mergeDistrict
 				newDistricts.push(district);
 			}
 		}
-		return printTable(table, newData, newDistricts, parties, mergeParties, [], mergedDistrictLabel, firstHeader, showFraction, showColumnTotals, showRowTotals, decimals);
+		if (mergedDistrictLabel == "Distriktsmandater") {
+			newDistricts.splice(0, 0, mergedDistrictLabel);
+		} else {
+			newDistricts.push(mergedDistrictLabel);
+		}
+		return printTable(table, newData, newDistricts, parties, mergeParties, [], mergedDistrictLabel, firstHeader, showColumnTotals, showRowTotals, format);
 	}
 
 	// Make ANDRE always appear last
@@ -81,7 +93,6 @@ function printTable(table, data, districts, parties, mergeParties, mergeDistrict
 	table.tBodies[0].innerHTML = "";
 
 	// Print table
-	const format = (x, total) => showFraction ? (roundDown(100*x/total, decimals) + " %") : x.toLocaleString(LANG); // round *down* so parties slightly below threshold cannot seem to be above it (e.g. show 3.999% as 3.9% instead of 4.0%)
 	var head = table.tHead.insertRow();
 	var cell = document.createElement("th");
 	cell.innerHTML = firstHeader;
@@ -477,6 +488,7 @@ function update() {
 
 	var showFraction = document.getElementById("showfraction").checked;
 	var decimals = parseInt(document.getElementById("decimals").value);
+	var format = showFraction ? (x, total) => formatFraction(x, total, decimals) : formatCount;
 
 	// Build sorted list of unique parties
 	var sortParties = document.getElementById("sortparties").value;
@@ -557,8 +569,8 @@ function update() {
 		}
 	}
 
-	printTable(voteTable, votes, districtList, parties, mergeParties, mergeDistricts, "Distriktsstemmer", "Valgdistrikt", showFraction, true, true, decimals);
-	printTable(seatTable, seats, districtListWithGlobal, parties, mergeParties, mergeDistricts, "Distriktsmandater", "Valgdistrikt", showFraction, true, true, decimals);
+	printTable(voteTable, votes, districtList, parties, mergeParties, mergeDistricts, "Distriktsstemmer", "Valgdistrikt", true, true, format);
+	printTable(seatTable, seats, districtListWithGlobal, parties, mergeParties, mergeDistricts, "Distriktsmandater", "Valgdistrikt", true, true, format);
 
 	// Read graph of friend parties
 	var friendsInput = document.getElementById("friends");
@@ -617,7 +629,7 @@ function update() {
 			teamsDict[teamName] = {"Posisjon": teamSeats[team], "Opposisjon": totalSeatCount - teamSeats[team]};
 			teamNames.push(teamName);
 		}
-		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon"], [], [], "", "Partier i posisjon", showFraction, false, true, decimals);
+		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon"], [], [], "", "Partier i posisjon", false, true, format);
 	}
 
 	var totalVotes = sumGlobal(globalVotes);
@@ -633,18 +645,16 @@ function update() {
 		var diff = partyStats[party]["Andel stemmer"] - partyStats[party]["Andel mandater"];
 		LSq += diff**2;
 		LH += Math.abs(diff);
-		partyStats[party]["Andel stemmer"] = partyStats[party]["Andel stemmer"].toLocaleString(LANG) + " %";
-		partyStats[party]["Andel mandater"] = partyStats[party]["Andel mandater"].toLocaleString(LANG) + " %";
-		partyStats[party]["Overrepresentasjon"] = (partyStats[party]["Overrepresentasjon"] > 0 ? "+" : "") + partyStats[party]["Overrepresentasjon"].toLocaleString(LANG) + " %";
 	}
 	LSq = Math.sqrt(LSq / 2);
 	LH = LH / 2;
 	var data = {
-		"Disproporsjonalitet (Gallagher)": {"Verdi": LSq.toLocaleString(LANG) + " %"},
-		"Disproporsjonalitet (Loosemore-Hanby)": {"Verdi": LH.toLocaleString(LANG) + " %"},
+		"Disproporsjonalitet (Gallagher)": {"Verdi": LSq},
+		"Disproporsjonalitet (Loosemore-Hanby)": {"Verdi": LH},
 	};
-	printTable(statTable, data, Object.keys(data), ["Verdi"], [], [], "", "Variabel", false, false, false, 0);
-	printTable(partyStatTable, partyStats, Object.keys(partyStats), ["Andel mandater", "Andel stemmer", "Overrepresentasjon"], [], mergeParties, "ANDRE", "Parti", false, false, false, 0);
+	var format = (frac, total) => roundDown(frac, decimals) + " %";
+	printTable(statTable, data, Object.keys(data), ["Verdi"], [], [], "", "Sammendragsvariabel", false, false, format);
+	printTable(partyStatTable, partyStats, Object.keys(partyStats), ["Andel mandater", "Andel stemmer", "Overrepresentasjon"], [], mergeParties, "ANDRE", "Parti", false, false, format);
 
 	extraPartyInput.innerHTML = "";
 	for (var party of parties) {
