@@ -8,7 +8,7 @@ var seatTable = document.getElementById("seats");
 var teamTable = document.getElementById("teams");
 var statTable = document.getElementById("stats");
 var partyStatTable = document.getElementById("partystats");
-var log = document.getElementById("log");
+var logOutput = document.getElementById("log");
 var voteLink = document.getElementById("voteslink");
 var seatLink = document.getElementById("seatslink");
 var teamLink = document.getElementById("teamslink");
@@ -30,10 +30,13 @@ function formatCount(x, total) {
 }
 
 function clearLog() {
-	log.innerHTML = "";
+	log = "";
 };
 function printLog(line) {
-	log.innerHTML += line + '\n';
+	log += line + '\n';
+};
+function flushLog() {
+	logOutput.innerHTML = log;
 };
 
 function printTable(table, data, districts, parties, mergeParties, mergeDistricts, mergedDistrictLabel, firstHeader, showColumnTotals, showRowTotals, format) {
@@ -670,6 +673,8 @@ function update() {
 	extraDistrictInput.value = extraDistrict; // restore selection
 
 	extraVotesInput.step = extraVotes == 0 ? 1 : 10 ** Math.floor(Math.log10(Math.abs(extraVotes)));;
+
+	flushLog();
 };
 
 function showTables(showVotes, showSeats, showTeams, showStats, showLog) {
