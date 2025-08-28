@@ -197,6 +197,9 @@ function dHondt(votes, seats, totalVotes, totalSeats) {
 function hamilton(votes, seats, totalVotes, totalSeats) {
 	return votes * totalSeats - seats * totalVotes; // equivalent to votes/totalVotes * totalSeats - seats, but avoids any divison by zero
 }
+function winnerTakesItAll(votes, seats, totalVotes, totalSeats) {
+	return votes;
+}
 
 var scoreFunctions = {
 	"Sainte-Laguë fra 1,4": sainteLague14,
@@ -204,6 +207,7 @@ var scoreFunctions = {
 	"Sainte-Laguë fra 1,0": sainteLague10,
 	"D’Hondt": dHondt,
 	"Hare/Hamilton": hamilton,
+	"Vinneren tar alt": winnerTakesItAll,
 };
 
 function calculateSeats(votes, totalSeats, methodName) {
