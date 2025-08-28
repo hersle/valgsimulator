@@ -436,12 +436,15 @@ function update() {
 	clearLog();
 
 	var election = document.getElementById("election").value;
-	if (election == "2017") {
-		votes = votes2017;
-		districts = districts2017;
+	if (election == "2013") {
+		var votes = votes2013;
+		var districts = districts2013;
+	} else if (election == "2017") {
+		var votes = votes2017;
+		var districts = districts2017;
 	} else if (election == "2021") {
-		votes = votes2021;
-		districts = districts2021;
+		var votes = votes2021;
+		var districts = districts2021;
 	} else {
 		alert("Unknown election " + election);
 	}
