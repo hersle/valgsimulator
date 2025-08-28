@@ -435,21 +435,34 @@ function mergeDistrictData(datasets, districts, newDistrict) {
 function update() {
 	clearLog();
 
+	var election = document.getElementById("election").value;
+	if (election == "2017") {
+		votes = votes2017;
+		districts = districts2017;
+	} else if (election == "2021") {
+		votes = votes2021;
+		districts = districts2021;
+	} else {
+		alert("Unknown election " + election);
+	}
+
 	// Deep copy votes, so original data is not modified
-	var districts = {};
-	for (var district in districts2021) {
-		districts[district] = {};
-		for (var key in districts2021[district]) {
-			districts[district][key] = districts2021[district][key];
+	var newDistricts = {};
+	for (var district in districts) {
+		newDistricts[district] = {};
+		for (var key in districts[district]) {
+			newDistricts[district][key] = districts[district][key];
 		}
 	}
-	var votes = {};
-	for (var district in votes2021) {
-		votes[district] = {};
-		for (var party in votes2021[district]) {
-			votes[district][party] = votes2021[district][party];
+	districts = newDistricts;
+	var newVotes = {};
+	for (var district in votes) {
+		newVotes[district] = {};
+		for (var party in votes[district]) {
+			newVotes[district][party] = votes[district][party];
 		}
 	}
+	votes = newVotes;
 
 	var localThreshold = parseFloat(document.getElementById("localthreshold").value);
 	var globalThreshold = parseFloat(document.getElementById("globalthreshold").value);
