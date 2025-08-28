@@ -470,17 +470,25 @@ function update() {
 	var extraParty = extraPartyInput.value;
 	var extraDistrict = extraDistrictInput.value;
 
-	if (document.getElementById("mergedistricts").checked) {
-		mergeDistrictData([votes, districts], ["Buskerud", "Akershus", "Østfold"], "Viken");
-		mergeDistrictData([votes, districts], ["Oppland", "Hedmark"], "Innlandet");
-		mergeDistrictData([votes, districts], ["Vestfold", "Telemark"], "Vestfold og Telemark");
-		mergeDistrictData([votes, districts], ["Aust-Agder", "Vest-Agder"], "Agder");
-		mergeDistrictData([votes, districts], ["Sogn og Fjordane", "Hordaland"], "Vestland");
-		mergeDistrictData([votes, districts], ["Troms", "Finnmark"], "Troms og Finnmark");
+	var districtCount = parseInt(document.getElementById("mergedistricts").value.split(" ")[0]); // 19, 18, 11, 15 or 1
+	if (districtCount <= 18) {
 		mergeDistrictData([votes, districts], ["Sør-Trøndelag", "Nord-Trøndelag"], "Trøndelag");
-		if (!(extraDistrict in Object.keys(districts))) {
-			extraDistrictInput.value = ""; // de-select invalid extra vote district if not part of new merged districts
-		}
+	}
+	if (districtCount <= 15) {
+		mergeDistrictData([votes, districts], ["Oppland", "Hedmark"], "Innlandet");
+		mergeDistrictData([votes, districts], ["Sogn og Fjordane", "Hordaland"], "Vestland");
+		mergeDistrictData([votes, districts], ["Aust-Agder", "Vest-Agder"], "Agder");
+	}
+	if (districtCount <= 11) {
+		mergeDistrictData([votes, districts], ["Buskerud", "Akershus", "Østfold"], "Viken");
+		mergeDistrictData([votes, districts], ["Vestfold", "Telemark"], "Vestfold og Telemark");
+		mergeDistrictData([votes, districts], ["Troms", "Finnmark"], "Troms og Finnmark");
+	}
+	if (districtCount <= 1) {
+		mergeDistrictData([votes, districts], Object.keys(districts), "Norge"); // merge all remaining districts
+	}
+	if (!(extraDistrict in Object.keys(districts))) {
+		extraDistrictInput.value = ""; // de-select invalid extra vote district if not part of new merged districts
 	}
 
 	if (extraParty && extraDistrict && !isNaN(extraVotes)) {

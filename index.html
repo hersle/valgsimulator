@@ -72,8 +72,14 @@
 				<label for="requireglobalrepresentation">Krev deltakelse i alle distrikter for utjevningsmandater</label>
 			</span>
 			<span title="Slå sammen innbyggertall, areal og stemmer fra 19 til 11 fylker etter regionsreformen i 2020.">
-				<input type="checkbox" id="mergedistricts" oninput="update();"/>
-				<label for="mergedistricts">Slå sammen distrikter til 2020-fylker</label>
+				<label for="mergedistricts">Slå sammen distrikter til</label>
+				<select id="mergedistricts" oninput="update();">
+					<option>19 fylker (til 2018)</option>
+					<option>18 fylker (til 2020)</option>
+					<option>15 fylker (fra 2024)</option>
+					<option>11 fylker (til 2024)</option>
+					<option>1 valgdistrikt</option>
+				</select>
 			</span>
 			<span title="Gi et gitt antall ekstra stemmer til et gitt parti i et gitt valgdistrikt. Et negativt antall tar bort stemmer.">
 				<label for="extravotes">Gi</label>
