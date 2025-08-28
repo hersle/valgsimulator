@@ -9,10 +9,13 @@
 	<script type="text/javascript" src="valg.js" defer></script>
 </head>
 <body>
-	<h1>Valgsimulator</h1>
+	<h1>Valgsimulator 🗳️🇳🇴</h1>
+	<p>
+		Se hvordan endringer i <a href="https://lovdata.no/dokument/NL/lov/2023-06-16-62">valgloven</a> påvirker <a href="https://valgresultat.no">resultatet av Stortingsvalget</a>.
+		Åpen <a href="https://github.com/hersle/valgsimulator">kildekode</a>.
+	</p>
 	<fieldset>
-		<legend>Valgalternativer</legend>
-		<p>Påvirker beregningen av valgresultatet.</p>
+		<legend>Valgalternativer (påvirker valgresultatet)</legend>
 		<span title="Bruk stemmetall fra dette Stortingsvalget." >
 			<label for="election">Valg:</label>
 			<select id="election">
@@ -81,8 +84,7 @@
 		</span>
 	</fieldset>
 	<fieldset>
-		<legend>Visningsalternativer</legend>
-		<p>Påvirker <strong>ikke</strong> beregningen av valgresultatet, men kun visningen av tabellene.</p>
+		<legend>Visningsalternativer (påvirker <strong>ikke</strong> valgresultatet)</legend>
 		<span>
 			<label for="sortparties">Sortér partier etter</label>
 			<select id="sortparties" oninput="update();">
@@ -129,42 +131,61 @@
 		<a id="statslink" onclick="showTables(false, false, false, true, false);" style="margin-right: 0.3em">Statistikk</a>
 		<a id="loglink" onclick="showTables(false, false, false, false, true);">Logg</a>
 	</h2>
-	<div id="votestab" class="tablecontainer">
-		<table id="votes">
-			<thead></thead>
-			<tbody></tbody>
-		</table>
+	<div id="votestab">
+		<div class="tablecontainer">
+			<table id="votes">
+				<thead></thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<p>Tabellen viser antall stemmer som hvert parti har fått i hvert valgdistrikt. En tom celle betyr at partiet ikke stilte til valg i distriktet.</p>
 	</div>
-	<div id="seatstab" class="tablecontainer">
-		<table id="seats">
-			<thead></thead>
-			<tbody></tbody>
-		</table>
+	<div id="seatstab">
+		<div class="tablecontainer">
+			<table id="seats">
+				<thead></thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<p>Tabellen viser antall mandater som er tildelt hvert parti i hvert valgdistrikt. En tom celle betyr at partiet ikke stilte til valg i distriktet eller ikke oppfyller kriteriene for å tildeles mandater der (f.eks. under sperregrensen).</p>
 	</div>
-	<div id="teamstab" class="tablecontainer">
-		<table id="teams">
-			<thead></thead>
-			<tbody></tbody>
-		</table>
+	<div id="teamstab">
+		<div class="tablecontainer">
+			<table id="teams">
+				<thead></thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<p>Tabellen viser alle kombinasjoner av koalisjoner av samarbeidsvillige partier og antall mandater som er innenfor (posisjon) og utenfor (opposisjon) koalisjonen.</p>
 	</div>
-	<div id="statstab" class="tablecontainer">
-		<table id="partystats" style="margin-bottom: 1em;">
-			<thead></thead>
-			<tbody></tbody>
-		</table>
-		<table id="stats">
-			<thead></thead>
-			<tbody></tbody>
-		</table>
+	<div id="statstab">
+		<div class="tablecontainer">
+			<table id="partystats" style="margin-bottom: 1em;">
+				<thead></thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<p>Tabellen viser avvik mellom andel nasjonale stemmer og mandater for hvert parti.</p>
+		<div class="tablecontainer">
+			<table id="stats">
+				<thead></thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		<p>Tabellen viser størrelser som måler proporsjonaliteten til hele valget.</p>
 	</div>
-	<div id="logtab" class="tablecontainer">
-		<textarea id="log" rows="25" readonly></textarea>
+	<div id="logtab">
+		<textarea id="log" rows="25" wrap="off" readonly></textarea>
+		<p>Loggen forklarer alle stegene i beregningen av valgresultatet.</p>
 	</div>
-	<h2>Kilder</h2>
+	<h2>Kilder og nyttige lenker</h2>
 	<ul>
 		<li><a href="https://valgresultat.no/valg/2021/">Offisielle stemmetall og valgresultater</a></li>
 		<li><a href="https://lovdata.no/dokument/NL/lov/2023-06-16-62">Valgloven</a></li>
 		<li><a href="https://www.regjeringen.no/no/dokumentarkiv/regjeringen-solberg/aktuelt-regjeringen-solberg/kmd/pressemeldinger/2020/fordeling-av-mandatene-ved-neste-stortingsvalg/id2699589/">Innbyggertall og areal for valgdistriktene</a></li>
+		<li><a href="https://lavinia.no/">Lavinia valgsimulator</a></li>
+		<li><a href="https://www.vg.no/spesial/2017/stortingsvalg/">VGs valgsimulator</a></li>
+		<li><a href="https://github.com/JanOleA/stlague">Jan Ole Åkerholms valgsimulator</a></li>
 	</ul>
 </body>
 </html>

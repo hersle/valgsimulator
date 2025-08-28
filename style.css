@@ -40,6 +40,10 @@ fieldset > p{
 	margin: 0;
 }
 
+h1 {
+	margin-bottom: 0;
+}
+
 h2 > a {
 	color: black;
 	text-decoration: none;
@@ -55,4 +59,8 @@ h2 {
 	width: 100%;
 	box-sizing: border-box;
 	resize: vertical;
+}
+
+p:first-child {
+	margin-top: 0;
 }
