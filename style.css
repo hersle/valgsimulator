@@ -1,5 +1,23 @@
 body {
 	font-family: sans-serif;
+	margin: 0;
+}
+
+header, footer {
+	background-color: whitesmoke;
+	padding: 0.5em;
+}
+
+header a:visited {
+	color: inherit;
+}
+
+h1 {
+	margin-bottom: 0;
+}
+
+article {
+	padding: 0.5em;
 }
 
 .tablecontainer {
@@ -33,20 +51,16 @@ fieldset {
 	flex-wrap: wrap;
 	row-gap: 0.75em;
 	column-gap: 2em;
+	line-height: 1.6em;
+	border: 1px solid lightgray;
 }
 
-fieldset > p{
-	width: 100%;
-	margin: 0;
+legend {
+	font-weight: bold;
 }
 
-h1 {
-	margin-bottom: 0;
-}
-
-h2 > a {
+a {
 	color: black;
-	text-decoration: none;
 	cursor: pointer;
 }
 
@@ -63,4 +77,8 @@ h2 {
 
 p:first-child {
 	margin-top: 0;
+}
+
+p:last-child {
+	margin-bottom: 0;
 }
