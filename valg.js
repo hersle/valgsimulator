@@ -228,7 +228,7 @@ function calculateSeats(votes, totalSeats, methodName) {
 				bestScore = score;
 				bestParty = party;
 			} else if (score == bestScore) {
-				alert("Error: " + bestParty + " and " + party + " tied with score " + score + ". Don't know how to handle this."); // TODO: implement edge case handling
+				printLog("  ADVARSEL: " + bestParty + " og " + party + " har begge poengsum " + score + "; foretrekker " + bestParty); // TODO: implement edge case handling
 			}
 		}
 		printLog("  " + seat + ". mandat til " + bestParty + " med " + bestScore + " poeng (" + seats[bestParty] + " mandater fra før)");
@@ -319,7 +319,10 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 	// * run for election in all districts (can be turned off)
 	// * have at least 4% of the national votes (electoral threshold)
 	for (var party in globalVotes) {
-		if (globalVotes[party] * 100 < globalThreshold * totalVotes) { // globalThreshold is in percent
+		if (party.toUpperCase() == "ANDRE") {
+			printLog(party + " holdes alltid utenfor fordelingen av utjevningsmandater");
+			delete globalVotes[party];
+		} else if (globalVotes[party] * 100 < globalThreshold * totalVotes) { // globalThreshold is in percent
 			var exempt = exemptGlobalThresholdIflocalSeats && (party in localSeats) && localSeats[party] > 0;
 			if (exempt) {
 				printLog(party + " unntas fra sperregrensen for utjevningsmandater fordi de har minst ett distriktsmandat");
@@ -448,6 +451,9 @@ function update() {
 	} else if (election == "2021") {
 		var votes = votes2021;
 		var districts = districts2021;
+	} else if (election == "2025*") {
+		var votes = votes2025;
+		var districts = districts2025;
 	} else {
 		alert("Unknown election " + election);
 	}
