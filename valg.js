@@ -220,7 +220,7 @@ function calculateSeats(votes, totalSeats, methodName) {
 	var totalVotes = sumGlobal(votes);
 
 	var tiedParty = undefined;
-	for (var seat = 1; seat <= totalSeats; seat++) {
+	for (var seat = 1; seat <= totalSeats + 1; seat++) {
 		var bestScore = Number.MIN_VALUE;
 		var bestParty = null;
 		for (var party in votes) {
@@ -233,8 +233,12 @@ function calculateSeats(votes, totalSeats, methodName) {
 				tiedParty = party;
 			}
 		}
-		printLog("  " + seat + ". mandat til " + bestParty + " med " + bestScore + " poeng (" + seats[bestParty] + " mandater fra før)");
-		seats[bestParty] += 1;
+		if (seat <= totalSeats) {
+			printLog("  " + seat + ". mandat til " + bestParty + " med " + bestScore + " poeng (" + seats[bestParty] + " mandater fra før)");
+			seats[bestParty] += 1;
+		} else {
+			printLog("  Neste mandat ville gått til " + bestParty + " med " + bestScore + " poeng (" + seats[bestParty] + " mandater fra før)");
+		}
 	}
 	if (tiedParty !== undefined) {
 		printLog("  ADVARSEL: " + bestParty + " og " + party + " har begge poengsum " + score + "; foretrekker " + bestParty); // TODO: implement edge case handling
