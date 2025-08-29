@@ -580,6 +580,7 @@ function update() {
 		}
 	}
 	var globalVotes = sumLocal(votes);
+	var totalVotes = sumGlobal(globalVotes);
 	var compare = (party1, party2, data) => data[party2] == data[party1] ? (party1 < party2 ? -1 : +1) : (data[party2] - data[party1]); // sort by value in "data", but by name if values are equal
 	if (sortParties == "Navn") {
 		parties.sort();
@@ -704,14 +705,19 @@ function update() {
 		var teamsDict = {};
 		var teamNames = [];
 		for (var team of teams) {
+			var teamVotes = 0;
+			for (var party of team) {
+				teamVotes += globalVotes[party];
+			}
+			var seatFrac = teamSeats[team] / totalSeatCount;
+			var voteFrac = teamVotes / totalVotes;
 			var teamName = team.join(" + ");
-			teamsDict[teamName] = {"Posisjon": teamSeats[team], "Opposisjon": totalSeatCount - teamSeats[team]};
+			teamsDict[teamName] = {"Posisjon": teamSeats[team], "Opposisjon": totalSeatCount - teamSeats[team], "Andel mandater": truncate(seatFrac*100, decimals).toLocaleString(LANG) + " %", "Andel stemmer": truncate(voteFrac*100, decimals).toLocaleString(LANG) + " %", "Overrepresentasjon": truncate((seatFrac-voteFrac)*100, decimals).toLocaleString(LANG) + " %"};
 			teamNames.push(teamName);
 		}
-		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon"], [], [], "", "Partier i posisjon", false, true, format);
+		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon"], [], [], "", "Partier i posisjon", false, false, (x) => x);
 	}
 
-	var totalVotes = sumGlobal(globalVotes);
 	var LSq = 0.0;
 	var LH = 0.0;
 	var partyStats = {};
