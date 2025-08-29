@@ -381,4 +381,6 @@ var election2017 = {
 		"Troms": {"area": 25870, "population": 158650},
 		"Finnmark": {"area": 48617, "population": 73787},
 	},
+
+	"defaults": merge3({"friends": "RØDT+SV+A+SP+MDG, KRF+V+H+FRP"}, DEFAULTS_BEFORE_2025, DEFAULTS_COMMON),
 };

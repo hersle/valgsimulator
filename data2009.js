@@ -323,4 +323,6 @@ var election2009 = {
 		"Troms": {"area": 25877, "population": 152628},
 		"Finnmark": {"area": 48618, "population": 73210},
 	},
+
+	"defaults": merge3({"friends": "SV+A+SP, KRF+H+FRP"}, DEFAULTS_BEFORE_2025, DEFAULTS_COMMON),
 };

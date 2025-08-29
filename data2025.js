@@ -26,6 +26,8 @@ var election2025 = {
 		"Vestfold": {"population": 256432, "area": 2168, "eligible": 191454, "showup": 76.5},
 		"Østfold": {"population": 312152, "area": 4004, "eligible": 220797, "showup": 72.9},
 	},
+
+	"defaults": merge3({"friends": "Rødt+SV+Ap+Sp+MDG, KrF+Venstre+Høyre+Frp"}, DEFAULTS_AFTER_2025, DEFAULTS_COMMON),
 };
 
 var parties2025 = ["Ap", "Høyre", "Frp", "SV", "Sp", "KrF", "Venstre", "MDG", "Rødt", "Andre"];

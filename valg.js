@@ -5,6 +5,7 @@ var elections = {
 	"2021": election2021,
 	"2025*": election2025,
 };
+var election;
 
 var voteTab = document.getElementById("votestab");
 var seatTab = document.getElementById("seatstab");
@@ -452,14 +453,35 @@ function mergeDistrictData(datasets, districts, newDistrict) {
 	}
 };
 
-function update() {
-	clearLog();
+function applyDefaults(defaults) {
+	for (var id in defaults) {
+		var val = defaults[id];
+		var el = document.getElementById(id);
+		if (typeof(val) == "boolean") {
+			el.checked = val;
+		} else {
+			el.value = val;
+		}
+	}
+};
 
-	var election = document.getElementById("election").value;
+function setElection() {
+	election = document.getElementById("election").value;
 	if (!(election in elections)) {
 		alert("Unknown election " + election);
 	}
 	election = elections[election];
+
+	if ("defaults" in election) {
+		applyDefaults(election["defaults"]);
+	}
+
+	update();
+}
+
+function update() {
+	clearLog();
+
 	var votes = election.votes;
 	var districts = election.districts;
 
@@ -489,7 +511,7 @@ function update() {
 	var areaFactor = parseFloat(document.getElementById("areafactor").value);
 	var minSeatsPerDistrict = parseInt(document.getElementById("minlocalseats").value);
 	var requireGlobalRepresentation = document.getElementById("requireglobalrepresentation").checked;
-	var exemptGlobalThresholdIflocalSeats = document.getElementById("exemptglobalthresholdiflocalseats").checked;
+	var exemptGlobalThresholdIflocalSeats = document.getElementById("exemptglobalthreshold").checked;
 
 	var methodName = document.getElementById("method").value;
 
@@ -737,4 +759,4 @@ function showTables(showVotes, showSeats, showTeams, showStats, showLog) {
 };
 
 showTables(true, false, false, false, false);
-update(); // run once on page load
+setElection(); // run once on page load

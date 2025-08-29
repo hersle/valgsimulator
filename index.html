@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>Valg</title>
 	<link rel="stylesheet" href="style.css">
+	<script type="text/javascript" src="defaults.js"></script>
 	<script type="text/javascript" src="data2009.js"></script>
 	<script type="text/javascript" src="data2013.js"></script>
 	<script type="text/javascript" src="data2017.js"></script>
@@ -23,7 +24,7 @@
 			<legend>Valgalternativer (påvirker resultatet)</legend>
 			<span title="Bruk stemmetall fra dette Stortingsvalget." >
 				<label for="election">Valg</label>
-				<select id="election" value="2021" oninput="update();">
+				<select id="election" value="2021" oninput="setElection();">
 					<option>2009</option>
 					<option>2013</option>
 					<option>2017</option>
@@ -73,8 +74,8 @@
 				<label for="negativeglobalseats">Tillat negative utjevningsmandater</label>
 			</span>
 			<span title="La partier under sperregrensen likevel tildeles utjevningsmandater om de allerede har distriktsmandater.">
-				<input type="checkbox" id="exemptglobalthresholdiflocalseats" oninput="update();"/>
-				<label for="exemptglobalthresholdiflocalseats">Unnta partier med distriktsmandater fra sperregrensen for utjevningsmandater</label>
+				<input type="checkbox" id="exemptglobalthreshold" oninput="update();"/>
+				<label for="exemptglobalthreshold">Unnta partier med distriktsmandater fra sperregrensen for utjevningsmandater</label>
 			</span>
 			<span title="Hold partier som ikke stiller til valg i alle valgdistrikter utenfor fordelingen av utjevningsmandater.">
 				<input type="checkbox" id="requireglobalrepresentation" oninput="update();"/>
