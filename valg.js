@@ -607,7 +607,7 @@ function update() {
 		}
 	}
 
-	var groupLocal = document.getElementById("grouplocal").checked;
+	var groupLocal = false; // document.getElementById("grouplocal").checked;
 	var mergeDistricts = [];
 	if (groupLocal) {
 		for (var district in votes) {
