@@ -31,32 +31,39 @@
 					<option selected>2021</option>
 					<option>2025*</option>
 				</select>
+				<a>ⓘ</a>
 			</span>
 			<span title="Antall distrikts- og utjevningsmandater som skal velges til Stortinget til sammen.">
 				<label for="totalseats">Mandater</label>
 				<input type="number" id="totalseats" value="169" min="0" step="1" oninput="update();" size="2"/>
+				<a>ⓘ</a>
 			</span>
 			<span title="Antall Stortingsmandater fordeles mellom valgdistriktene med Saint-Laguës rene metode (fra 1,0) med utgangspunkt i tallet &quot;folketall + arealfaktor × areal/km²&quot; for hvert valgdistrikt.">
 				<label for="areafactor">Arealfaktor</label>
 				<input type="number" id="areafactor" value="1.8" min="0" step="0.1" oninput="update();" size="2"/>
+				<a>ⓘ</a>
 			</span>
 			<span title="Om noen valgdistrikter får færre Stortingsmandater enn dette, vil dette antallet plasser likevel reserveres for distriktet, og fordelingen gjentas for de gjenværende distriktene inntil alle har fått minst dette antallet mandater.">
 				<label for="minlocalseats">Minimum mandater per distrikt</label>
 				<input type="number" id="minlocalseats" value="0" min="0" step="1" oninput="update();" size="1"/>
+				<a>ⓘ</a>
 			</span>
 			<span title="Antall mandater som omgjøres til utjevningsmandater fra hvert valgdistrikt.">
 				<label for="globalseatsperdistrict">Utjevningsmandater per distrikt</label>
 				<input type="number" id="globalseatsperdistrict" value="1" min="0" step="1" oninput="update();" size="1"/>
+				<a>ⓘ</a>
 			</span>
 			<span title="Et parti må få minst denne andelen av stemmene i et distrikt for å tildeles mandater der.">
 				<label for="localthreshold">Sperregrense distriktsmandater</label>
 				<input type="number" id="localthreshold" value="0" min="0" max="100" step="0.1" oninput="update();" size="1"/>
 				<label for="localthreshold">%</label>
+				<a>ⓘ</a>
 			</span>
 			<span title="Et parti må få minst denne andelen av stemmene nasjonalt for å kunne tildeles utjevningsmandater.">
 				<label for="globalthreshold">Sperregrense utjevningsmandater</label>
 				<input type="number" id="globalthreshold" value="4" min="0" max="100" step="0.1" oninput="update();" size="1"/>
 				<label for="globalthreshold">%</label>
+				<a>ⓘ</a>
 			</span>
 			<span title="Metoden som brukes til å fordele distrikts- og utjevningsmandater mellom partiene.">
 				<label for="method">Fordelingsmetode</label>
@@ -68,18 +75,22 @@
 					<option>Hare/Hamilton</option>
 					<option>Vinneren tar alt</option>
 				</select>
+				<a>ⓘ</a>
 			</span>
 			<span title="Skal fordelingen av distriktsmandater gjentas inntil alle partier har fått minst null distriktsmandater?">
 				<input type="checkbox" id="negativeglobalseats" oninput="update();"/>
 				<label for="negativeglobalseats">Tillat negative utjevningsmandater</label>
+				<a>ⓘ</a>
 			</span>
 			<span title="La partier under sperregrensen likevel tildeles utjevningsmandater om de allerede har distriktsmandater.">
 				<input type="checkbox" id="exemptglobalthreshold" oninput="update();"/>
 				<label for="exemptglobalthreshold">Unnta partier med distriktsmandater fra sperregrensen for utjevningsmandater</label>
+				<a>ⓘ</a>
 			</span>
 			<span title="Hold partier som ikke stiller til valg i alle valgdistrikter utenfor fordelingen av utjevningsmandater.">
 				<input type="checkbox" id="requireglobalrepresentation" oninput="update();"/>
 				<label for="requireglobalrepresentation">Krev deltakelse i alle distrikter for utjevningsmandater</label>
+				<a>ⓘ</a>
 			</span>
 			<span title="Slå sammen innbyggertall, areal og stemmer fra 19 til 11 fylker etter regionsreformen i 2020.">
 				<label for="mergedistricts">Slå sammen distrikter til</label>
@@ -90,6 +101,7 @@
 					<option>11 fylker (til 2024)</option>
 					<option>1 valgdistrikt</option>
 				</select>
+				<a>ⓘ</a>
 			</span>
 			<span title="Gi et gitt antall ekstra stemmer til et gitt parti i et gitt valgdistrikt. Et negativt antall tar bort stemmer.">
 				<label for="extravotes">Gi</label>
@@ -98,6 +110,7 @@
 				<select id="extraparty" oninput="update();"></select>
 				<label for="extradistrict">i</label>
 				<select id="extradistrict" oninput="update();"></select>
+				<a>ⓘ</a>
 			</span>
 		</fieldset>
 		<fieldset>
@@ -127,10 +140,12 @@
 				<label for="showfraction">Vis andeler med</label>
 				<input type="number" id="decimals" value="1" min="0" max="9" step="1" oninput="update();" size="1"/>
 				<label for="decimals">desimaler</label>
+				<a>ⓘ</a>
 			</span>
 			<span title="Vis alle partier som ikke har fått noen mandater som ett parti med navnet ANDRE.">
 				<input type="checkbox" id="groupotherparties" oninput="update();"/>
 				<label for="groupotherparties">Samle <strong>ANDRE</strong> partier uten mandater</label>
+				<a>ⓘ</a>
 			</span>
 			<!--
 			<span title="Vis bare samlet antall distriktsstemmer eller -mandater.">
@@ -141,6 +156,7 @@
 			<span title="Liste over hvilke partier som kan inngå i koalisjon med hverandre. Feltet blir rødt når det er ugyldig formatert.">
 				<label for="friends">Samarbeidspartier</legend>
 				<input type="text" id="friends" value="A+SP+SV, SV+MDG, H+FRP+V+KRF" oninput="update();" size="30"/>
+				<a>ⓘ</a>
 			</span>
 		</fieldset>
 		</section>
@@ -215,7 +231,7 @@
 		<ul>
 			<li>Endring av valgår nullstiller alle alternativer til årets valglov.</li>
 			<li>Bruk piltastene for å gradvis endre verdien til valg alternativ.</li>
-			<li>Hold musen over alternativer for å vise forklaringer og flere tips.</li>
+			<li>Trykk på ⓘ eller hold musen over alternativer for å vise forklaringer og flere tips.</li>
 			<li>Endringer trer i kraft umiddelbart.</li>
 		</ul>
 		<h2>Kilder og nyttige lenker</h2>

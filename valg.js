@@ -26,6 +26,17 @@ var logLink = document.getElementById("loglink");
 
 var LANG = "no-NO";
 
+// Add event listeners for help buttons
+for (var fieldset of document.getElementsByTagName("fieldset")) {
+	for (const span of fieldset.getElementsByTagName("span")) { // const fixes span in the function closure
+		for (var a of span.getElementsByTagName("a")) {
+			a.addEventListener("click", function (e) {
+				alert(span.title);
+			});
+		}
+	}
+}
+
 // Cut off remaining decimals
 function truncate(number, decimals) {
 	if (number < 0) {
