@@ -588,7 +588,7 @@ function update() {
 	} else if (sortParties == "Mandater") {
 		parties.sort((party1, party2) => compare(party1, party2, globalSeats));
 	} else if (sortParties == "Farge (subjektivt)") {
-		var spectrum = ["NKP", "RØDT", "SV", "A", "SP", "MDG", "KYST", "KRF", "V", "H", "FRP", "KRISTNE", "LIBS", "DEMN", "AAN"];
+		var spectrum = ["NKP", "R", "SV", "AP", "SP", "MDG", "KYST", "KRF", "V", "H", "FRP", "PDK", "LIB", "ND", "AAN"];
 		var rightism = {};
 		for (var party of parties) {
 			rightism[party] = spectrum.includes(party) ? spectrum.indexOf(party) : 10000;

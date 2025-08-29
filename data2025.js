@@ -27,10 +27,10 @@ var election2025 = {
 		"Østfold": {"population": 312152, "area": 4004, "eligible": 220797, "showup": 72.9},
 	},
 
-	"defaults": merge3({"friends": "Rødt+SV+Ap+Sp+MDG, KrF+Venstre+Høyre+Frp"}, DEFAULTS_AFTER_2025, DEFAULTS_COMMON),
+	"defaults": merge3({"friends": "R+SV+AP+SP+MDG, KRF+V+H+FRP"}, DEFAULTS_AFTER_2025, DEFAULTS_COMMON),
 };
 
-var parties2025 = ["Ap", "Høyre", "Frp", "SV", "Sp", "KrF", "Venstre", "MDG", "Rødt", "Andre"];
+var parties2025 = ["AP", "H", "FRP", "SV", "SP", "KRF", "V", "MDG", "R", "ANDRE"];
 
 var votes2025 = {
 	"Akershus": [27.4, 19.5, 18.9, 6.1, 3.6, 2.5, 6.4, 5.4, 5.4, 3.9],
