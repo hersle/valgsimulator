@@ -1,3 +1,11 @@
+var elections = {
+	"2009": election2009,
+	"2013": election2013,
+	"2017": election2017,
+	"2021": election2021,
+	"2025*": election2025,
+};
+
 var voteTab = document.getElementById("votestab");
 var seatTab = document.getElementById("seatstab");
 var teamTab = document.getElementById("teamstab");
@@ -448,24 +456,12 @@ function update() {
 	clearLog();
 
 	var election = document.getElementById("election").value;
-	if (election == "2009") {
-		var votes = votes2009;
-		var districts = districts2009;
-	} else if (election == "2013") {
-		var votes = votes2013;
-		var districts = districts2013;
-	} else if (election == "2017") {
-		var votes = votes2017;
-		var districts = districts2017;
-	} else if (election == "2021") {
-		var votes = votes2021;
-		var districts = districts2021;
-	} else if (election == "2025*") {
-		var votes = votes2025;
-		var districts = districts2025;
-	} else {
+	if (!(election in elections)) {
 		alert("Unknown election " + election);
 	}
+	election = elections[election];
+	var votes = election.votes;
+	var districts = election.districts;
 
 	// Deep copy votes, so original data is not modified
 	var newDistricts = {};
