@@ -219,6 +219,7 @@ function calculateSeats(votes, totalSeats, methodName) {
 
 	var totalVotes = sumGlobal(votes);
 
+	var tiedParty = undefined;
 	for (var seat = 1; seat <= totalSeats; seat++) {
 		var bestScore = Number.MIN_VALUE;
 		var bestParty = null;
@@ -227,12 +228,16 @@ function calculateSeats(votes, totalSeats, methodName) {
 			if (score > bestScore) {
 				bestScore = score;
 				bestParty = party;
+				tiedParty = undefined;
 			} else if (score == bestScore) {
-				printLog("  ADVARSEL: " + bestParty + " og " + party + " har begge poengsum " + score + "; foretrekker " + bestParty); // TODO: implement edge case handling
+				tiedParty = party;
 			}
 		}
 		printLog("  " + seat + ". mandat til " + bestParty + " med " + bestScore + " poeng (" + seats[bestParty] + " mandater fra før)");
 		seats[bestParty] += 1;
+	}
+	if (tiedParty !== undefined) {
+		printLog("  ADVARSEL: " + bestParty + " og " + party + " har begge poengsum " + score + "; foretrekker " + bestParty); // TODO: implement edge case handling
 	}
 
 	return seats;
