@@ -1,11 +1,12 @@
 body {
 	font-family: sans-serif;
 	margin: 0;
+	padding: 0;
 }
 
 header, footer {
 	background-color: whitesmoke;
-	padding: 0.5em;
+	padding: 0.5rem;
 }
 
 header a:visited {
@@ -16,12 +17,12 @@ h1 {
 	margin-bottom: 0;
 }
 
-article {
-	padding: 0.5em;
-}
-
-.tablecontainer {
+/* 	https://aileenrae.co.uk/blog/firefox-scroll-padding-bug/ */
+.scroll {
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
 	overflow-x: auto;
+	white-space: nowrap;
 }
 
 table {
@@ -45,7 +46,7 @@ th {
 }
 
 fieldset {
-	margin-bottom: 1em;
+	margin: 0 0 1em 0;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -64,21 +65,16 @@ a {
 	cursor: pointer;
 }
 
-h2 {
-	white-space: nowrap;
-	overflow-x: auto;
-}
-
 #log {
 	width: 100%;
 	box-sizing: border-box;
 	resize: vertical;
 }
 
-p:first-child {
-	margin-top: 0;
+section {
+	padding: 0 0.5rem;
 }
 
-p:last-child {
-	margin-bottom: 0;
+h2 {
+	margin: 0;
 }

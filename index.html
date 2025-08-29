@@ -15,13 +15,14 @@
 <body>
 	<header>
 		<h1>Valgsimulator 🗳️🇳🇴</h1>
-		<p>Se hvordan endringer i <a href="https://lovdata.no/dokument/NL/lov/2023-06-16-62">valgloven</a> påvirker <a href="https://valgresultat.no">resultatet av Stortingsvalget</a>.</p>
+		<p style="margin: 0.5rem 0">Hvordan påvirkes <a href="https://valgresultat.no">resultatet av Stortingsvalget</a> av endringer i <a href="https://lovdata.no/dokument/NL/lov/2023-06-16-62">valgloven</a>? <a href="https://github.com/hersle/valgsimulator">Åpen kildekode</a>.</p>
 	</header>
 	<article>
+		<section>
 		<fieldset>
 			<legend>Valgalternativer (påvirker resultatet)</legend>
 			<span title="Bruk stemmetall fra dette Stortingsvalget." >
-				<label for="election">Valg:</label>
+				<label for="election">Valg</label>
 				<select id="election" value="2021" oninput="update();">
 					<option>2009</option>
 					<option>2013</option>
@@ -139,60 +140,74 @@
 				<input type="text" id="friends" value="A+SP+SV, SV+MDG, H+FRP+V+KRF" oninput="update();" size="30"/>
 			</span>
 		</fieldset>
-		<h2>
+		</section>
+		<h2 class="scroll" style="padding: 0.5rem 0.5rem">
 			<a id="voteslink" onclick="showTables(true, false, false, false, false);" style="margin-right: 0.3em">Stemmer</a>
 			<a id="seatslink" onclick="showTables(false, true, false, false, false);" style="margin-right: 0.3em">Mandater</a>
 			<a id="teamslink" onclick="showTables(false, false, true, false, false);" style="margin-right: 0.3em">Koalisjoner</a>
 			<a id="statslink" onclick="showTables(false, false, false, true, false);" style="margin-right: 0.3em">Statistikk</a>
-			<a id="loglink" onclick="showTables(false, false, false, false, true);">Logg</a>
+			<a id="loglink" onclick="showTables(false, false, false, false, true);">Beregning</a>
 		</h2>
 		<div id="votestab">
-			<div class="tablecontainer">
+			<div class="scroll">
 				<table id="votes">
 					<thead></thead>
 					<tbody></tbody>
 				</table>
 			</div>
+			<section>
 			<p>Tabellen viser antall stemmer som hvert parti har fått i hvert valgdistrikt. En tom celle betyr at partiet ikke stilte til valg i distriktet.</p>
+			</section>
 		</div>
 		<div id="seatstab">
-			<div class="tablecontainer">
+			<div class="scroll">
 				<table id="seats">
 					<thead></thead>
 					<tbody></tbody>
 				</table>
 			</div>
+			<section>
 			<p>Tabellen viser antall mandater som er tildelt hvert parti i hvert valgdistrikt. En tom celle betyr at partiet ikke stilte til valg i distriktet eller ikke oppfyller kriteriene for å tildeles mandater der (f.eks. under sperregrensen).</p>
+			</section>
 		</div>
 		<div id="teamstab">
-			<div class="tablecontainer">
+			<div class="scroll">
 				<table id="teams">
 					<thead></thead>
 					<tbody></tbody>
 				</table>
 			</div>
+			<section>
 			<p>Tabellen viser alle kombinasjoner av koalisjoner av samarbeidsvillige partier og antall mandater som er innenfor (posisjon) og utenfor (opposisjon) koalisjonen.</p>
+			</section>
 		</div>
 		<div id="statstab">
-			<div class="tablecontainer">
+			<div class="scroll">
 				<table id="partystats">
 					<thead></thead>
 					<tbody></tbody>
 				</table>
 			</div>
+			<section>
 			<p>Tabellen viser avvik mellom andel nasjonale stemmer og mandater for hvert parti.</p>
-			<div class="tablecontainer">
+			</section>
+			<div class="scroll">
 				<table id="stats">
 					<thead></thead>
 					<tbody></tbody>
 				</table>
 			</div>
+			<section>
 			<p>Tabellen viser størrelser som måler proporsjonaliteten til hele valget.</p>
+			</section>
 		</div>
 		<div id="logtab">
-			<textarea id="log" rows="25" wrap="off" readonly></textarea>
-			<p>Loggen forklarer alle stegene i beregningen av valgresultatet.</p>
+			<section>
+				<textarea id="log" rows="25" wrap="off" readonly></textarea>
+				<p>Loggen forklarer alle stegene i beregningen av valgresultatet.</p>
+			</section>
 		</div>
+		<section>
 		<h2>Kilder og nyttige lenker</h2>
 		<ul>
 			<li><a href="https://valgresultat.no/valg/2021/">Offisielle stemmetall og valgresultater</a></li>
@@ -206,9 +221,10 @@
 			<li><a href="https://www.vg.no/spesial/2017/stortingsvalg/">VGs valgsimulator</a></li>
 			<li><a href="https://github.com/JanOleA/stlague">Jan Ole Åkerholms valgsimulator</a></li>
 		</ul>
+		</section>
 	</article>
 	<footer>
-		<p>Utviklet av Herman Sletmoen. <a href="https://github.com/hersle/valgsimulator">Åpen kildekode</a>. <a href="https://github.com/hersle/valgsimulator/issues">Meld inn forslag, feil og problemer!</a></p>
+		<p style="margin: 0.5rem 0;">Utviklet av Herman Sletmoen. <a href="https://github.com/hersle/valgsimulator">Åpen kildekode</a>. <a href="https://github.com/hersle/valgsimulator/issues">Meld inn forslag, feil og problemer!</a></p>
 	</footer>
 </body>
 </html>
