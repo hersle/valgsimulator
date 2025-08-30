@@ -711,10 +711,17 @@ function update() {
 			var seatFrac = teamSeats[team] / totalSeatCount;
 			var voteFrac = teamVotes / totalVotes;
 			var teamName = team.join(" + ");
-			teamsDict[teamName] = {"Posisjon": teamSeats[team], "Opposisjon": totalSeatCount - teamSeats[team], "Andel mandater": truncate(seatFrac*100, decimals).toLocaleString(LANG) + " %", "Andel stemmer": truncate(voteFrac*100, decimals).toLocaleString(LANG) + " %", "Overrepresentasjon": truncate((seatFrac-voteFrac)*100, decimals).toLocaleString(LANG) + " %"};
+			teamsDict[teamName] = {
+				"Posisjon": teamSeats[team],
+				"Opposisjon": totalSeatCount - teamSeats[team],
+				"Andel mandater": truncate(seatFrac*100, decimals).toLocaleString(LANG) + " %",
+				"Andel stemmer": truncate(voteFrac*100, decimals).toLocaleString(LANG) + " %",
+				"Overrepresentasjon": truncate((seatFrac-voteFrac)*100, decimals).toLocaleString(LANG) + " %",
+				"Stemmer per mandat": truncate(teamVotes/teamSeats[team], 0).toLocaleString(LANG),
+			};
 			teamNames.push(teamName);
 		}
-		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon"], [], [], "", "Partier i posisjon", false, false, (x) => x);
+		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon", "Stemmer per mandat"], [], [], "", "Partier i posisjon", false, false, (x) => x);
 	}
 
 	var LSq = 0.0;
