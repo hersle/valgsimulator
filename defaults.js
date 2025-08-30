@@ -4,6 +4,7 @@ var DEFAULTS_COMMON = {
 	"globalseatsperdistrict": 1,
 	"localthreshold": 0.0,
 	"globalthreshold": 4.0,
+	"localglobalthreshold": false,
 	"method": "Sainte-Laguë fra 1,4",
 	"negativeglobalseats": false,
 	"exemptglobalthreshold": false,

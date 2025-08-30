@@ -316,18 +316,21 @@ function calculateAllSeatCounts(districts, totalSeatCount, globalSeatsPerDistric
 	return [localSeatCounts, globalSeatCount];
 };
 
-function calculateLocalSeats(votes, localSeatCounts, methodName, threshold) {
+function calculateLocalSeats(votes, localSeatCounts, methodName, localThreshold, globalThreshold) {
 	var seats = {};
+	var partyTotalVotes = sumLocal(votes);
+	var globalTotalVotes = sumGlobal(partyTotalVotes);
+
 	for (var district in votes) {
-		var totalVotes = sumGlobal(votes[district]);
+		var localTotalVotes = sumGlobal(votes[district]);
 		var votesAboveThreshold = {};
 		for (var party in votes[district]) {
-			if (votes[district][party] * 100 >= threshold * totalVotes) {
+			if (votes[district][party] * 100 >= localThreshold * localTotalVotes && partyTotalVotes[party] * 100 >= globalThreshold * globalTotalVotes) {
 				votesAboveThreshold[party] = votes[district][party];
 			}
 		}
 		printLog("");
-		printLog("Fordeler " + localSeatCounts[district] + " distriktsmandater i " + district + " mellom " + Object.keys(votesAboveThreshold).join(", ") + " (fikk minst " + threshold + " % av stemmene) med " + methodName);
+		printLog("Fordeler " + localSeatCounts[district] + " distriktsmandater i " + district + " mellom " + Object.keys(votesAboveThreshold).join(", ") + " (fikk minst " + localThreshold + " % av stemmene i distriktet og " + globalThreshold + " % av stemme nasjonalt) med " + methodName);
 		seats[district] = calculateSeats(votesAboveThreshold, localSeatCounts[district], methodName);
 	}
 	return seats;
@@ -402,8 +405,8 @@ function calculateGlobalSeats(localVotes, localSeats, globalSeatCount, globalThr
 	}
 };
 
-function calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, methodName, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats) {
-	var seats = calculateLocalSeats(votes, localSeatCounts, methodName, localThreshold);
+function calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, localGlobalThreshold, methodName, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats) {
+	var seats = calculateLocalSeats(votes, localSeatCounts, methodName, localThreshold, localGlobalThreshold);
 	seats["Utjevningsmandater"] = calculateGlobalSeats(votes, seats, globalSeatCount, globalThreshold, methodName, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats);
 	return seats;
 };
@@ -515,6 +518,7 @@ function update() {
 
 	var localThreshold = parseFloat(document.getElementById("localthreshold").value);
 	var globalThreshold = parseFloat(document.getElementById("globalthreshold").value);
+	var localGlobalThreshold = document.getElementById("localglobalthreshold").checked ? globalThreshold : 0.0;
 	var totalSeatCount = parseInt(document.getElementById("totalseats").value);
 	var globalSeatsPerDistrict = parseInt(document.getElementById("globalseatsperdistrict").value);
 	var negativeGlobalSeats = document.getElementById("negativeglobalseats").checked;
@@ -561,7 +565,7 @@ function update() {
 	}
 
 	var [localSeatCounts, globalSeatCount] = calculateAllSeatCounts(districts, totalSeatCount, globalSeatsPerDistrict, areaFactor, minSeatsPerDistrict);
-	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, methodName, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats);
+	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, localGlobalThreshold, methodName, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats);
 	var globalSeats = sumLocal(seats);
 
 	var showFraction = document.getElementById("showfraction").checked;

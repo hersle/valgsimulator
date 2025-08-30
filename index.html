@@ -54,15 +54,20 @@
 				<a>ⓘ</a>
 			</span>
 			<span title="Minste andel stemmer som et parti må få i et distrikt for å tildeles mandater der. I dag er det ingen slik grense.">
-				<label for="localthreshold">Sperregrense distriktsmandater</label>
+				<label for="localthreshold">Lokal sperregrense</label>
 				<input type="number" id="localthreshold" value="0" min="0" max="100" step="0.1" oninput="update();" size="1"/>
 				<label for="localthreshold">%</label>
 				<a>ⓘ</a>
 			</span>
 			<span title="Minste andel stemmer som et parti må få nasjonalt for å tildeles utjevningsmandater. Siden 1989 er grensen 4 %.">
-				<label for="globalthreshold">Sperregrense utjevningsmandater</label>
+				<label for="globalthreshold">Nasjonal sperregrense</label>
 				<input type="number" id="globalthreshold" value="4" min="0" max="100" step="0.1" oninput="update();" size="1"/>
 				<label for="globalthreshold">%</label>
+				<a>ⓘ</a>
+			</span>
+			<span title="I utgangspunktet gjelder den nasjonale sperregrensen kun utjevningsmandater. Dette alternativet gjør at partiet som ikke når den nasjonale sperregrensen heller ikke tildeles distriktsmandater.">
+				<input type="checkbox" id="localglobalthreshold" oninput="update();"/>
+				<label for="localglobalthreshold">Nasjonal sperregrense gjelder både distrikt- og utjevningsmandater</label>
 				<a>ⓘ</a>
 			</span>
 			<span title="I hvert distrikt fordeles distrikts- og utjevningsmandater mellom partiene med en gitt metode. Én og én mandat tildeles partiet med størst poengsum inntil alle mandatene er oppbrukt. Sainte-Laguë gir poengsum v/(2s+1), der v er partiets stemmer og s er antall mandater de allerede har fått i distriktet. I modifisert versjon endres første deletall (når s = 0) fra 1 til 1,2 eller 1,4. D'Hondt gir poengsum v/(s+1). Hare/Hamilton gir poengsum v/V*S-s, hvor V og S er totalt antall stemmer og mandater i distriktet. Vinneren tar alt gir alle mandatene til partiet med flest stemmer. Endret fra D'Hondt til Sainte-Laguë (med første delingstall modifisert til 1,4) i 1953.">
