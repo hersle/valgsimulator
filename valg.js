@@ -516,6 +516,8 @@ function update() {
 	var [localSeatCounts, globalSeatCount] = calculateAllSeatCounts(districts, totalSeatCount, globalSeatsPerDistrict, areaFactor, minSeatsPerDistrict);
 	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, localGlobalThreshold, methodName, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats);
 	var globalSeats = sumLocal(seats);
+	var globalVotes = sumLocal(votes);
+	var totalVotes = sumGlobal(globalVotes);
 
 	// Build sorted list of unique parties
 	var sortParties = document.getElementById("sortparties").value;
@@ -530,9 +532,32 @@ function update() {
 	parties.sort();
 	var fullParties = parties; // always refers to full party list
 
+	var showFraction = document.getElementById("showfraction").checked;
+	var decimals = parseInt(document.getElementById("decimals").value);
+
+	// Compute statistics (before any merging of parties takes place)
+	var LSq = 0.0;
+	var LH = 0.0;
+	for (var party of parties) {
+		var seatFrac = party in globalSeats ? globalSeats[party] / totalSeatCount : 0;
+		var voteFrac = globalVotes[party] / totalVotes;
+		var diff = voteFrac - seatFrac;
+		LSq += diff**2;
+		LH += Math.abs(diff);
+	}
+	LSq = Math.sqrt(LSq / 2);
+	LH = LH / 2;
+	var data = {"LSq": {"Verdi": LSq*100}, "LH": {"Verdi": LH*100}};
+	var format = (frac, total) => truncate(frac, decimals) + " %";
+	printTable(statTable, data, ["LSq", "LH"], ["Verdi"], "Variabel", false, false, format);
+
+	var format = showFraction ? (x, total) => formatFraction(x, total, decimals) : formatCount;
+
+	// Merge parties with no seats as "ANDRE", if requested
 	var groupOtherParties = document.getElementById("groupotherparties").checked;
 	var newParties = [];
 	if (groupOtherParties) {
+		globalVotes["ANDRE"] = 0;
 		globalSeats["ANDRE"] = 0;
 		for (var party of parties) { // all parties are not necessarily in globalSeats (e.g. if under thresholds), so loop over parties instead
 			if (globalSeats[party] == 0 || !(party in globalSeats)) {
@@ -547,6 +572,10 @@ function update() {
 						}
 					}
 				}
+				for (data of [globalSeats, globalVotes]) {
+					data["ANDRE"] += data[party];
+					delete data[party];
+				}
 			} else {
 				newParties.push(party);
 			}
@@ -555,12 +584,6 @@ function update() {
 		parties = newParties;
 	}
 
-	var showFraction = document.getElementById("showfraction").checked;
-	var decimals = parseInt(document.getElementById("decimals").value);
-	var format = showFraction ? (x, total) => formatFraction(x, total, decimals) : formatCount;
-
-	var globalVotes = sumLocal(votes);
-	var totalVotes = sumGlobal(globalVotes);
 	var compare = (party1, party2, data) => data[party2] == data[party1] ? (party1 < party2 ? -1 : +1) : (data[party2] - data[party1]); // sort by value in "data", but by name if values are equal
 	if (sortParties == "Navn") {
 		// sorted by name above
@@ -699,24 +722,6 @@ function update() {
 		}
 		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon", "Stemmer per mandat"], "Partier i posisjon", false, false, (x) => x);
 	}
-
-	var LSq = 0.0;
-	var LH = 0.0;
-	for (var party of parties) {
-		var seatFrac = party in globalSeats ? globalSeats[party] / totalSeatCount : 0;
-		var voteFrac = globalVotes[party] / totalVotes;
-		var diff = voteFrac - seatFrac;
-		LSq += diff**2;
-		LH += Math.abs(diff);
-	}
-	LSq = Math.sqrt(LSq / 2);
-	LH = LH / 2;
-	var data = {
-		"LSq": {"Verdi": LSq*100},
-		"LH": {"Verdi": LH*100},
-	};
-	var format = (frac, total) => truncate(frac, decimals) + " %";
-	printTable(statTable, data, Object.keys(data), ["Verdi"], "Variabel", false, false, format);
 
 	var totalPopulation = 0;
 	for (var district in districts) {
