@@ -424,5 +424,5 @@ var election2021 = {
 		"Finnmark": {"population": 75472, "area": 48631},
 	},
 
-	"defaults": merge3({"friends": "R+SV+AP+SP+MDG, KRF+V+H+FRP"}, DEFAULTS_BEFORE_2025, DEFAULTS_COMMON),
+	"defaults": merge3({"friends": "SV+AP+SP, KRF+V+H+FRP"}, DEFAULTS_BEFORE_2025, DEFAULTS_COMMON),
 };
