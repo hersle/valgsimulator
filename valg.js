@@ -42,8 +42,7 @@ function truncate(number, decimals) {
 	if (number < 0) {
 		return -truncate(-number, decimals);
 	}
-	number = Math.floor(number * 10**decimals) / 10**decimals;
-	return number.toFixed(decimals);
+	return Math.floor(number * 10**decimals) / 10**decimals;
 };
 
 function formatFraction(x, total, decimals) {
