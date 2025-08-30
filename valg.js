@@ -749,11 +749,11 @@ function update() {
 	LSq = Math.sqrt(LSq / 2);
 	LH = LH / 2;
 	var data = {
-		"Disproporsjonalitet (Gallagher)": {"Verdi": LSq*100},
-		"Disproporsjonalitet (Loosemore-Hanby)": {"Verdi": LH*100},
+		"LSq": {"Verdi": LSq*100},
+		"LH": {"Verdi": LH*100},
 	};
 	var format = (frac, total) => truncate(frac, decimals) + " %";
-	printTable(statTable, data, Object.keys(data), ["Verdi"], [], [], "", "Sammendragsvariabel", false, false, format);
+	printTable(statTable, data, Object.keys(data), ["Verdi"], [], [], "", "Variabel", false, false, format);
 
 	var totalPopulation = 0;
 	for (var district in districts) {
