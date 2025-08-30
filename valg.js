@@ -17,7 +17,6 @@ var voteTable = document.getElementById("votes");
 var seatTable = document.getElementById("seats");
 var teamTable = document.getElementById("teams");
 var statTable = document.getElementById("stats");
-var partyStatTable = document.getElementById("partystats");
 var distTable = document.getElementById("dists");
 var logOutput = document.getElementById("log");
 var voteLink = document.getElementById("voteslink");
@@ -696,6 +695,13 @@ function update() {
 	if (valid) {
 		var teams = calculateTeams(friends);
 
+		// add parties with no votes as "empty teams"
+		for (var party of parties) {
+			if (globalSeats[party] == 0) {
+				teams.push([party]);
+			}
+		}
+
 		var teamSeats = {};
 		for (var team of teams) {
 			teamSeats[team] = 0;
@@ -733,26 +739,21 @@ function update() {
 
 	var LSq = 0.0;
 	var LH = 0.0;
-	var partyStats = {};
 	for (var party of parties) {
-		partyStats[party] = {
-			"Andel mandater": party in globalSeats ? globalSeats[party] / totalSeatCount * 100 : 0,
-			"Andel stemmer": globalVotes[party] / totalVotes * 100,
-		};
-		partyStats[party]["Overrepresentasjon"] = partyStats[party]["Andel mandater"] - partyStats[party]["Andel stemmer"];
-		var diff = partyStats[party]["Andel stemmer"] - partyStats[party]["Andel mandater"];
+		var seatFrac = party in globalSeats ? globalSeats[party] / totalSeatCount : 0;
+		var voteFrac = globalVotes[party] / totalVotes;
+		var diff = voteFrac - seatFrac;
 		LSq += diff**2;
 		LH += Math.abs(diff);
 	}
 	LSq = Math.sqrt(LSq / 2);
 	LH = LH / 2;
 	var data = {
-		"Disproporsjonalitet (Gallagher)": {"Verdi": LSq},
-		"Disproporsjonalitet (Loosemore-Hanby)": {"Verdi": LH},
+		"Disproporsjonalitet (Gallagher)": {"Verdi": LSq*100},
+		"Disproporsjonalitet (Loosemore-Hanby)": {"Verdi": LH*100},
 	};
 	var format = (frac, total) => truncate(frac, decimals) + " %";
 	printTable(statTable, data, Object.keys(data), ["Verdi"], [], [], "", "Sammendragsvariabel", false, false, format);
-	printTable(partyStatTable, partyStats, Object.keys(partyStats), ["Andel mandater", "Andel stemmer", "Overrepresentasjon"], [], mergeParties, "ANDRE", "Parti", false, false, format);
 
 	var totalPopulation = 0;
 	for (var district in districts) {
