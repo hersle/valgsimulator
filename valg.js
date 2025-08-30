@@ -62,58 +62,7 @@ function flushLog() {
 	logOutput.innerHTML = log;
 };
 
-function printTable(table, data, districts, parties, mergeParties, mergeDistricts, mergedDistrictLabel, firstHeader, showColumnTotals, showRowTotals, format) {
-	if (mergeParties.length > 0) {
-		var newData = {};
-		parties = parties.slice(); // make copy
-		for (var district in data) {
-			newData[district] = {"ANDRE": 0};
-			for (var party in data[district]) {
-				if (mergeParties.includes(party)) {
-					newData[district]["ANDRE"] += data[district][party];
-				} else {
-					newData[district][party] = data[district][party];
-				}
-			}
-		}
-		for (var party of mergeParties) {
-			if (parties.includes(party)) {
-				parties.splice(parties.indexOf(party), 1); // remove from list of sorted parties
-			}
-		}
-		parties.push("ANDRE"); // always last
-		return printTable(table, newData, districts, parties, [], mergeDistricts, mergedDistrictLabel, firstHeader, showColumnTotals, showRowTotals, format);
-	} else if (mergeDistricts.length > 0) {
-		var newData = {};
-		newData[mergedDistrictLabel] = {};
-		var newDistricts = [];
-		for (var district in data) {
-			if (mergeDistricts.includes(district)) {
-				for (var party in data[district]) {
-					if (!(party in newData[mergedDistrictLabel])) {
-						newData[mergedDistrictLabel][party] = 0;
-					}
-					newData[mergedDistrictLabel][party] += data[district][party];
-				}
-			} else {
-				newData[district] = data[district];
-				newDistricts.push(district);
-			}
-		}
-		if (mergedDistrictLabel == "Distriktsmandater") {
-			newDistricts.splice(0, 0, mergedDistrictLabel);
-		} else {
-			newDistricts.push(mergedDistrictLabel);
-		}
-		return printTable(table, newData, newDistricts, parties, mergeParties, [], mergedDistrictLabel, firstHeader, showColumnTotals, showRowTotals, format);
-	}
-
-	// Make ANDRE always appear last
-	if (parties.includes("ANDRE")) {
-		parties.splice(parties.indexOf("ANDRE"), 1);
-		parties.push("ANDRE");
-	}
-
+function printTable(table, data, districts, parties, firstHeader, showColumnTotals, showRowTotals, format) {
 	// Reset table
 	table.tHead.innerHTML = "";
 	table.tBodies[0].innerHTML = "";
@@ -568,10 +517,6 @@ function update() {
 	var seats = calculateAllSeats(votes, localSeatCounts, globalSeatCount, localThreshold, globalThreshold, localGlobalThreshold, methodName, negativeGlobalSeats, requireGlobalRepresentation, exemptGlobalThresholdIflocalSeats);
 	var globalSeats = sumLocal(seats);
 
-	var showFraction = document.getElementById("showfraction").checked;
-	var decimals = parseInt(document.getElementById("decimals").value);
-	var format = showFraction ? (x, total) => formatFraction(x, total, decimals) : formatCount;
-
 	// Build sorted list of unique parties
 	var sortParties = document.getElementById("sortparties").value;
 	var parties = [];
@@ -582,11 +527,43 @@ function update() {
 			}
 		}
 	}
+	parties.sort();
+	var fullParties = parties; // always refers to full party list
+
+	var groupOtherParties = document.getElementById("groupotherparties").checked;
+	var newParties = [];
+	if (groupOtherParties) {
+		globalSeats["ANDRE"] = 0;
+		for (var party of parties) { // all parties are not necessarily in globalSeats (e.g. if under thresholds), so loop over parties instead
+			if (globalSeats[party] == 0 || !(party in globalSeats)) {
+				for (data of [votes, seats]) {
+					for (var district in data) {
+						if (party in data[district]) {
+							if (!("ANDRE" in data[district])) {
+								data[district]["ANDRE"] = 0;
+							}
+							data[district]["ANDRE"] += data[district][party];
+							delete data[district][party];
+						}
+					}
+				}
+			} else {
+				newParties.push(party);
+			}
+		}
+		newParties.push("ANDRE"); // always last
+		parties = newParties;
+	}
+
+	var showFraction = document.getElementById("showfraction").checked;
+	var decimals = parseInt(document.getElementById("decimals").value);
+	var format = showFraction ? (x, total) => formatFraction(x, total, decimals) : formatCount;
+
 	var globalVotes = sumLocal(votes);
 	var totalVotes = sumGlobal(globalVotes);
 	var compare = (party1, party2, data) => data[party2] == data[party1] ? (party1 < party2 ? -1 : +1) : (data[party2] - data[party1]); // sort by value in "data", but by name if values are equal
 	if (sortParties == "Navn") {
-		parties.sort();
+		// sorted by name above
 	} else if (sortParties == "Stemmer") {
 		parties.sort((party1, party2) => compare(party1, party2, globalVotes));
 	} else if (sortParties == "Mandater") {
@@ -598,6 +575,12 @@ function update() {
 			rightism[party] = spectrum.includes(party) ? spectrum.indexOf(party) : 10000;
 		}
 		parties.sort((party1, party2) => compare(party2, party1, rightism));
+	}
+
+	// Make ANDRE always appear last
+	if (parties.includes("ANDRE")) {
+		parties.splice(parties.indexOf("ANDRE"), 1);
+		parties.push("ANDRE");
 	}
 
 	var sortDistricts = document.getElementById("sortdistricts").value;
@@ -634,32 +617,14 @@ function update() {
 	var districtListWithGlobal = districtList.slice();
 	districtListWithGlobal.push("Utjevningsmandater");
 
-	var groupOtherParties = document.getElementById("groupotherparties").checked;
-	var mergeParties = [];
-	if (groupOtherParties) {
-		for (var party of parties) { // all parties are not necessarily in globalSeats (e.g. if under thresholds), so loop over parties instead
-			if (globalSeats[party] == 0 || !(party in globalSeats)) {
-				mergeParties.push(party);
-			}
-		}
-	}
-
-	var groupLocal = false; // document.getElementById("grouplocal").checked;
-	var mergeDistricts = [];
-	if (groupLocal) {
-		for (var district in votes) {
-			mergeDistricts.push(district);
-		}
-	}
-
-	printTable(voteTable, votes, districtList, parties, mergeParties, mergeDistricts, "Distriktsstemmer", "Valgdistrikt", true, true, format);
-	printTable(seatTable, seats, districtListWithGlobal, parties, mergeParties, mergeDistricts, "Distriktsmandater", "Valgdistrikt", true, true, format);
+	printTable(voteTable, votes, districtList, parties, "Valgdistrikt", true, true, format);
+	printTable(seatTable, seats, districtListWithGlobal, parties, "Valgdistrikt", true, true, format);
 
 	// Read graph of friend parties
 	var friendsInput = document.getElementById("friends");
 	var friendsText = friendsInput.value.trim();
 	var friends = {};
-	for (var party of parties) {
+	for (var party of fullParties) {
 		friends[party] = [];
 	}
 	var valid = true;
@@ -667,7 +632,7 @@ function update() {
 		for (var text of friendsText.split(/\s*,\s*/)) {
 			var friendList = text.split(/\s*\+\s*/);
 			for (var party1 of friendList) {
-				if (!parties.includes(party1)) {
+				if (!fullParties.includes(party1)) {
 					valid = false;
 					break;
 				}
@@ -732,7 +697,7 @@ function update() {
 			};
 			teamNames.push(teamName);
 		}
-		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon", "Stemmer per mandat"], [], [], "", "Partier i posisjon", false, false, (x) => x);
+		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon", "Stemmer per mandat"], "Partier i posisjon", false, false, (x) => x);
 	}
 
 	var LSq = 0.0;
@@ -751,7 +716,7 @@ function update() {
 		"LH": {"Verdi": LH*100},
 	};
 	var format = (frac, total) => truncate(frac, decimals) + " %";
-	printTable(statTable, data, Object.keys(data), ["Verdi"], [], [], "", "Variabel", false, false, format);
+	printTable(statTable, data, Object.keys(data), ["Verdi"], "Variabel", false, false, format);
 
 	var totalPopulation = 0;
 	for (var district in districts) {
@@ -772,10 +737,10 @@ function update() {
 		districts[district]["Folketall"] = districts[district]["population"];
 		districts[district]["Areal / km²"] = districts[district]["area"];
 	}
-	printTable(distTable, districts, districtList, ["Folketall", "Areal / km²", "Fordelingstall", "Mandater", "Innbyggere per mandat", "Mandatandel", "Befolkningsandel", "Overrepresentasjon"], [], [], "", "Valgdistrikt", false, false, (x) => x.toLocaleString(LANG))
+	printTable(distTable, districts, districtList, ["Folketall", "Areal / km²", "Fordelingstall", "Mandater", "Innbyggere per mandat", "Mandatandel", "Befolkningsandel", "Overrepresentasjon"], "Valgdistrikt", false, false, (x) => x.toLocaleString(LANG))
 
 	extraPartyInput.innerHTML = "";
-	for (var party of parties) {
+	for (var party of fullParties) {
 		var el = document.createElement("option");
 		el.innerHTML = party;
 		extraPartyInput.appendChild(el);
