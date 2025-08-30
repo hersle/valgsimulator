@@ -11,17 +11,20 @@ var voteTab = document.getElementById("votestab");
 var seatTab = document.getElementById("seatstab");
 var teamTab = document.getElementById("teamstab");
 var statTab = document.getElementById("statstab");
+var distTab = document.getElementById("diststab");
 var logTab = document.getElementById("logtab");
 var voteTable = document.getElementById("votes");
 var seatTable = document.getElementById("seats");
 var teamTable = document.getElementById("teams");
 var statTable = document.getElementById("stats");
 var partyStatTable = document.getElementById("partystats");
+var distTable = document.getElementById("dists");
 var logOutput = document.getElementById("log");
 var voteLink = document.getElementById("voteslink");
 var seatLink = document.getElementById("seatslink");
 var teamLink = document.getElementById("teamslink");
 var statLink = document.getElementById("statslink");
+var distLink = document.getElementById("distslink");
 var logLink = document.getElementById("loglink");
 
 var LANG = "no-NO";
@@ -618,7 +621,7 @@ function update() {
 		districtList.sort((district1, district2) => compare(district1, district2, districtVotes));
 	} else if (sortDistricts == "Mandater") {
 		districtList.sort((district1, district2) => compare(district1, district2, localSeatCounts));
-	} else if (sortDistricts == "Innbyggertall") {
+	} else if (sortDistricts == "Folketall") {
 		var populations = {};
 		for (var district in districts) {
 			populations[district] = districts[district]["population"];
@@ -751,6 +754,27 @@ function update() {
 	printTable(statTable, data, Object.keys(data), ["Verdi"], [], [], "", "Sammendragsvariabel", false, false, format);
 	printTable(partyStatTable, partyStats, Object.keys(partyStats), ["Andel mandater", "Andel stemmer", "Overrepresentasjon"], [], mergeParties, "ANDRE", "Parti", false, false, format);
 
+	var totalPopulation = 0;
+	for (var district in districts) {
+		totalPopulation += districts[district]["population"];
+	}
+	for (var district in districts) {
+		districts[district]["Fordelingstall"] = truncate(districts[district]["population"] * areaFactor + districts[district]["area"], 0); // TODO: don't duplicate!
+		districts[district]["Mandater"] = localSeatCounts[district] + globalSeatsPerDistrict;
+		districts[district]["Befolkningsandel"] = districts[district]["population"] / totalPopulation * 100;
+		districts[district]["Mandatandel"] = districts[district]["Mandater"] / totalSeatCount * 100;
+		districts[district]["Overrepresentasjon"] = districts[district]["Mandatandel"] - districts[district]["Befolkningsandel"];
+		districts[district]["Fordelingstall"] = districts[district]["Fordelingstall"].toLocaleString(LANG);
+		districts[district]["Innbyggere per mandat"] = truncate(districts[district]["population"] / districts[district]["Mandater"], 0).toLocaleString(LANG);
+		districts[district]["Mandater"] = districts[district]["Mandater"].toLocaleString(LANG);
+		districts[district]["Befolkningsandel"] = truncate(districts[district]["Befolkningsandel"], decimals).toLocaleString(LANG) + " %";
+		districts[district]["Mandatandel"] = truncate(districts[district]["Mandatandel"], decimals).toLocaleString(LANG) + " %";
+		districts[district]["Overrepresentasjon"] = truncate(districts[district]["Overrepresentasjon"], decimals).toLocaleString(LANG) + " %";
+		districts[district]["Folketall"] = districts[district]["population"];
+		districts[district]["Areal / km²"] = districts[district]["area"];
+	}
+	printTable(distTable, districts, districtList, ["Folketall", "Areal / km²", "Fordelingstall", "Mandater", "Innbyggere per mandat", "Mandatandel", "Befolkningsandel", "Overrepresentasjon"], [], [], "", "Valgdistrikt", false, false, (x) => x.toLocaleString(LANG))
+
 	extraPartyInput.innerHTML = "";
 	for (var party of parties) {
 		var el = document.createElement("option");
@@ -772,18 +796,20 @@ function update() {
 	flushLog();
 };
 
-function showTables(showVotes, showSeats, showTeams, showStats, showLog) {
+function showTables(showVotes, showSeats, showTeams, showDists, showStats, showLog) {
 	voteTab.style["display"] = showVotes ? "block" : "none";
 	seatTab.style["display"] = showSeats ? "block" : "none";
 	teamTab.style["display"] = showTeams ? "block" : "none";
+	distTab.style["display"] = showDists ? "block" : "none";
 	statTab.style["display"] = showStats ? "block" : "none";
 	logTab.style["display"] = showLog ? "block" : "none";
 	voteLink.style["color"] =  showVotes ? "black" : "gray";
 	seatLink.style["color"] =  showSeats ? "black" : "gray";
 	teamLink.style["color"] =  showTeams ? "black" : "gray";
+	distLink.style["color"] =  showDists ? "black" : "gray";
 	statLink.style["color"] =  showStats ? "black" : "gray";
 	logLink.style["color"] =  showLog ? "black" : "gray";
 };
 
-showTables(true, false, false, false, false);
+showTables(true, false, false, false, false, false);
 setElection(); // run once on page load
