@@ -166,12 +166,12 @@
 		</fieldset>
 		</section>
 		<h2 class="scroll" style="padding: 0.5rem 0.5rem">
-			<a id="voteslink" onclick="showTables(true, false, false, false, false, false);" style="margin-right: 0.3em">Stemmer</a>
-			<a id="seatslink" onclick="showTables(false, true, false, false, false, false);" style="margin-right: 0.3em">Mandater</a>
-			<a id="teamslink" onclick="showTables(false, false, true, false, false, false);" style="margin-right: 0.3em">Koalisjoner</a>
-			<a id="distslink" onclick="showTables(false, false, false, true, false, false);" style="margin-right: 0.3em">Distrikter</a>
-			<a id="statslink" onclick="showTables(false, false, false, false, true, false);" style="margin-right: 0.3em">Statistikk</a>
-			<a id="loglink" onclick="showTables(false, false, false, false, false, true);">Beregning</a>
+			<a id="voteslink" onclick="showTab('votes');" style="margin-right: 0.3em">Stemmer</a>
+			<a id="seatslink" onclick="showTab('seats');" style="margin-right: 0.3em">Mandater</a>
+			<a id="teamslink" onclick="showTab('teams');" style="margin-right: 0.3em">Koalisjoner</a>
+			<a id="distslink" onclick="showTab('dists');" style="margin-right: 0.3em">Distrikter</a>
+			<a id="statslink" onclick="showTab('stats');" style="margin-right: 0.3em">Statistikk</a>
+			<a id="calcslink" onclick="showTab('calcs');">Beregning</a>
 		</h2>
 		<div id="votestab">
 			<div class="scroll">
@@ -237,7 +237,7 @@
 			<p>Tabellen viser størrelser som måler proporsjonaliteten til hele valget.</p>
 			</section>
 		</div>
-		<div id="logtab">
+		<div id="calcstab">
 			<section>
 				<textarea id="log" rows="25" wrap="off" readonly></textarea>
 				<p>Loggen forklarer alle stegene i beregningen av valgresultatet.</p>

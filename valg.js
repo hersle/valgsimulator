@@ -12,7 +12,7 @@ var seatTab = document.getElementById("seatstab");
 var teamTab = document.getElementById("teamstab");
 var statTab = document.getElementById("statstab");
 var distTab = document.getElementById("diststab");
-var logTab = document.getElementById("logtab");
+var calcTab = document.getElementById("calcstab");
 var voteTable = document.getElementById("votes");
 var seatTable = document.getElementById("seats");
 var teamTable = document.getElementById("teams");
@@ -25,7 +25,7 @@ var seatLink = document.getElementById("seatslink");
 var teamLink = document.getElementById("teamslink");
 var statLink = document.getElementById("statslink");
 var distLink = document.getElementById("distslink");
-var logLink = document.getElementById("loglink");
+var calcLink = document.getElementById("calcslink");
 
 var LANG = "no-NO";
 
@@ -796,20 +796,20 @@ function update() {
 	flushLog();
 };
 
-function showTables(showVotes, showSeats, showTeams, showDists, showStats, showLog) {
-	voteTab.style["display"] = showVotes ? "block" : "none";
-	seatTab.style["display"] = showSeats ? "block" : "none";
-	teamTab.style["display"] = showTeams ? "block" : "none";
-	distTab.style["display"] = showDists ? "block" : "none";
-	statTab.style["display"] = showStats ? "block" : "none";
-	logTab.style["display"] = showLog ? "block" : "none";
-	voteLink.style["color"] =  showVotes ? "black" : "gray";
-	seatLink.style["color"] =  showSeats ? "black" : "gray";
-	teamLink.style["color"] =  showTeams ? "black" : "gray";
-	distLink.style["color"] =  showDists ? "black" : "gray";
-	statLink.style["color"] =  showStats ? "black" : "gray";
-	logLink.style["color"] =  showLog ? "black" : "gray";
+function showTab(tab) {
+	voteTab.style["display"] = tab == "votes" ? "block" : "none";
+	seatTab.style["display"] = tab == "seats" ? "block" : "none";
+	teamTab.style["display"] = tab == "teams" ? "block" : "none";
+	distTab.style["display"] = tab == "dists" ? "block" : "none";
+	statTab.style["display"] = tab == "stats" ? "block" : "none";
+	calcTab.style["display"] = tab == "calcs" ? "block" : "none";
+	voteLink.style["color"] = tab == "votes" ? "black" : "gray";
+	seatLink.style["color"] = tab == "seats" ? "black" : "gray";
+	teamLink.style["color"] = tab == "teams" ? "black" : "gray";
+	distLink.style["color"] = tab == "dists" ? "black" : "gray";
+	statLink.style["color"] = tab == "stats" ? "black" : "gray";
+	calcLink.style["color"] = tab == "calcs" ? "black" : "gray";
 };
 
-showTables(true, false, false, false, false, false);
+showTab("votes");
 setElection(); // run once on page load
