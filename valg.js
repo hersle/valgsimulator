@@ -10,7 +10,6 @@ var election;
 var voteTab = document.getElementById("votestab");
 var seatTab = document.getElementById("seatstab");
 var teamTab = document.getElementById("teamstab");
-var statTab = document.getElementById("statstab");
 var distTab = document.getElementById("diststab");
 var calcTab = document.getElementById("calcstab");
 var voteTable = document.getElementById("votes");
@@ -22,7 +21,6 @@ var logOutput = document.getElementById("log");
 var voteLink = document.getElementById("voteslink");
 var seatLink = document.getElementById("seatslink");
 var teamLink = document.getElementById("teamslink");
-var statLink = document.getElementById("statslink");
 var distLink = document.getElementById("distslink");
 var calcLink = document.getElementById("calcslink");
 
@@ -802,13 +800,11 @@ function showTab(tab) {
 	seatTab.style["display"] = tab == "seats" ? "block" : "none";
 	teamTab.style["display"] = tab == "teams" ? "block" : "none";
 	distTab.style["display"] = tab == "dists" ? "block" : "none";
-	statTab.style["display"] = tab == "stats" ? "block" : "none";
 	calcTab.style["display"] = tab == "calcs" ? "block" : "none";
 	voteLink.style["color"] = tab == "votes" ? "black" : "gray";
 	seatLink.style["color"] = tab == "seats" ? "black" : "gray";
 	teamLink.style["color"] = tab == "teams" ? "black" : "gray";
 	distLink.style["color"] = tab == "dists" ? "black" : "gray";
-	statLink.style["color"] = tab == "stats" ? "black" : "gray";
 	calcLink.style["color"] = tab == "calcs" ? "black" : "gray";
 };
 
