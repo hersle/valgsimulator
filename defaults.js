@@ -8,7 +8,7 @@ var DEFAULTS_COMMON = {
 	"method": "Sainte-Laguë fra 1,4",
 	"negativeglobalseats": false,
 	"exemptglobalthreshold": false,
-	"mergedistricts": "19 fylker (til 2018)",
+	"mergedistricts": "19 fylker (før 2018)",
 	"extravotes": 0,
 	"extraparty": "",
 	"extradistrict": "",

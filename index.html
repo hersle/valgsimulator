@@ -23,7 +23,7 @@
 		<fieldset>
 			<span title="Bruk offisielle stemmetall fra dette Stortingsvalget. Fremtidige valg merket * bruker i stedet meningsmålinger fra pollofpolls.no, og relative oppslutninger regnes om til absolutte stemmetall ved å anta at andelen hjemmesittere av de stemmeberettigede i hvert valgdistrikt er den samme som i forrige valg." >
 				<label for="election">Valg</label>
-				<select id="election" value="2021" oninput="setElection();">
+				<select id="election" oninput="setElection();">
 					<option>2009</option>
 					<option>2013</option>
 					<option>2017</option>
@@ -97,12 +97,12 @@
 				<a>ⓘ</a>
 			</span>
 			<span title="Slå sammen innbyggertall, areal og stemmer for noen valgdistrikter. 19 fylker svarer nøyaktig til dagens valgdistrikter og innebærer ingen sammenslåing. 18 fylker slår Nord- og Sør-Trøndelag sammen til Trøndelag. 15 fylker slår også sammen Hordaland og Sogn og Fjordane til Vestland, Vest- og Øst-Agder til Agder og Oppland og Hedmark til Innlandet. 11 fylker slår også sammen Troms og Finnmark, Vestfold og Telemark, og Østfold, Akershus og Buskerud til Viken. Ett valgdistrikt slår alle distriktene sammen til ett nasjonalt valgdistrikt.">
-				<label for="mergedistricts">Slå sammen distrikter til</label>
+				<label for="mergedistricts">Samle distrikter til</label>
 				<select id="mergedistricts" oninput="update();">
-					<option>19 fylker (til 2018)</option>
-					<option>18 fylker (til 2020)</option>
-					<option>15 fylker (fra 2024)</option>
-					<option>11 fylker (til 2024)</option>
+					<option selected>19 fylker (før 2018)</option>
+					<option>18 fylker (før 2020)</option>
+					<option>15 fylker (etter 2024)</option>
+					<option>11 fylker (før 2024)</option>
 					<option>1 valgdistrikt</option>
 				</select>
 				<a>ⓘ</a>
