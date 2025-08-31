@@ -116,9 +116,8 @@
 				<select id="extradistrict" oninput="update();"></select>
 				<a>ⓘ</a>
 			</span>
-			<span title="Vis prosentandelen stemmer og mandater i stedet for antallet. Andeler rundes mot null, slik at avrundingsfeil ikke kan gi inntrykk av at partier nærme sperregrensen er over sperregrensen. Påvirker ikke valgresultatet.">
-				<input type="checkbox" id="showfraction" oninput="update();"/>
-				<label for="showfraction">Vis andeler med</label>
+			<span title="Antall desimaler som vises i desimaltall. Påvirker ikke valgresultatet.">
+				<label for="decimals">Vis </label>
 				<input type="number" id="decimals" value="1" min="0" max="9" step="1" oninput="update();" size="1"/>
 				<label for="decimals">desimaler</label>
 				<a>ⓘ</a>
@@ -216,6 +215,7 @@
 			<li>Bruk piltastene for å gradvis endre verdien til valgt alternativ.</li>
 			<li>Trykk på ⓘ eller hold musen over alternativer for å vise forklaringer og flere tips.</li>
 			<li>Sortér tabeller ved å klikke i første rad eller kolonne.</li>
+			<li>Bytt mellom å vise antall og andeler stemmer ved å klikke på tallene i tabellene.</li>
 			<li>Endringer trer i kraft umiddelbart.</li>
 		</ul>
 		<h2>Kilder og nyttige lenker</h2>

@@ -222,6 +222,27 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 			}
 		}
 	}
+
+	const toggleShowFraction = function (e) {
+		if (table.showFraction) {
+			table.showFraction = !table.showFraction;
+		} else {
+			table.showFraction = true;
+		}
+		update();
+	};
+	for (const row of tbody.children) {
+		for (let i = 1; i < row.children.length; i++) {
+			const cell = row.children[i];
+			cell.addEventListener("click", toggleShowFraction);
+		}
+	}
+	if (tfoot) {
+		for (let i = 1; i < row.children.length; i++) {
+			const cell = row.children[i];
+			cell.addEventListener("click", toggleShowFraction);
+		}
+	}
 }
 
 function sumLocal(local) {
@@ -625,7 +646,6 @@ function update() {
 	parties.sort();
 	var fullParties = parties; // always refers to full party list
 
-	var showFraction = document.getElementById("showfraction").checked;
 	var decimals = parseInt(document.getElementById("decimals").value);
 
 	// Compute statistics (before any merging of parties takes place)
@@ -643,8 +663,6 @@ function update() {
 	var data = {"LSq": {"Verdi": LSq*100}, "LH": {"Verdi": LH*100}};
 	var format = (frac, total) => truncate(frac, decimals) + " %";
 	printTable(statTable, data, ["LSq", "LH"], ["Verdi"], "Variabel", false, false, format);
-
-	var format = showFraction ? (x, total) => formatFraction(x, total, decimals) : formatCount;
 
 	// Merge parties with no seats as "ANDRE", if requested
 	var groupOtherParties = document.getElementById("groupotherparties").checked;
@@ -691,8 +709,8 @@ function update() {
 	var districtListWithGlobal = districtList.slice();
 	districtListWithGlobal.push("Utjevningsmandater");
 
-	printTable(voteTable, votes, districtList, parties, "Valgdistrikt", true, true, format);
-	printTable(seatTable, seats, districtListWithGlobal, parties, "Valgdistrikt", true, true, format);
+	printTable(voteTable, votes, districtList, parties, "Valgdistrikt", true, true, voteTable.showFraction ? (x, total) => formatFraction(x, total, decimals) : formatCount);
+	printTable(seatTable, seats, districtListWithGlobal, parties, "Valgdistrikt", true, true, seatTable.showFraction ? (x, total) => formatFraction(x, total, decimals) : formatCount);
 
 	// Read graph of friend parties
 	var friendsInput = document.getElementById("friends");
