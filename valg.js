@@ -89,6 +89,11 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 		} else {
 			districts.sort((d1, d2) => _comp(data[d1][table.sortColumn], data[d2][table.sortColumn]));
 		}
+		var idx = districts.indexOf("Utjevningsmandater");
+		if (idx >= 0) {
+			districts.splice(idx, 1);
+			districts.push("Utjevningsmandater");
+		}
 	}
 	if (table.sortRow) {
 		if (table.sortRow == "Totalt") {
