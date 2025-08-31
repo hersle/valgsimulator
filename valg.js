@@ -90,6 +90,22 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 			districts.sort((d1, d2) => _comp(data[d1][table.sortColumn], data[d2][table.sortColumn]));
 		}
 	}
+	if (table.sortRow) {
+		if (table.sortRow == "Totalt") {
+			const sumfunc = function (p) {
+				var s = 0;
+				for (const d in data) {
+					if (p in data[d]) {
+						s += data[d][p];
+					}
+				}
+				return s;
+			};
+			parties.sort((p1, p2) => _comp(sumfunc(p1), sumfunc(p2)));
+		} else {
+			parties.sort((p1, p2) => _comp(data[table.sortRow][p1], data[table.sortRow][p2]));
+		}
+	}
 
 	// Reset table
 	var thead = table.tHead;
@@ -100,7 +116,7 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 
 	// Print table
 	var head = thead.insertRow();
-	var cell = document.createElement("th");
+	const cell = document.createElement("th");
 	cell.innerHTML = firstHeader;
 	head.appendChild(cell);
 	for (var party of parties) {
@@ -109,7 +125,7 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 		head.appendChild(cell);
 	}
 	if (showRowTotals) {
-		var cell = document.createElement("th");
+		const cell = document.createElement("th");
 		cell.innerHTML = "Totalt";
 		head.appendChild(cell);
 	}
@@ -141,11 +157,11 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 	if (showColumnTotals) {
 		tfoot.innerHTML = ""; // reset
 		var row = tfoot.insertRow();
-		var cell = document.createElement("th");
+		const cell = document.createElement("th");
 		cell.innerHTML = "Totalt";
 		row.appendChild(cell);
 		for (var party of parties) {
-			var cell = document.createElement("th");
+			const cell = document.createElement("th");
 			var total = 0;
 			for (var district in data) {
 				if (party in data[district]) {
@@ -156,7 +172,7 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 			row.appendChild(cell);
 		}
 		if (showRowTotals) {
-			var cell = document.createElement("th");
+			const cell = document.createElement("th");
 			cell.innerHTML = format(globalTotal, globalTotal);
 			row.appendChild(cell);
 		}
@@ -169,6 +185,29 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 		})
 		if (cell.innerText == table.sortColumn) {
 			cell.classList.add("sorted");
+		}
+	}
+
+	if (showRowTotals) {
+		for (const row of tbody.children) {
+			const cell = row.children[0];
+			cell.addEventListener("click", function (e) {
+				table.sortRow = cell.textContent;
+				update();
+			});
+			if (cell.innerText == table.sortRow) {
+				cell.classList.add("sorted");
+			}
+		}
+		if (tfoot) {
+			const cell = tfoot.children[0].children[0];
+			cell.addEventListener("click", function (e) {
+				table.sortRow = cell.textContent;
+				update();
+			});
+			if (cell.innerText == table.sortRow) {
+				cell.classList.add("sorted");
+			}
 		}
 	}
 }
@@ -632,37 +671,11 @@ function update() {
 		parties.push("ANDRE");
 	}
 
-	var sortDistricts = document.getElementById("sortdistricts").value;
 	var districtList = [];
 	for (var district in votes) {
 		districtList.push(district);
 	}
-	if (sortDistricts == "Navn") {
-		districtList.sort();
-	} else if (sortDistricts == "Stemmer") {
-		var districtVotes = {};
-		for (var district in votes) {
-			districtVotes[district] = 0;
-			for (var party in votes[district]) {
-				districtVotes[district] += votes[district][party];
-			}
-		}
-		districtList.sort((district1, district2) => compare(district1, district2, districtVotes));
-	} else if (sortDistricts == "Mandater") {
-		districtList.sort((district1, district2) => compare(district1, district2, localSeatCounts));
-	} else if (sortDistricts == "Folketall") {
-		var populations = {};
-		for (var district in districts) {
-			populations[district] = districts[district]["population"];
-		}
-		districtList.sort((district1, district2) => compare(district1, district2, populations));
-	} else if (sortDistricts == "Areal") {
-		var areas = {};
-		for (var district in districts) {
-			areas[district] = districts[district]["area"];
-		}
-		districtList.sort((district1, district2) => compare(district1, district2, areas));
-	}
+	districtList.sort();
 	var districtListWithGlobal = districtList.slice();
 	districtListWithGlobal.push("Utjevningsmandater");
 
