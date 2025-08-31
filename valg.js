@@ -66,6 +66,7 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 	// Reset table
 	var thead = table.tHead;
 	var tbody = table.tBodies[0];
+	var tfoot = table.tFoot;
 	thead.innerHTML = "";
 	tbody.innerHTML = "";
 
@@ -109,7 +110,8 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 	}
 
 	if (showColumnTotals) {
-		var row = tbody.insertRow();
+		tfoot.innerHTML = ""; // reset
+		var row = tfoot.insertRow();
 		var cell = document.createElement("th");
 		cell.innerHTML = "Totalt";
 		row.appendChild(cell);
