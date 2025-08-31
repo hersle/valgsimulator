@@ -644,7 +644,7 @@ function update() {
 		}
 	}
 	parties.sort();
-	var fullParties = parties; // always refers to full party list
+	var fullParties = parties.slice(); // always refers to full party list (copy for safety)
 
 	var decimals = parseInt(document.getElementById("decimals").value);
 
