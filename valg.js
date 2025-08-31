@@ -26,6 +26,13 @@ var calcLink = document.getElementById("calcslink");
 
 var LANG = "no-NO";
 
+distTable.sortColumn = "Valgdistrikt";
+voteTable.sortColumn = "Valgdistrikt";
+voteTable.sortRow = "Totalt";
+seatTable.sortColumn = "Valgdistrikt";
+seatTable.sortRow = "Totalt";
+teamTable.sortColumn = "Posisjon";
+
 // Add event listeners for help buttons
 for (var fieldset of document.getElementsByTagName("fieldset")) {
 	for (const span of fieldset.getElementsByTagName("span")) { // const fixes span in the function closure
