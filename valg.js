@@ -94,7 +94,18 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 			};
 			districts.sort((d1, d2) => _comp(sumfunc(d1), sumfunc(d2)));
 		} else {
-			districts.sort((d1, d2) => _comp(data[d1][table.sortColumn], data[d2][table.sortColumn]));
+			if (table.showFraction) {
+				var districtData = {};
+				for (var district of districts) {
+					districtData[district] = 0;
+					for (var party in data[district]) {
+						districtData[district] += data[district][party];
+					}
+				}
+				districts.sort((d1, d2) => _comp(table.sortColumn in data[d1] ? data[d1][table.sortColumn] / districtData[d1] : undefined, table.sortColumn in data[d2] ? data[d2][table.sortColumn] / districtData[d2] : undefined));
+			} else {
+				districts.sort((d1, d2) => _comp(data[d1][table.sortColumn], data[d2][table.sortColumn]));
+			}
 		}
 		var idx = districts.indexOf("Utjevningsmandater");
 		if (idx >= 0) {
