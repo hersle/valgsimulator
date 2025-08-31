@@ -91,3 +91,11 @@ fieldset span a {
 	text-decoration: none;
 	color: gray;
 }
+
+thead > tr > th:hover {
+	cursor: pointer;
+}
+
+th.sorted {
+	text-decoration: underline;
+}

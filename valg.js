@@ -62,7 +62,35 @@ function flushLog() {
 	logOutput.innerHTML = log;
 };
 
+function _comp(x1, x2) {
+	if (x1 == undefined && x2 == undefined) return 0;
+	if (x1 == undefined) return +1;
+	if (x2 == undefined) return -1;
+	if (!isNaN(x2 - x1)) return x2 - x1;
+	x1 = x1.replaceAll(" ", "").replaceAll(" ", "").replaceAll("−", "-").replaceAll(",", ".").replaceAll("%", ""); // non-breakable space and minus sign! // TODO: what a mess
+	x2 = x2.replaceAll(" ", "").replaceAll(" ", "").replaceAll("−", "-").replaceAll(",", ".").replaceAll("%", ""); // non-breakable space and minus sign!
+	return x2.localeCompare(x1, LANG, {numeric: true});
+}
+
 function printTable(table, data, districts, parties, firstHeader, showColumnTotals, showRowTotals, format) {
+	// Sort districts by column
+	if (table.sortColumn) {
+		if (table.sortColumn == firstHeader) {
+			districts.sort((d1, d2) => _comp(d2, d1));
+		} else if (table.sortColumn == "Totalt") {
+			const sumfunc = function (d) {
+				var s = 0;
+				for (const party in data[d]) {
+					s += data[d][party];
+				}
+				return s;
+			};
+			districts.sort((d1, d2) => _comp(sumfunc(d1), sumfunc(d2)));
+		} else {
+			districts.sort((d1, d2) => _comp(data[d1][table.sortColumn], data[d2][table.sortColumn]));
+		}
+	}
+
 	// Reset table
 	var thead = table.tHead;
 	var tbody = table.tBodies[0];
@@ -76,7 +104,7 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 	cell.innerHTML = firstHeader;
 	head.appendChild(cell);
 	for (var party of parties) {
-		var cell = document.createElement("th");
+		const cell = document.createElement("th");
 		cell.innerHTML = party;
 		head.appendChild(cell);
 	}
@@ -85,10 +113,11 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 		cell.innerHTML = "Totalt";
 		head.appendChild(cell);
 	}
+
 	var globalTotal = 0;
 	for (var district of districts) {
 		var row = tbody.insertRow();
-		var cell = document.createElement("th");
+		const cell = document.createElement("th");
 		cell.innerHTML = district;
 		row.appendChild(cell);
 		var total = 0;
@@ -97,13 +126,13 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 		}
 		globalTotal += total;
 		for (var party of parties) {
-			var cell = row.insertCell();
+			const cell = row.insertCell();
 			if (party in data[district]) {
 				cell.innerHTML = format(data[district][party], total);
 			}
 		}
 		if (showRowTotals) {
-			var cell = document.createElement("th");
+			const cell = document.createElement("th");
 			cell.innerHTML = format(total, total);
 			row.appendChild(cell);
 		}
@@ -130,6 +159,16 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 			var cell = document.createElement("th");
 			cell.innerHTML = format(globalTotal, globalTotal);
 			row.appendChild(cell);
+		}
+	}
+
+	for (const cell of head.children) {
+		cell.addEventListener("click", function (e) {
+			table.sortColumn = cell.textContent;
+			update();
+		})
+		if (cell.innerText == table.sortColumn) {
+			cell.classList.add("sorted");
 		}
 	}
 }
@@ -524,7 +563,6 @@ function update() {
 	var totalVotes = sumGlobal(globalVotes);
 
 	// Build sorted list of unique parties
-	var sortParties = document.getElementById("sortparties").value;
 	var parties = [];
 	for (var district in votes) {
 		for (var party in votes[district]) {
@@ -586,22 +624,6 @@ function update() {
 		}
 		newParties.push("ANDRE"); // always last
 		parties = newParties;
-	}
-
-	var compare = (party1, party2, data) => data[party2] == data[party1] ? (party1 < party2 ? -1 : +1) : (data[party2] - data[party1]); // sort by value in "data", but by name if values are equal
-	if (sortParties == "Navn") {
-		// sorted by name above
-	} else if (sortParties == "Stemmer") {
-		parties.sort((party1, party2) => compare(party1, party2, globalVotes));
-	} else if (sortParties == "Mandater") {
-		parties.sort((party1, party2) => compare(party1, party2, globalSeats));
-	} else if (sortParties == "Farge (subjektivt)") {
-		var spectrum = ["NKP", "R", "SV", "AP", "SP", "MDG", "KYST", "KRF", "V", "H", "FRP", "PDK", "LIB", "ND", "AAN"];
-		var rightism = {};
-		for (var party of parties) {
-			rightism[party] = spectrum.includes(party) ? spectrum.indexOf(party) : 10000;
-		}
-		parties.sort((party1, party2) => compare(party2, party1, rightism));
 	}
 
 	// Make ANDRE always appear last
