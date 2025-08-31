@@ -64,11 +64,13 @@ function flushLog() {
 
 function printTable(table, data, districts, parties, firstHeader, showColumnTotals, showRowTotals, format) {
 	// Reset table
-	table.tHead.innerHTML = "";
-	table.tBodies[0].innerHTML = "";
+	var thead = table.tHead;
+	var tbody = table.tBodies[0];
+	thead.innerHTML = "";
+	tbody.innerHTML = "";
 
 	// Print table
-	var head = table.tHead.insertRow();
+	var head = thead.insertRow();
 	var cell = document.createElement("th");
 	cell.innerHTML = firstHeader;
 	head.appendChild(cell);
@@ -84,7 +86,7 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 	}
 	var globalTotal = 0;
 	for (var district of districts) {
-		var row = table.insertRow();
+		var row = tbody.insertRow();
 		var cell = document.createElement("th");
 		cell.innerHTML = district;
 		row.appendChild(cell);
@@ -107,7 +109,7 @@ function printTable(table, data, districts, parties, firstHeader, showColumnTota
 	}
 
 	if (showColumnTotals) {
-		var row = table.insertRow();
+		var row = tbody.insertRow();
 		var cell = document.createElement("th");
 		cell.innerHTML = "Totalt";
 		row.appendChild(cell);
