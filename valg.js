@@ -79,179 +79,65 @@ function _comp(x1, x2) {
 	return x2.localeCompare(x1, LANG, {numeric: true});
 }
 
-function printTable(table, data, districts, parties, firstHeader, showColumnTotals, showRowTotals, format) {
-	// Sort districts by column
-	if (table.sortColumn) {
-		if (table.sortColumn == firstHeader) {
-			districts.sort((d1, d2) => _comp(d2, d1));
-		} else if (table.sortColumn == "Totalt") {
-			const sumfunc = function (d) {
-				var s = 0;
-				for (const party in data[d]) {
-					s += data[d][party];
-				}
-				return s;
-			};
-			districts.sort((d1, d2) => _comp(sumfunc(d1), sumfunc(d2)));
-		} else {
-			if (table.showFraction) {
-				var districtData = {};
-				for (var district of districts) {
-					districtData[district] = 0;
-					for (var party in data[district]) {
-						districtData[district] += data[district][party];
-					}
-				}
-				districts.sort((d1, d2) => _comp(table.sortColumn in data[d1] ? data[d1][table.sortColumn] / districtData[d1] : undefined, table.sortColumn in data[d2] ? data[d2][table.sortColumn] / districtData[d2] : undefined));
-			} else {
-				districts.sort((d1, d2) => _comp(data[d1][table.sortColumn], data[d2][table.sortColumn]));
-			}
-		}
-		var idx = districts.indexOf("Utjevningsmandater");
-		if (idx >= 0) {
-			districts.splice(idx, 1);
-			districts.push("Utjevningsmandater");
-		}
-	}
-	if (table.sortRow) {
-		if (table.sortRow == "Totalt") {
-			const sumfunc = function (p) {
-				var s = 0;
-				for (const d in data) {
-					if (p in data[d]) {
-						s += data[d][p];
-					}
-				}
-				return s;
-			};
-			parties.sort((p1, p2) => _comp(sumfunc(p1), sumfunc(p2)));
-		} else {
-			parties.sort((p1, p2) => _comp(data[table.sortRow][p1], data[table.sortRow][p2]));
-		}
-	}
+function createCell(tag, text) {
+	var cell = document.createElement(tag);
+	cell.innerText = text;
+	return cell;
+}
 
+function printTable(table, data, districts, parties, firstHeader, showTotals, format) {
 	// Reset table
-	var thead = table.tHead;
-	var tbody = table.tBodies[0];
-	var tfoot = table.tFoot;
+	const thead = table.tHead;
+	const tbody = table.tBodies[0];
 	thead.innerHTML = "";
 	tbody.innerHTML = "";
 
-	// Print table
-	var head = thead.insertRow();
-	const cell = document.createElement("th");
-	cell.innerHTML = firstHeader;
-	head.appendChild(cell);
-	for (var party of parties) {
-		const cell = document.createElement("th");
-		cell.innerHTML = party;
-		head.appendChild(cell);
-	}
-	if (showRowTotals) {
-		const cell = document.createElement("th");
-		cell.innerHTML = "Totalt";
-		head.appendChild(cell);
-	}
-
-	var globalTotal = 0;
-	for (var district of districts) {
-		var row = tbody.insertRow();
-		const cell = document.createElement("th");
-		cell.innerHTML = district;
-		row.appendChild(cell);
-		var total = 0;
-		for (var party in data[district]) {
-			total += data[district][party];
-		}
-		globalTotal += total;
-		for (var party of parties) {
-			const cell = row.insertCell();
-			if (party in data[district]) {
-				cell.innerHTML = format(data[district][party], total);
-			}
-		}
-		if (showRowTotals) {
-			const cell = document.createElement("th");
-			cell.innerHTML = format(total, total);
-			row.appendChild(cell);
-		}
-	}
-
-	if (showColumnTotals) {
-		tfoot.innerHTML = ""; // reset
-		var row = tfoot.insertRow();
-		const cell = document.createElement("th");
-		cell.innerHTML = "Totalt";
-		row.appendChild(cell);
-		for (var party of parties) {
-			const cell = document.createElement("th");
-			var total = 0;
-			for (var district in data) {
-				if (party in data[district]) {
-					total += data[district][party];
+	if (showTotals) {
+		const totalDistrict = {};
+		for (const district in data) {
+			data[district]["Totalt"] = 0;
+			for (const party in data[district]) {
+				const contrib = data[district][party];
+				data[district]["Totalt"] += contrib;
+				if (!(party in totalDistrict)) {
+					totalDistrict[party] = 0;
 				}
+				totalDistrict[party] += contrib;
 			}
-			cell.innerHTML = format(total, globalTotal);
-			row.appendChild(cell);
 		}
-		if (showRowTotals) {
-			const cell = document.createElement("th");
-			cell.innerHTML = format(globalTotal, globalTotal);
-			row.appendChild(cell);
+		data["Totalt"] = totalDistrict;
+	}
+
+	// Print table
+	const head = thead.insertRow();
+	head.appendChild(createCell("th", firstHeader));
+	for (const party of parties) {
+		head.appendChild(createCell("th", party));
+	}
+	if (showTotals) {
+		head.appendChild(createCell("th", "Totalt"));
+	}
+
+	for (var district of districts) {
+		const row = tbody.insertRow();
+		row.appendChild(createCell("th", district));
+		for (var party of parties) {
+			row.appendChild(createCell("td", party in data[district] ? format(data[district][party], 0) : ""));
+		}
+		if (showTotals) {
+			row.appendChild(createCell("th", format(data[district]["Totalt"], 0)));
 		}
 	}
 
-	for (const cell of head.children) {
-		cell.addEventListener("click", function (e) {
-			table.sortColumn = cell.textContent;
-			update();
-		})
-		if (cell.innerText == table.sortColumn) {
-			cell.classList.add("sorted");
+	if (showTotals) {
+		const tfoot = table.tFoot;
+		const row = tfoot.insertRow();
+		row.appendChild(createCell("th", "Totalt"));
+		for (const party of parties) {
+			row.appendChild(createCell("th", format(data["Totalt"][party], 0)));
 		}
-	}
-
-	if (showRowTotals) {
-		for (const row of tbody.children) {
-			const cell = row.children[0];
-			cell.addEventListener("click", function (e) {
-				table.sortRow = cell.textContent;
-				update();
-			});
-			if (cell.innerText == table.sortRow) {
-				cell.classList.add("sorted");
-			}
-		}
-		if (tfoot) {
-			const cell = tfoot.children[0].children[0];
-			cell.addEventListener("click", function (e) {
-				table.sortRow = cell.textContent;
-				update();
-			});
-			if (cell.innerText == table.sortRow) {
-				cell.classList.add("sorted");
-			}
-		}
-	}
-
-	const toggleShowFraction = function (e) {
-		if (table.showFraction) {
-			table.showFraction = !table.showFraction;
-		} else {
-			table.showFraction = true;
-		}
-		update();
-	};
-	for (const row of tbody.children) {
-		for (let i = 1; i < row.children.length; i++) {
-			const cell = row.children[i];
-			cell.addEventListener("click", toggleShowFraction);
-		}
-	}
-	if (tfoot) {
-		for (let i = 1; i < row.children.length; i++) {
-			const cell = row.children[i];
-			cell.addEventListener("click", toggleShowFraction);
+		if (showTotals) {
+			row.appendChild(createCell("th", format(data["Totalt"]["Totalt"], 0)));
 		}
 	}
 }
@@ -673,7 +559,7 @@ function update() {
 	LH = LH / 2;
 	var data = {"LSq": {"Verdi": LSq*100}, "LH": {"Verdi": LH*100}};
 	var format = (frac, total) => truncate(frac, decimals) + " %";
-	printTable(statTable, data, ["LSq", "LH"], ["Verdi"], "Variabel", false, false, format);
+	printTable(statTable, data, ["LSq", "LH"], ["Verdi"], "Variabel", false, format);
 
 	// Merge parties with no seats as "ANDRE", if requested
 	var groupOtherParties = document.getElementById("groupotherparties").checked;
@@ -720,8 +606,8 @@ function update() {
 	var districtListWithGlobal = districtList.slice();
 	districtListWithGlobal.push("Utjevningsmandater");
 
-	printTable(voteTable, votes, districtList, parties, "Valgdistrikt", true, true, voteTable.showFraction ? (x, total) => formatFraction(x, total, decimals) : formatCount);
-	printTable(seatTable, seats, districtListWithGlobal, parties, "Valgdistrikt", true, true, seatTable.showFraction ? (x, total) => formatFraction(x, total, decimals) : formatCount);
+	printTable(voteTable, votes, districtList, parties, "Valgdistrikt", true, voteTable.showFraction ? (x, total) => formatFraction(x, total, decimals) : formatCount);
+	printTable(seatTable, seats, districtListWithGlobal, parties, "Valgdistrikt", true, seatTable.showFraction ? (x, total) => formatFraction(x, total, decimals) : formatCount);
 
 	// Read graph of friend parties
 	var friendsInput = document.getElementById("friends");
@@ -800,7 +686,7 @@ function update() {
 			};
 			teamNames.push(teamName);
 		}
-		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon", "Stemmer per mandat"], "Partier i posisjon", false, false, (x) => x);
+		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon", "Stemmer per mandat"], "Partier i posisjon", false, (x) => x);
 	}
 
 	var totalPopulation = 0;
@@ -822,7 +708,7 @@ function update() {
 		districts[district]["Folketall"] = districts[district]["population"];
 		districts[district]["Areal / km²"] = districts[district]["area"];
 	}
-	printTable(distTable, districts, districtList, ["Folketall", "Areal / km²", "Fordelingstall", "Mandater", "Innbyggere per mandat", "Mandatandel", "Befolkningsandel", "Overrepresentasjon"], "Valgdistrikt", false, false, (x) => x.toLocaleString(LANG))
+	printTable(distTable, districts, districtList, ["Folketall", "Areal / km²", "Fordelingstall", "Mandater", "Innbyggere per mandat", "Mandatandel", "Befolkningsandel", "Overrepresentasjon"], "Valgdistrikt", false, (x) => x.toLocaleString(LANG))
 
 	extraPartyInput.innerHTML = "";
 	for (var party of fullParties) {
