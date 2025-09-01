@@ -85,7 +85,7 @@ function createCell(tag, text) {
 	return cell;
 }
 
-function printTable(table, data, districts, parties, firstHeader, showTotals, format) {
+function printTable(table, data, districts, parties, firstHeader, showTotals, format, fractional) {
 	// Reset table
 	const thead = table.tHead;
 	const tbody = table.tBodies[0];
@@ -94,18 +94,31 @@ function printTable(table, data, districts, parties, firstHeader, showTotals, fo
 
 	if (showTotals) {
 		const totalDistrict = {};
+		var globalTotal = 0;
 		for (const district in data) {
-			data[district]["Totalt"] = 0;
+			var districtTotal = 0;
 			for (const party in data[district]) {
 				const contrib = data[district][party];
-				data[district]["Totalt"] += contrib;
+				districtTotal += contrib;
 				if (!(party in totalDistrict)) {
 					totalDistrict[party] = 0;
 				}
 				totalDistrict[party] += contrib;
+				globalTotal += contrib;
 			}
+			data[district]["Totalt"] = districtTotal;
 		}
 		data["Totalt"] = totalDistrict;
+		data["Totalt"]["Totalt"] = globalTotal;
+	}
+
+	if (fractional) {
+		for (const district in data) {
+			for (const party in data[district]) {
+				data[district][party] /= data[district]["Totalt"];
+			}
+		}
+		format = (x) => truncate(100*x, 1).toLocaleString(LANG) + " %"; // TODO: decimals
 	}
 
 	// Print table
@@ -132,6 +145,7 @@ function printTable(table, data, districts, parties, firstHeader, showTotals, fo
 
 	if (showTotals) {
 		const tfoot = table.tFoot;
+		tfoot.innerHTML = "";
 		const row = tfoot.insertRow();
 		row.appendChild(createCell("th", "Totalt"));
 		for (const party of parties) {
@@ -139,6 +153,20 @@ function printTable(table, data, districts, parties, firstHeader, showTotals, fo
 		}
 		if (showTotals) {
 			row.appendChild(createCell("th", format(data["Totalt"]["Totalt"], 0)));
+		}
+	}
+
+	const toggleShowFraction = function (e) {
+		if (table.showFraction) {
+			table.showFraction = !table.showFraction;
+		} else {
+			table.showFraction = true;
+		}
+		update(); // could just re-render table?
+	};
+	for (const row of tbody.children) {
+		for (const cell of row.children) {
+			cell.addEventListener("click", toggleShowFraction);
 		}
 	}
 }
@@ -606,8 +634,8 @@ function update() {
 	var districtListWithGlobal = districtList.slice();
 	districtListWithGlobal.push("Utjevningsmandater");
 
-	printTable(voteTable, votes, districtList, parties, "Valgdistrikt", true, x => x.toLocaleString(LANG));
-	printTable(seatTable, seats, districtListWithGlobal, parties, "Valgdistrikt", true, x => x.toLocaleString(LANG));
+	printTable(voteTable, votes, districtList, parties, "Valgdistrikt", true, x => x.toLocaleString(LANG), voteTable.showFraction);
+	printTable(seatTable, seats, districtListWithGlobal, parties, "Valgdistrikt", true, x => x.toLocaleString(LANG), seatTable.showFraction);
 
 	// Read graph of friend parties
 	var friendsInput = document.getElementById("friends");
