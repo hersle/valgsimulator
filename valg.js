@@ -131,6 +131,16 @@ function printTable(table, data, districts, parties, firstHeader, showTotals, fo
 			return data[d2][table.sortColumn] - data[d1][table.sortColumn]; // numerically descending
 		});
 	}
+	if (table.sortRow) {
+		parties.sort(function (p1, p2) {
+			const have1 = p1 in data[table.sortRow];
+			const have2 = p2 in data[table.sortRow];
+			if (!have1 && !have2) return p1.localeCompare(p2); // alphabetically ascending
+			if (!have1) return +1; // prefer p2 (as if district1 is zero)
+			if (!have2) return -1; // prefer p1 (as if district2 is zero)
+			return data[table.sortRow][p2] - data[table.sortRow][p1]; // numerically descending
+		});
+	}
 
 	// Print table
 	const head = thead.insertRow();
@@ -165,6 +175,11 @@ function printTable(table, data, districts, parties, firstHeader, showTotals, fo
 		if (showTotals) {
 			row.appendChild(createCell("th", format(data["Totalt"]["Totalt"], 0)));
 		}
+		const cell = tfoot.children[0].children[0];
+		cell.addEventListener("click", function (e) {
+			table.sortRow = cell.innerText;
+			update();
+		});
 	}
 
 	const toggleShowFraction = function (e) {
@@ -176,7 +191,15 @@ function printTable(table, data, districts, parties, firstHeader, showTotals, fo
 		update(); // could just re-render table?
 	};
 	for (const row of tbody.children) {
-		for (const cell of row.children) {
+		if (showTotals) {
+			const cell = row.children[0];
+			cell.addEventListener("click", function (e) {
+				table.sortRow = cell.innerText;
+				update();
+			});
+		}
+		for (let i = 1; i < row.children.length; i++) {
+			const cell = row.children[i];
 			cell.addEventListener("click", toggleShowFraction);
 		}
 	}
