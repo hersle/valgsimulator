@@ -45,6 +45,13 @@ th {
 	background: whitesmoke;
 }
 
+th.sorted {
+	background-color: color-mix(in srgb, blue 5%, whitesmoke);
+}
+td.sorted {
+	background-color: color-mix(in srgb, blue 5%, white);
+}
+
 fieldset {
 	margin: 0.75rem 0;
 	display: flex;
@@ -94,8 +101,4 @@ fieldset span a {
 
 table:hover {
 	cursor: pointer;
-}
-
-th.sorted {
-	text-decoration: underline;
 }

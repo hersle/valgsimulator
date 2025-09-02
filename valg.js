@@ -213,6 +213,38 @@ function printTable(table, data, districts, parties, firstHeader, showTotals, fo
 			update();
 		});
 	}
+
+	// Highlight sorted columns/rows
+	if (table.sortColumn) {
+		var i = 0;
+		for (var i = 0; i < thead.children[0].children.length; i++) {
+			if (thead.children[0].children[i].innerText == table.sortColumn) break;
+		}
+		thead.children[0].children[i].classList.add("sorted");
+		for (const row of tbody.children) {
+			row.children[i].classList.add("sorted");
+		}
+		const tfoot = table.tFoot;
+		if (showTotals) {
+			tfoot.children[0].children[i].classList.add("sorted");
+		}
+	}
+	if (table.sortRow) {
+		const tfoot = table.tFoot;
+		for (const row of tbody.children) {
+			if (row.children[0].innerText == table.sortRow) {
+				for (const cell of row.children) {
+					cell.classList.add("sorted");
+				}
+				break;
+			}
+		}
+		if (table.sortRow == tfoot.children[0].children[0].innerText) {
+			for (const cell of tfoot.children[0].children) {
+				cell.classList.add("sorted");
+			}
+		}
+	}
 }
 
 function sumLocal(local) {
