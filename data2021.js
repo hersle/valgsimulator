@@ -256,7 +256,7 @@ var election2021 = {
 			"PIR": 262,
 			"PP": 2286,
 			"PS": 591,
-			"GT": 87,
+			"GEN": 87, // valgresultater.no displays Generasjonspartiet in Akershus and Hordaland with different abbreviations; this is manually fixed here (https://no.wikipedia.org/wiki/Stortingsvalget_2021#cite_note-ReferenceA-5)
 		},
 		"Sogn og Fjordane": {
 			"AP": 16426,
