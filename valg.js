@@ -121,6 +121,17 @@ function printTable(table, data, districts, parties, firstHeader, showTotals, fo
 		format = (x) => truncate(100*x, 1).toLocaleString(LANG) + " %"; // TODO: decimals
 	}
 
+	if (table.sortColumn) {
+		districts.sort(function (d1, d2) {
+			const have1 = table.sortColumn in data[d1];
+			const have2 = table.sortColumn in data[d2];
+			if (!have1 && !have2) return d1.localeCompare(d2); // alphabetically ascending
+			if (!have1) return +1; // prefer d2 (as if district1 is zero)
+			if (!have2) return -1; // prefer d1 (as if district2 is zero)
+			return data[d2][table.sortColumn] - data[d1][table.sortColumn]; // numerically descending
+		});
+	}
+
 	// Print table
 	const head = thead.insertRow();
 	head.appendChild(createCell("th", firstHeader));
@@ -168,6 +179,12 @@ function printTable(table, data, districts, parties, firstHeader, showTotals, fo
 		for (const cell of row.children) {
 			cell.addEventListener("click", toggleShowFraction);
 		}
+	}
+	for (const cell of thead.children[0].children) {
+		cell.addEventListener("click", function (e) {
+			table.sortColumn = cell.innerText;
+			update();
+		});
 	}
 }
 
