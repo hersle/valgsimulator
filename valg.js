@@ -52,13 +52,6 @@ function truncate(number, decimals) {
 	return Math.floor(number * 10**decimals) / 10**decimals;
 };
 
-function formatFraction(x, total, decimals) {
-	return truncate(100*x/total, decimals) + " %"; // round *down* so parties slightly below threshold cannot seem to be above it (e.g. show 3.999% as 3.9% instead of 4.0%)
-}
-function formatCount(x, total) {
-	return x.toLocaleString(LANG);
-}
-
 function clearLog() {
 	log = "";
 };
@@ -118,7 +111,7 @@ function printTable(table, data, districts, parties, firstHeader, showTotals, fo
 				data[district][party] /= data[district]["Totalt"];
 			}
 		}
-		format = (x) => truncate(100*x, 1).toLocaleString(LANG) + " %"; // TODO: decimals
+		format = (x) => truncate(100*x, 1).toFixed(1).toLocaleString(LANG) + " %"; // TODO: decimals
 	}
 
 	if (table.sortColumn) {
@@ -663,7 +656,7 @@ function update() {
 	LSq = Math.sqrt(LSq / 2);
 	LH = LH / 2;
 	var data = {"LSq": {"Verdi": LSq*100}, "LH": {"Verdi": LH*100}};
-	printTable(statTable, data, ["LSq", "LH"], ["Verdi"], "Variabel", false, x => truncate(x, decimals) + " %");
+	printTable(statTable, data, ["LSq", "LH"], ["Verdi"], "Variabel", false, x => truncate(x, decimals).toFixed(decimals).toLocaleString(LANG) + " %");
 
 	// Merge parties with no seats as "ANDRE", if requested
 	var groupOtherParties = document.getElementById("groupotherparties").checked;
@@ -790,7 +783,7 @@ function update() {
 			};
 			teamNames.push(teamName);
 		}
-		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon", "Stemmer per mandat"], "Partier i posisjon", false, (x, i) => i >= 2 && i <= 4 ? truncate(100*x, decimals).toLocaleString(LANG) + " %" : x.toLocaleString(LANG));
+		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon", "Stemmer per mandat"], "Partier i posisjon", false, (x, i) => i >= 2 && i <= 4 ? truncate(100*x, decimals).toFixed(decimals).toLocaleString(LANG) + " %" : x.toLocaleString(LANG));
 	}
 
 	var totalPopulation = 0;
@@ -807,7 +800,7 @@ function update() {
 		districts[district]["Folketall"] = districts[district]["population"];
 		districts[district]["Areal / km²"] = districts[district]["area"];
 	}
-	printTable(distTable, districts, districtList, ["Folketall", "Areal / km²", "Fordelingstall", "Mandater", "Innbyggere per mandat", "Mandatandel", "Befolkningsandel", "Overrepresentasjon"], "Valgdistrikt", false, (x, i) => i >= 5 && i <= 7 ? truncate(100*x, decimals).toLocaleString(LANG) + " %" : x.toLocaleString(LANG));
+	printTable(distTable, districts, districtList, ["Folketall", "Areal / km²", "Fordelingstall", "Mandater", "Innbyggere per mandat", "Mandatandel", "Befolkningsandel", "Overrepresentasjon"], "Valgdistrikt", false, (x, i) => i >= 5 && i <= 7 ? truncate(100*x, decimals).toFixed(decimals).toLocaleString(LANG) + " %" : x.toLocaleString(LANG));
 
 	extraPartyInput.innerHTML = "";
 	for (var party of fullParties) {
