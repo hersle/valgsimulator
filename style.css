@@ -92,7 +92,7 @@ fieldset span a {
 	color: gray;
 }
 
-thead > tr > th:hover {
+table:hover {
 	cursor: pointer;
 }
 
