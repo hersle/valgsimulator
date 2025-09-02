@@ -130,6 +130,10 @@ function printTable(table, data, districts, parties, firstHeader, showTotals, fo
 			if (!have2) return -1; // prefer d1 (as if district2 is zero)
 			return data[d2][table.sortColumn] - data[d1][table.sortColumn]; // numerically descending
 		});
+		var levelingIndex = districts.indexOf("Utjevningsmandater");
+		if (levelingIndex != -1) {
+			districts.push(districts.splice(levelingIndex, 1)[0]); // remove and re-add at the end
+		}
 	}
 	if (table.sortRow) {
 		parties.sort(function (p1, p2) {
