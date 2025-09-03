@@ -88,15 +88,15 @@ function printTable(table, data, districts, parties, firstHeader, showTotals, fo
 
 	if (showTotals) {
 		const totalDistrict = {};
+		for (const party of parties) {
+			totalDistrict[party] = 0;
+		}
 		var globalTotal = 0;
 		for (const district in data) {
 			var districtTotal = 0;
 			for (const party in data[district]) {
 				const contrib = data[district][party];
 				districtTotal += contrib;
-				if (!(party in totalDistrict)) {
-					totalDistrict[party] = 0;
-				}
 				totalDistrict[party] += contrib;
 				globalTotal += contrib;
 			}
