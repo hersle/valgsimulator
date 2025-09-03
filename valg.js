@@ -743,48 +743,33 @@ function update() {
 	friendsInput.style["background-color"] = valid ? "limegreen" : "crimson";
 
 	if (valid) {
-		var teams = calculateTeams(friends);
+		var teamList = calculateTeams(friends);
 
 		// add parties with no votes as "empty teams"
 		for (var party of parties) {
 			if (globalSeats[party] == 0) {
-				teams.push([party]);
+				teamList.push([party]);
 			}
 		}
 
-		var teamSeats = {};
-		for (var team of teams) {
-			teamSeats[team] = 0;
-			for (var party of team) {
+		var teams = {};
+		var totalLocalSeats = sumLocal(localSeatCounts);
+		for (var team of teamList) {
+			var name = team.join(" + ");
+			teams[name] = {"Posisjon": 0, "Stemmer": 0};
+			for (const party of team) {
 				if (party in globalSeats) {
-					teamSeats[team] += globalSeats[party];
+					teams[name]["Posisjon"] += globalSeats[party];
 				}
+				teams[name]["Stemmer"] += globalVotes[party];
 			}
+			teams[name]["Opposisjon"] = totalSeatCount - teams[name]["Posisjon"];
+			teams[name]["Andel mandater"] = teams[name]["Posisjon"] / totalSeatCount;
+			teams[name]["Andel stemmer"] = teams[name]["Stemmer"] / totalVotes;
+			teams[name]["Overrepresentasjon"] = teams[name]["Andel mandater"] - teams[name]["Andel stemmer"];
+			teams[name]["Stemmer per mandat"] = Math.ceil(teams[name]["Stemmer"] / teams[name]["Posisjon"]);
 		}
-
-		teams.sort((team1, team2) => teamSeats[team2] - teamSeats[team1]);
-
-		var teamsDict = {};
-		var teamNames = [];
-		for (var team of teams) {
-			var teamVotes = 0;
-			for (var party of team) {
-				teamVotes += globalVotes[party];
-			}
-			var seatFrac = teamSeats[team] / totalSeatCount;
-			var voteFrac = teamVotes / totalVotes;
-			var teamName = team.join(" + ");
-			teamsDict[teamName] = {
-				"Posisjon": teamSeats[team],
-				"Opposisjon": totalSeatCount - teamSeats[team],
-				"Andel mandater": seatFrac,
-				"Andel stemmer": voteFrac,
-				"Overrepresentasjon": seatFrac-voteFrac,
-				"Stemmer per mandat": Math.ceil(teamVotes/teamSeats[team]),
-			};
-			teamNames.push(teamName);
-		}
-		printTable(teamTable, teamsDict, teamNames, ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon", "Stemmer per mandat"], "Partier i posisjon", false, (x, i) => i >= 2 && i <= 4 ? truncate(100*x, decimals).toFixed(decimals).toLocaleString(LANG) + " %" : x.toLocaleString(LANG));
+		printTable(teamTable, teams, Object.keys(teams), ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon", "Stemmer per mandat"], "Partier i posisjon", false, (x, i) => i >= 2 && i <= 4 ? truncate(100*x, decimals).toFixed(decimals).toLocaleString(LANG) + " %" : x.toLocaleString(LANG));
 	}
 
 	var totalPopulation = 0;
