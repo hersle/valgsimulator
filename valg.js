@@ -34,11 +34,12 @@ seatTable.sortRow = "Totalt";
 teamTable.sortColumn = "Posisjon";
 
 // Add event listeners for help buttons
-for (var fieldset of document.getElementsByTagName("fieldset")) {
-	for (const span of fieldset.getElementsByTagName("span")) { // const fixes span in the function closure
-		for (var a of span.getElementsByTagName("a")) {
+for (const fieldset of document.getElementsByTagName("fieldset")) {
+	for (const label of fieldset.getElementsByTagName("label")) { // const fixes label in the function closure
+		for (const a of label.getElementsByTagName("a")) {
 			a.addEventListener("click", function (e) {
-				alert(span.title);
+				alert(label.title);
+				e.preventDefault(); // prevent link click from toggling/focusing input field
 			});
 		}
 	}

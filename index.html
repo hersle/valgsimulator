@@ -22,7 +22,7 @@
 	<article>
 		<section>
 		<fieldset>
-			<span title="Bruk offisielle stemmetall fra dette Stortingsvalget. Fremtidige valg merket * bruker i stedet meningsmålinger fra pollofpolls.no, og relative oppslutninger regnes om til absolutte stemmetall ved å anta at andelen hjemmesittere av de stemmeberettigede i hvert valgdistrikt er den samme som i forrige valg." >
+			<label title="Bruk offisielle stemmetall fra dette Stortingsvalget. Fremtidige valg merket * bruker i stedet meningsmålinger fra pollofpolls.no, og relative oppslutninger regnes om til absolutte stemmetall ved å anta at andelen hjemmesittere av de stemmeberettigede i hvert valgdistrikt er den samme som i forrige valg." >
 				<label for="election">Valg</label>
 				<select id="election" oninput="setElection();">
 					<option>2009</option>
@@ -32,60 +32,60 @@
 					<option>2025*</option>
 				</select>
 				<a>ⓘ</a>
-			</span>
-			<span title="Antall distrikts- og utjevningsmandater som skal velges til Stortinget til sammen. Siden 2005 velges 169 mandater.">
+			</label>
+			<label title="Antall distrikts- og utjevningsmandater som skal velges til Stortinget til sammen. Siden 2005 velges 169 mandater.">
 				<label for="totalseats">Mandater</label>
 				<input type="number" id="totalseats" value="169" min="0" step="1" oninput="update();" size="2"/>
 				<a>ⓘ</a>
-			</span>
-			<span title="Relativ vekt mellom én kvadratkilometer og én innbygger i fordelingen av antall Stortingsmandater mellom valgdistriktene. Antall Stortingsmandater fordeles mellom distriktene med Saint-Laguës rene metode (fra 1,0). Fordelingen tar utgangspunkt i tallet &quot;folketall + arealfaktor × areal/km²&quot; for hvert valgdistrikt. Sett til 0 for å fordele mandater kun etter innbyggertall. Siden 2005 er arealfaktoren 1,8.">
+			</label>
+			<label title="Relativ vekt mellom én kvadratkilometer og én innbygger i fordelingen av antall Stortingsmandater mellom valgdistriktene. Antall Stortingsmandater fordeles mellom distriktene med Saint-Laguës rene metode (fra 1,0). Fordelingen tar utgangspunkt i tallet &quot;folketall + arealfaktor × areal/km²&quot; for hvert valgdistrikt. Sett til 0 for å fordele mandater kun etter innbyggertall. Siden 2005 er arealfaktoren 1,8.">
 				<label for="areafactor">Arealfaktor</label>
 				<input type="number" id="areafactor" value="1.8" min="0" step="0.1" oninput="update();" size="2"/>
 				<a>ⓘ</a>
-			</span>
-			<span title="Om et valgdistrikt tildeles færre mandater enn dette, vil et minimum antall plasser likevel reserveres for distriktet, og fordelingen av de gjenværende mandatene gjentas for de gjenværende distriktene inntil alle har fått minst dette antallet mandater. Endret fra 0 til 4 i 2025.">
+			</label>
+			<label title="Om et valgdistrikt tildeles færre mandater enn dette, vil et minimum antall plasser likevel reserveres for distriktet, og fordelingen av de gjenværende mandatene gjentas for de gjenværende distriktene inntil alle har fått minst dette antallet mandater. Endret fra 0 til 4 i 2025.">
 				<label for="minlocalseats">Minimum mandater per distrikt</label>
 				<input type="number" id="minlocalseats" value="0" min="0" step="1" oninput="update();" size="1"/>
 				<a>ⓘ</a>
-			</span>
-			<span title="Antall mandater som omgjøres til utjevningsmandater fra hvert valgdistrikt etter at det samlede antallet Stortingsmandater er fordelt mellom valgdistriktene. Siden 2005 er det 1 utjevningsmandat per valgdistrikt.">
+			</label>
+			<label title="Antall mandater som omgjøres til utjevningsmandater fra hvert valgdistrikt etter at det samlede antallet Stortingsmandater er fordelt mellom valgdistriktene. Siden 2005 er det 1 utjevningsmandat per valgdistrikt.">
 				<label for="globalseatsperdistrict">Utjevningsmandater per distrikt</label>
 				<input type="number" id="globalseatsperdistrict" value="1" min="0" step="1" oninput="update();" size="1"/>
 				<a>ⓘ</a>
-			</span>
-			<span title="Minste andel stemmer som et parti må få i et distrikt for å tildeles mandater der. I dag er det ingen slik grense.">
+			</label>
+			<label title="Minste andel stemmer som et parti må få i et distrikt for å tildeles mandater der. I dag er det ingen slik grense.">
 				<label for="localthreshold">Lokal sperregrense</label>
 				<input type="number" id="localthreshold" value="0" min="0" max="100" step="0.1" oninput="update();" size="1"/>
 				<label for="localthreshold">%</label>
 				<a>ⓘ</a>
-			</span>
-			<span title="Minste andel stemmer som et parti må få nasjonalt for å tildeles utjevningsmandater. Siden 1989 er grensen 4 %.">
+			</label>
+			<label title="Minste andel stemmer som et parti må få nasjonalt for å tildeles utjevningsmandater. Siden 1989 er grensen 4 %.">
 				<label for="globalthreshold">Nasjonal sperregrense</label>
 				<input type="number" id="globalthreshold" value="4" min="0" max="100" step="0.1" oninput="update();" size="1"/>
 				<label for="globalthreshold">%</label>
 				<a>ⓘ</a>
-			</span>
-			<span title="I utgangspunktet gjelder den nasjonale sperregrensen kun utjevningsmandater. Dette alternativet gjør at partiet som ikke når den nasjonale sperregrensen heller ikke tildeles distriktsmandater.">
+			</label>
+			<label title="I utgangspunktet gjelder den nasjonale sperregrensen kun utjevningsmandater. Dette alternativet gjør at partiet som ikke når den nasjonale sperregrensen heller ikke tildeles distriktsmandater.">
 				<input type="checkbox" id="localglobalthreshold" oninput="update();"/>
 				<label for="localglobalthreshold">Nasjonal sperregrense gjelder både distrikt- og utjevningsmandater</label>
 				<a>ⓘ</a>
-			</span>
-			<span title="I utgangspunktet beregnes antall utjevningsmandater for hvert parti som forskjellen mellom antall mandater de får i en nasjonal fordeling av alle Stortingsmandatene og antallet distriktsmandater de har fått. Denne differansen kan godt være negativ. Etter dagens regler skal i så fall partiet likevel få beholde alle sine distriktsmandater, og det gjøres en ny beregning av utjevningsmandater uten dette partiets stemmer og mandater. Dette alternativet tillater i stedet et negativt antall utjevningsmandater, som i praksis innebærer at partiet må gi fra seg noen distriktsmandater. Dette er tilfellet i Sverige.">
+			</label>
+			<label title="I utgangspunktet beregnes antall utjevningsmandater for hvert parti som forskjellen mellom antall mandater de får i en nasjonal fordeling av alle Stortingsmandatene og antallet distriktsmandater de har fått. Denne differansen kan godt være negativ. Etter dagens regler skal i så fall partiet likevel få beholde alle sine distriktsmandater, og det gjøres en ny beregning av utjevningsmandater uten dette partiets stemmer og mandater. Dette alternativet tillater i stedet et negativt antall utjevningsmandater, som i praksis innebærer at partiet må gi fra seg noen distriktsmandater. Dette er tilfellet i Sverige.">
 				<input type="checkbox" id="negativeglobalseats" oninput="update();"/>
 				<label for="negativeglobalseats">Tillat negative utjevningsmandater</label>
 				<a>ⓘ</a>
-			</span>
-			<span title="La partier under sperregrensen likevel tildeles utjevningsmandater om de allerede har distriktsmandater. Dagens regler håndhever alltid sperregrensen.">
+			</label>
+			<label title="La partier under sperregrensen likevel tildeles utjevningsmandater om de allerede har distriktsmandater. Dagens regler håndhever alltid sperregrensen.">
 				<input type="checkbox" id="exemptglobalthreshold" oninput="update();"/>
 				<label for="exemptglobalthreshold">Unnta partier med distriktsmandater fra sperregrensen for utjevningsmandater</label>
 				<a>ⓘ</a>
-			</span>
-			<span title="Hold partier som ikke stiller til valg i alle valgdistrikter utenfor fordelingen av utjevningsmandater. Deltakelse i alle distrikter ble et krav i 2025.">
+			</label>
+			<label title="Hold partier som ikke stiller til valg i alle valgdistrikter utenfor fordelingen av utjevningsmandater. Deltakelse i alle distrikter ble et krav i 2025.">
 				<input type="checkbox" id="requireglobalrepresentation" oninput="update();"/>
 				<label for="requireglobalrepresentation">Krev deltakelse i alle distrikter for utjevningsmandater</label>
 				<a>ⓘ</a>
-			</span>
-			<span title="I hvert distrikt fordeles distrikts- og utjevningsmandater mellom partiene med en gitt metode. Én og én mandat tildeles partiet med størst poengsum inntil alle mandatene er oppbrukt. Sainte-Laguë gir poengsum v/(2s+1), der v er partiets stemmer og s er antall mandater de allerede har fått i distriktet. I modifisert versjon endres første deletall (når s = 0) fra 1 til 1,2 eller 1,4. D'Hondt gir poengsum v/(s+1). Hare/Hamilton gir poengsum v/V*S-s, hvor V og S er totalt antall stemmer og mandater i distriktet. Vinneren tar alt gir alle mandatene til partiet med flest stemmer. Endret fra D'Hondt til Sainte-Laguë (med første delingstall modifisert til 1,4) i 1953.">
+			</label>
+			<label title="I hvert distrikt fordeles distrikts- og utjevningsmandater mellom partiene med en gitt metode. Én og én mandat tildeles partiet med størst poengsum inntil alle mandatene er oppbrukt. Sainte-Laguë gir poengsum v/(2s+1), der v er partiets stemmer og s er antall mandater de allerede har fått i distriktet. I modifisert versjon endres første deletall (når s = 0) fra 1 til 1,2 eller 1,4. D'Hondt gir poengsum v/(s+1). Hare/Hamilton gir poengsum v/V*S-s, hvor V og S er totalt antall stemmer og mandater i distriktet. Vinneren tar alt gir alle mandatene til partiet med flest stemmer. Endret fra D'Hondt til Sainte-Laguë (med første delingstall modifisert til 1,4) i 1953.">
 				<label for="method">Fordelingsmetode</label>
 				<select id="method" oninput="update();">
 					<option>Sainte-Laguë fra 1,4</option>
@@ -96,8 +96,8 @@
 					<option>Vinneren tar alt</option>
 				</select>
 				<a>ⓘ</a>
-			</span>
-			<span title="Slå sammen innbyggertall, areal og stemmer for noen valgdistrikter. 19 fylker svarer nøyaktig til dagens valgdistrikter og innebærer ingen sammenslåing. 18 fylker slår Nord- og Sør-Trøndelag sammen til Trøndelag. 15 fylker slår også sammen Hordaland og Sogn og Fjordane til Vestland, Vest- og Øst-Agder til Agder og Oppland og Hedmark til Innlandet. 11 fylker slår også sammen Troms og Finnmark, Vestfold og Telemark, og Østfold, Akershus og Buskerud til Viken. Ett valgdistrikt slår alle distriktene sammen til ett nasjonalt valgdistrikt.">
+			</label>
+			<label title="Slå sammen innbyggertall, areal og stemmer for noen valgdistrikter. 19 fylker svarer nøyaktig til dagens valgdistrikter og innebærer ingen sammenslåing. 18 fylker slår Nord- og Sør-Trøndelag sammen til Trøndelag. 15 fylker slår også sammen Hordaland og Sogn og Fjordane til Vestland, Vest- og Øst-Agder til Agder og Oppland og Hedmark til Innlandet. 11 fylker slår også sammen Troms og Finnmark, Vestfold og Telemark, og Østfold, Akershus og Buskerud til Viken. Ett valgdistrikt slår alle distriktene sammen til ett nasjonalt valgdistrikt.">
 				<label for="mergedistricts">Samle distrikter til</label>
 				<select id="mergedistricts" oninput="update();">
 					<option selected>19 fylker (før 2018)</option>
@@ -107,8 +107,8 @@
 					<option>1 valgdistrikt</option>
 				</select>
 				<a>ⓘ</a>
-			</span>
-			<span title="Gi et gitt antall ekstra stemmer til et gitt parti i et gitt valgdistrikt. Bruk et negativt tall for å fjerne stemmer. Prøv deg fram for å finne vippepunkt som utgjør forskjellen mellom ett mandat eller får partiet over sperregrensen, for eksempel.">
+			</label>
+			<label title="Gi et gitt antall ekstra stemmer til et gitt parti i et gitt valgdistrikt. Bruk et negativt tall for å fjerne stemmer. Prøv deg fram for å finne vippepunkt som utgjør forskjellen mellom ett mandat eller får partiet over sperregrensen, for eksempel.">
 				<label for="extravotes">Gi</label>
 				<input type="number" id="extravotes" value="0" step="1" size="5" oninput="update();"/>
 				<label for="extraparty">ekstra stemmer til</label>
@@ -116,29 +116,29 @@
 				<label for="extradistrict">i</label>
 				<select id="extradistrict" oninput="update();"></select>
 				<a>ⓘ</a>
-			</span>
-			<span title="Antall desimaler som vises i desimaltall. Påvirker ikke valgresultatet.">
+			</label>
+			<label title="Antall desimaler som vises i desimaltall. Påvirker ikke valgresultatet.">
 				<label for="decimals">Vis </label>
 				<input type="number" id="decimals" value="1" min="0" max="9" step="1" oninput="update();" size="1"/>
 				<label for="decimals">desimaler</label>
 				<a>ⓘ</a>
-			</span>
-			<span title="Vis alle partier som ikke har fått noen mandater som ett parti med navnet ANDRE. Påvirker ikke valgresultatet.">
+			</label>
+			<label title="Vis alle partier som ikke har fått noen mandater som ett parti med navnet ANDRE. Påvirker ikke valgresultatet.">
 				<input type="checkbox" id="groupotherparties" oninput="update();"/>
 				<label for="groupotherparties">Vis partier uten mandater som <strong>ANDRE</strong></label>
 				<a>ⓘ</a>
-			</span>
+			</label>
 			<!--
-			<span title="Vis bare samlet antall distriktsstemmer eller -mandater.">
+			<label title="Vis bare samlet antall distriktsstemmer eller -mandater.">
 				<input type="checkbox" id="grouplocal" oninput="update();"/>
 				<label for="grouplocal">Samle distrikter</label>
-			</span>
+			</label>
 			-->
-			<span title="Liste over hvilke partier som kan inngå i koalisjon med hverandre. Vennlige partier separeres med pluss(+), og flere slike lister separeres med komma (,). Feltet blir rødt når det er ugyldig formatert. Påvirker ikke valgresultatet.">
-				<label for="friends">Samarbeidspartier</legend>
+			<label title="Liste over hvilke partier som kan inngå i koalisjon med hverandre. Vennlige partier separeres med pluss(+), og flere slike lister separeres med komma (,). Feltet blir rødt når det er ugyldig formatert. Påvirker ikke valgresultatet.">
+				<label for="friends">Samarbeidspartier</label>
 				<input type="text" id="friends" value="A+SP+SV, SV+MDG, H+FRP+V+KRF" oninput="update();" size="30"/>
 				<a>ⓘ</a>
-			</span>
+			</label>
 		</fieldset>
 		</section>
 		<h2 class="scroll" style="padding: 0.5rem 0.5rem">

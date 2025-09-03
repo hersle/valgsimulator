@@ -58,7 +58,7 @@ fieldset {
 	flex-direction: row;
 	flex-wrap: wrap;
 	row-gap: 0.75em;
-	column-gap: 2em;
+	column-gap: 1em;
 	line-height: 1.6em;
 	padding: 0;
 	border-width: 0;
@@ -93,10 +93,18 @@ ul {
 	padding-left: 0em;
 }
 
+fieldset label {
+	flex-grow: 1; /* grow to fill flex space (looks better) */
+	background-color: whitesmoke;
+	padding: 0.25em;
+	border-radius: 0.25em;
+}
+
 /* for help links */
-fieldset span a {
+fieldset label a {
 	text-decoration: none;
 	color: gray;
+	float: right;
 }
 
 table:hover {
