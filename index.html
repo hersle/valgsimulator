@@ -65,19 +65,19 @@
 				<label for="globalthreshold">%</label>
 				<a>ⓘ</a>
 			</label>
-			<label title="I utgangspunktet gjelder den nasjonale sperregrensen kun utjevningsmandater. Dette alternativet gjør at partiet som ikke når den nasjonale sperregrensen heller ikke tildeles distriktsmandater.">
-				<input type="checkbox" id="localglobalthreshold" oninput="update();"/>
-				<label for="localglobalthreshold">Nasjonal sperregrense gjelder både distrikt- og utjevningsmandater</label>
-				<a>ⓘ</a>
-			</label>
-			<label title="I utgangspunktet beregnes antall utjevningsmandater for hvert parti som forskjellen mellom antall mandater de får i en nasjonal fordeling av alle Stortingsmandatene og antallet distriktsmandater de har fått. Denne differansen kan godt være negativ. Etter dagens regler skal i så fall partiet likevel få beholde alle sine distriktsmandater, og det gjøres en ny beregning av utjevningsmandater uten dette partiets stemmer og mandater. Dette alternativet tillater i stedet et negativt antall utjevningsmandater, som i praksis innebærer at partiet må gi fra seg noen distriktsmandater. Dette er tilfellet i Sverige.">
-				<input type="checkbox" id="negativeglobalseats" oninput="update();"/>
-				<label for="negativeglobalseats">Tillat negative utjevningsmandater</label>
+			<label title="I utgangspunktet gjelder den nasjonale sperregrensen kun utjevningsmandater. Dette kan skrus av, slik at partier som ikke når den nasjonale sperregrensen heller ikke tildeles distriktsmandater.">
+				<input type="checkbox" id="globalthresholdonlyleveling" oninput="update();"/>
+				<label for="globalthresholdonlyleveling">Nasjonal sperregrense gjelder kun utjevningsmandater</label>
 				<a>ⓘ</a>
 			</label>
 			<label title="La partier under sperregrensen likevel tildeles utjevningsmandater om de allerede har distriktsmandater. Dagens regler håndhever alltid sperregrensen.">
 				<input type="checkbox" id="exemptglobalthreshold" oninput="update();"/>
 				<label for="exemptglobalthreshold">Unnta partier med distriktsmandater fra sperregrensen for utjevningsmandater</label>
+				<a>ⓘ</a>
+			</label>
+			<label title="I utgangspunktet beregnes antall utjevningsmandater for hvert parti som forskjellen mellom antall mandater de får i en nasjonal fordeling av alle Stortingsmandatene og antallet distriktsmandater de har fått. Denne differansen kan godt være negativ. Etter dagens regler skal i så fall partiet likevel få beholde alle sine distriktsmandater, og det gjøres en ny beregning av utjevningsmandater uten dette partiets stemmer og mandater. Dette alternativet tillater i stedet et negativt antall utjevningsmandater, som i praksis innebærer at partiet må gi fra seg noen distriktsmandater. Dette er tilfellet i Sverige.">
+				<input type="checkbox" id="minzeroglobalseats" oninput="update();"/>
+				<label for="minzeroglobalseats">Krev minst 0 utjevningsmandater</label>
 				<a>ⓘ</a>
 			</label>
 			<label title="Hold partier som ikke stiller til valg i alle valgdistrikter utenfor fordelingen av utjevningsmandater. Deltakelse i alle distrikter ble et krav i 2025.">
@@ -111,7 +111,7 @@
 			<label title="Gi et gitt antall ekstra stemmer til et gitt parti i et gitt valgdistrikt. Bruk et negativt tall for å fjerne stemmer. Prøv deg fram for å finne vippepunkt som utgjør forskjellen mellom ett mandat eller får partiet over sperregrensen, for eksempel.">
 				<label for="extravotes">Gi</label>
 				<input type="number" id="extravotes" value="0" step="1" size="5" oninput="update();"/>
-				<label for="extraparty">ekstra stemmer til</label>
+				<label for="extraparty">stemmer til</label>
 				<select id="extraparty" oninput="update();"></select>
 				<label for="extradistrict">i</label>
 				<select id="extradistrict" oninput="update();"></select>
@@ -125,7 +125,7 @@
 			</label>
 			<label title="Vis alle partier som ikke har fått noen mandater som ett parti med navnet ANDRE. Påvirker ikke valgresultatet.">
 				<input type="checkbox" id="groupotherparties" oninput="update();"/>
-				<label for="groupotherparties">Vis partier uten mandater som <strong>ANDRE</strong></label>
+				<label for="groupotherparties">Vis <strong>ANDRE</strong></label>
 				<a>ⓘ</a>
 			</label>
 			<!--
@@ -136,7 +136,7 @@
 			-->
 			<label title="Liste over hvilke partier som kan inngå i koalisjon med hverandre. Vennlige partier separeres med pluss(+), og flere slike lister separeres med komma (,). Feltet blir rødt når det er ugyldig formatert. Påvirker ikke valgresultatet.">
 				<label for="friends">Samarbeidspartier</label>
-				<input type="text" id="friends" value="A+SP+SV, SV+MDG, H+FRP+V+KRF" oninput="update();" size="30"/>
+				<input type="text" id="friends" value="A+SP+SV, SV+MDG, H+FRP+V+KRF" oninput="update();" size="20"/>
 				<a>ⓘ</a>
 			</label>
 		</fieldset>

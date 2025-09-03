@@ -578,10 +578,10 @@ function update() {
 
 	var localThreshold = parseFloat(document.getElementById("localthreshold").value);
 	var globalThreshold = parseFloat(document.getElementById("globalthreshold").value);
-	var localGlobalThreshold = document.getElementById("localglobalthreshold").checked ? globalThreshold : 0.0;
+	var localGlobalThreshold = document.getElementById("globalthresholdonlyleveling").checked ? 0.0 : globalThreshold;
 	var totalSeatCount = parseInt(document.getElementById("totalseats").value);
 	var globalSeatsPerDistrict = parseInt(document.getElementById("globalseatsperdistrict").value);
-	var negativeGlobalSeats = document.getElementById("negativeglobalseats").checked;
+	var negativeGlobalSeats = !document.getElementById("minzeroglobalseats").checked;
 	var areaFactor = parseFloat(document.getElementById("areafactor").value);
 	var minSeatsPerDistrict = parseInt(document.getElementById("minlocalseats").value);
 	var requireGlobalRepresentation = document.getElementById("requireglobalrepresentation").checked;
