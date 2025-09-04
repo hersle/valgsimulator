@@ -5,11 +5,37 @@ body {
 }
 
 header, footer {
-	background-color: whitesmoke;
-	padding: 0.75rem;
+	/* colors from https://undervisning.stortinget.no/valg/valget-2021/ */
+	background-image: linear-gradient(
+		to right,
+		#5d083f 0% 10%, /* R */
+		#af0061 10% 20%, /* SV */
+		#da1f34 20% 30%, /* AP */
+		#1a9d57 30% 40%, /* SP */
+		#83c557 40% 50%, /* MDG */
+		#fb5200 50% 60%, /* PF */
+		#f8af3c 60% 70%, /* KRF */
+		#00462e 70% 80%, /* V */
+		#257de1 80% 90%, /* H */
+		#06205b 90% 100% /* FRP */
+	);
+	color: white;
 }
 
-header a:visited {
+header p, footer p {
+	margin: 0;
+	padding: 0.75rem;
+	background-color: black;
+}
+
+header h1 {
+	margin: 0.75rem;
+	padding: 0.5rem;
+	display: inline-block;
+	background-color: black;
+}
+
+header a, a:visited {
 	color: inherit;
 }
 
@@ -42,9 +68,8 @@ th:first-child {
 }
 
 th {
-	background: whitesmoke;
+	background-color: whitesmoke;
 }
-
 th.sorted {
 	background-color: color-mix(in srgb, blue 5%, whitesmoke);
 }
@@ -59,7 +84,7 @@ fieldset {
 	flex-wrap: wrap;
 	row-gap: 0.75em;
 	column-gap: 1em;
-	line-height: 1.6em;
+	line-width: 1.6em;
 	padding: 0;
 	border-width: 0;
 }
@@ -93,7 +118,7 @@ ul {
 	padding-left: 0em;
 }
 
-fieldset label {
+fieldset > label {
 	flex-grow: 1; /* grow to fill flex space (looks better) */
 	background-color: whitesmoke;
 	padding: 0.25em;
