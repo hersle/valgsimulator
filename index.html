@@ -35,33 +35,33 @@
 			</label>
 			<label title="Antall distrikts- og utjevningsmandater som skal velges til Stortinget til sammen. Siden 2005 velges 169 mandater.">
 				<label for="totalseats">Mandater</label>
-				<input type="number" id="totalseats" value="169" min="0" step="1" oninput="update();" size="2"/>
+				<input type="number" id="totalseats" value="169" min="0" step="1" oninput="update();" size="2" required/>
 				<a>ⓘ</a>
 			</label>
 			<label title="Relativ vekt mellom én kvadratkilometer og én innbygger i fordelingen av antall Stortingsmandater mellom valgdistriktene. Antall Stortingsmandater fordeles mellom distriktene med Saint-Laguës rene metode (fra 1,0). Fordelingen tar utgangspunkt i tallet &quot;folketall + arealfaktor × areal/km²&quot; for hvert valgdistrikt. Sett til 0 for å fordele mandater kun etter innbyggertall. Siden 2005 er arealfaktoren 1,8.">
 				<label for="areafactor">Arealfaktor</label>
-				<input type="number" id="areafactor" value="1.8" min="0" step="0.1" oninput="update();" size="2"/>
+				<input type="number" id="areafactor" value="1.8" min="0" step="0.1" oninput="update();" size="2" required/>
 				<a>ⓘ</a>
 			</label>
 			<label title="Om et valgdistrikt tildeles færre mandater enn dette, vil et minimum antall plasser likevel reserveres for distriktet, og fordelingen av de gjenværende mandatene gjentas for de gjenværende distriktene inntil alle har fått minst dette antallet mandater. Endret fra 0 til 4 i 2025.">
 				<label for="minlocalseats">Minimum mandater per distrikt</label>
-				<input type="number" id="minlocalseats" value="0" min="0" step="1" oninput="update();" size="1"/>
+				<input type="number" id="minlocalseats" value="0" min="0" step="1" oninput="update();" size="1" required/>
 				<a>ⓘ</a>
 			</label>
 			<label title="Antall mandater som omgjøres til utjevningsmandater fra hvert valgdistrikt etter at det samlede antallet Stortingsmandater er fordelt mellom valgdistriktene. Siden 2005 er det 1 utjevningsmandat per valgdistrikt.">
 				<label for="globalseatsperdistrict">Utjevningsmandater per distrikt</label>
-				<input type="number" id="globalseatsperdistrict" value="1" min="0" step="1" oninput="update();" size="1"/>
+				<input type="number" id="globalseatsperdistrict" value="1" min="0" step="1" oninput="update();" size="1" required/>
 				<a>ⓘ</a>
 			</label>
 			<label title="Minste andel stemmer som et parti må få i et distrikt for å tildeles mandater der. I dag er det ingen slik grense.">
 				<label for="localthreshold">Lokal sperregrense</label>
-				<input type="number" id="localthreshold" value="0" min="0" max="100" step="0.1" oninput="update();" size="1"/>
+				<input type="number" id="localthreshold" value="0" min="0" max="100" step="0.1" oninput="update();" size="1" required/>
 				<label for="localthreshold">%</label>
 				<a>ⓘ</a>
 			</label>
 			<label title="Minste andel stemmer som et parti må få nasjonalt for å tildeles utjevningsmandater. Siden 1989 er grensen 4 %.">
 				<label for="globalthreshold">Nasjonal sperregrense</label>
-				<input type="number" id="globalthreshold" value="4" min="0" max="100" step="0.1" oninput="update();" size="1"/>
+				<input type="number" id="globalthreshold" value="4" min="0" max="100" step="0.1" oninput="update();" size="1" required/>
 				<label for="globalthreshold">%</label>
 				<a>ⓘ</a>
 			</label>

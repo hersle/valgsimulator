@@ -132,6 +132,10 @@ fieldset label a {
 	float: right;
 }
 
+input:invalid {
+	background-color: red;
+}
+
 table:hover {
 	cursor: pointer;
 }

@@ -570,10 +570,8 @@ function update() {
 	var globalThreshold = parseFloat(document.getElementById("globalthreshold").value);
 	var localGlobalThreshold = document.getElementById("globalthresholdonlyleveling").checked ? 0.0 : globalThreshold;
 	var totalSeatCount = parseInt(document.getElementById("totalseats").value);
-	var globalSeatsPerDistrict = parseInt(document.getElementById("globalseatsperdistrict").value);
 	var negativeGlobalSeats = !document.getElementById("minzeroglobalseats").checked;
 	var areaFactor = parseFloat(document.getElementById("areafactor").value);
-	var minSeatsPerDistrict = parseInt(document.getElementById("minlocalseats").value);
 	var requireGlobalRepresentation = document.getElementById("requireglobalrepresentation").checked;
 	var exemptGlobalThresholdIflocalSeats = document.getElementById("exemptglobalthreshold").checked;
 
@@ -606,6 +604,11 @@ function update() {
 	if (!(extraDistrict in Object.keys(districts))) {
 		extraDistrictInput.value = ""; // de-select invalid extra vote district if not part of new merged districts
 	}
+
+	document.getElementById("minlocalseats").max = Math.floor(totalSeatCount/districtCount);
+	document.getElementById("globalseatsperdistrict").max = Math.floor(totalSeatCount/districtCount);
+	var minSeatsPerDistrict = parseInt(document.getElementById("minlocalseats").value);
+	var globalSeatsPerDistrict = parseInt(document.getElementById("globalseatsperdistrict").value);
 
 	if (extraParty && extraDistrict && !isNaN(extraVotes)) {
 		if (!(extraParty in votes[extraDistrict])) {
@@ -723,7 +726,7 @@ function update() {
 	}
 
 	// Color input field depending on validity of input formatting
-	friendsInput.style["background-color"] = valid ? "limegreen" : "crimson";
+	friendsInput.setCustomValidity(valid ? "" : "Ugyldig");
 
 	if (valid) {
 		var teamList = calculateTeams(friends);
