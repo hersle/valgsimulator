@@ -686,16 +686,9 @@ function update() {
 		parties.push("ANDRE");
 	}
 
-	var districtList = [];
-	for (var district in votes) {
-		districtList.push(district);
-	}
-	districtList.sort();
+	var districtList = Object.keys(votes);
 	var districtListWithGlobal = districtList.slice();
 	districtListWithGlobal.push("Utjevningsmandater");
-
-	printTable(voteTable, votes, districtList, parties, "Valgdistrikt", true, x => x.toLocaleString(LANG), voteTable.showFraction);
-	printTable(seatTable, seats, districtListWithGlobal, parties, "Valgdistrikt", true, x => x.toLocaleString(LANG), seatTable.showFraction);
 
 	// Read graph of friend parties
 	var friendsInput = document.getElementById("friends");
@@ -746,21 +739,28 @@ function update() {
 		var totalLocalSeats = sumLocal(localSeatCounts);
 		for (var team of teamList) {
 			var name = team.join(" + ");
-			teams[name] = {"Posisjon": 0, "Stemmer": 0};
+			teams[name] = {"Stemmer": 0, "Posisjon": 0, "Utjevningsmandater": 0};
 			for (const party of team) {
+				if (party in seats["Utjevningsmandater"]) {
+					teams[name]["Utjevningsmandater"] += seats["Utjevningsmandater"][party];
+				}
 				if (party in globalSeats) {
 					teams[name]["Posisjon"] += globalSeats[party];
 				}
 				teams[name]["Stemmer"] += globalVotes[party];
 			}
+			teams[name]["Distriktsmandater"] = teams[name]["Posisjon"] - teams[name]["Utjevningsmandater"];
 			teams[name]["Opposisjon"] = totalSeatCount - teams[name]["Posisjon"];
 			teams[name]["Andel mandater"] = teams[name]["Posisjon"] / totalSeatCount;
 			teams[name]["Andel stemmer"] = teams[name]["Stemmer"] / totalVotes;
 			teams[name]["Overrepresentasjon"] = teams[name]["Andel mandater"] - teams[name]["Andel stemmer"];
 			teams[name]["Stemmer per mandat"] = Math.ceil(teams[name]["Stemmer"] / teams[name]["Posisjon"]);
 		}
-		printTable(teamTable, teams, Object.keys(teams), ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon", "Stemmer per mandat"], "Partier i posisjon", false, (x, i) => i >= 2 && i <= 4 ? truncate(100*x, decimals).toFixed(decimals).toLocaleString(LANG) + " %" : x.toLocaleString(LANG));
+		printTable(teamTable, teams, Object.keys(teams), ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon", "Stemmer per mandat", "Distriktsmandater", "Utjevningsmandater", "Stemmer"], "Partier i posisjon", false, (x, i) => i >= 2 && i <= 4 ? truncate(100*x, decimals).toFixed(decimals).toLocaleString(LANG) + " %" : x.toLocaleString(LANG));
 	}
+
+	printTable(voteTable, votes, districtList, parties, "Valgdistrikt", true, x => x.toLocaleString(LANG), voteTable.showFraction);
+	printTable(seatTable, seats, districtListWithGlobal, parties, "Valgdistrikt", true, x => x.toLocaleString(LANG), seatTable.showFraction);
 
 	var totalPopulation = 0;
 	for (var district in districts) {
