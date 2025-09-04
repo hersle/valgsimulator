@@ -63,16 +63,6 @@ function flushLog() {
 	logOutput.innerHTML = log;
 };
 
-function _comp(x1, x2) {
-	if (x1 == undefined && x2 == undefined) return 0;
-	if (x1 == undefined) return +1;
-	if (x2 == undefined) return -1;
-	if (!isNaN(x2 - x1)) return x2 - x1;
-	x1 = x1.replaceAll(" ", "").replaceAll(" ", "").replaceAll("−", "-").replaceAll(",", ".").replaceAll("%", ""); // non-breakable space and minus sign! // TODO: what a mess
-	x2 = x2.replaceAll(" ", "").replaceAll(" ", "").replaceAll("−", "-").replaceAll(",", ".").replaceAll("%", ""); // non-breakable space and minus sign!
-	return x2.localeCompare(x1, LANG, {numeric: true});
-}
-
 function createCell(tag, text) {
 	var cell = document.createElement(tag);
 	cell.innerText = text;
