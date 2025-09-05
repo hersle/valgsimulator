@@ -78,19 +78,14 @@ td.sorted {
 }
 
 fieldset {
-	margin: 0.75rem 0;
+	margin: 0.75rem 0 0.25rem 0;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
-	row-gap: 0.75em;
-	column-gap: 1em;
-	line-width: 1.6em;
+	gap: 0.5em;
+	line-height: 2.0em;
 	padding: 0;
 	border-width: 0;
-}
-
-legend {
-	font-weight: bold;
 }
 
 a {
@@ -110,6 +105,8 @@ section {
 
 h2 {
 	margin: 0;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
 }
 
 ul {
@@ -121,7 +118,7 @@ ul {
 fieldset > label {
 	flex-grow: 1; /* grow to fill flex space (looks better) */
 	background-color: whitesmoke;
-	padding: 0.25em;
+	padding: 0.2em 0.4em;
 	border-radius: 0.25em;
 }
 
@@ -130,6 +127,14 @@ fieldset label a {
 	text-decoration: none;
 	color: gray;
 	float: right;
+}
+
+input, select {
+	background-color: white;
+	padding: 0.4em;
+	border: 1px solid lightgray;
+	border-radius: 0.25em;
+	box-sizing: border-box;
 }
 
 input:invalid {
