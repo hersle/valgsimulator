@@ -797,7 +797,7 @@ function update() {
 	}
 	extraDistrictInput.value = extraDistrict; // restore selection
 
-	extraVotesInput.step = extraVotes == 0 ? 1 : 10 ** Math.floor(Math.log10(Math.abs(extraVotes)));;
+	// extraVotesInput.step = extraVotes == 0 ? 1 : 10 ** Math.floor(Math.log10(Math.abs(extraVotes)));;
 
 	flushLog();
 };
