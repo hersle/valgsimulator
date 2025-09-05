@@ -39,10 +39,6 @@ header a, a:visited {
 	color: inherit;
 }
 
-h1 {
-	margin: 0.75rem 0;
-}
-
 /* 	https://aileenrae.co.uk/blog/firefox-scroll-padding-bug/ */
 .scroll {
 	padding-left: 0.75rem;
