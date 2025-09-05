@@ -802,6 +802,9 @@ function update() {
 	// extraVotesInput.step = extraVotes == 0 ? 1 : 10 ** Math.floor(Math.log10(Math.abs(extraVotes)));;
 
 	flushLog();
+
+	// Update URL parameters, unless requested not to
+	setURLFromInputs();
 };
 
 function showTab(tab) {
@@ -817,5 +820,30 @@ function showTab(tab) {
 	calcLink.style["color"] = tab == "calcs" ? "black" : "gray";
 };
 
-showTab("votes");
-setElection(); // run once on page load
+// Add all input element IDs and their values to the URL query parameters
+function setURLFromInputs() {
+	const url = new URL(window.location.href);
+	for (const el of document.querySelectorAll("input, select")) {
+		url.searchParams.set(el.id, el.value);
+	}
+	window.history.pushState({}, "", url.toString());
+}
+
+// Read the URL query parameters and set all input element IDs and their values ("reverse" of the above)
+function setInputsFromURL(url) {
+	for (const keyval of url.searchParams) {
+		const id = keyval[0];
+		const value = keyval[1];
+		const el = document.getElementById(id);
+		if (el) {
+			el.value = value;
+		}
+	}
+}
+
+showTab("votes"); // show vote tab by default
+const url = new URL(window.location.href); // save URL before update() in setElection() modifies it
+setInputsFromURL(url); // some URL parameters must take effect before setting election (e.g. "election")
+setElection(); // run once on page load, but don't set input fields from URL parameters
+setInputsFromURL(url); // other URL parameters should override defaults after setting the election
+update(false); // now set input fields from any URL parameters
