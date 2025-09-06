@@ -105,6 +105,10 @@ h2 {
 	padding-bottom: 0.5rem;
 }
 
+h2 > a:not(:last-child) {
+	margin-right: 0.3em;
+}
+
 ul {
 	list-style-position: inside;
 	list-style-type: square;

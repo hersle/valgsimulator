@@ -12,6 +12,7 @@ var seatTab = document.getElementById("seatstab");
 var teamTab = document.getElementById("teamstab");
 var distTab = document.getElementById("diststab");
 var calcTab = document.getElementById("calcstab");
+var tabs = [distTab, voteTab, seatTab, teamTab, calcTab];
 var voteTable = document.getElementById("votes");
 var seatTable = document.getElementById("seats");
 var teamTable = document.getElementById("teams");
@@ -23,6 +24,7 @@ var seatLink = document.getElementById("seatslink");
 var teamLink = document.getElementById("teamslink");
 var distLink = document.getElementById("distslink");
 var calcLink = document.getElementById("calcslink");
+var links = [distLink, voteLink, seatLink, teamLink, calcLink];
 
 var LANG = "no-NO";
 
@@ -542,29 +544,23 @@ function setElection() {
 	update();
 }
 
+function deepcopy(a) {
+	if (typeof(a) != "object") {
+		return a;
+	}
+	const b = {};
+	for (const k in a) {
+		b[k] = deepcopy(a[k]);
+	}
+	return b;
+}
+
 function update() {
 	clearLog();
 
-	var votes = election.votes;
-	var districts = election.districts;
-
 	// Deep copy votes, so original data is not modified
-	var newDistricts = {};
-	for (var district in districts) {
-		newDistricts[district] = {};
-		for (var key in districts[district]) {
-			newDistricts[district][key] = districts[district][key];
-		}
-	}
-	districts = newDistricts;
-	var newVotes = {};
-	for (var district in votes) {
-		newVotes[district] = {};
-		for (var party in votes[district]) {
-			newVotes[district][party] = votes[district][party];
-		}
-	}
-	votes = newVotes;
+	var votes = deepcopy(election.votes);
+	var districts = deepcopy(election.districts);
 
 	var localThreshold = parseFloat(document.getElementById("localthreshold").value);
 	var globalThreshold = parseFloat(document.getElementById("globalthreshold").value);
@@ -654,11 +650,11 @@ function update() {
 
 	// Merge parties with no seats as "ANDRE", if requested
 	var groupOtherParties = document.getElementById("groupotherparties").checked;
-	var newParties = [];
+	var newParties = ["ANDRE"];
 	if (groupOtherParties) {
 		globalVotes["ANDRE"] = 0;
 		globalSeats["ANDRE"] = 0;
-		for (var party of parties) { // all parties are not necessarily in globalSeats (e.g. if under thresholds), so loop over parties instead
+		parties = parties.filter(function(party) {
 			if (globalSeats[party] == 0 || !(party in globalSeats)) {
 				for (data of [votes, seats]) {
 					for (var district in data) {
@@ -675,17 +671,10 @@ function update() {
 					data["ANDRE"] += data[party];
 					delete data[party];
 				}
-			} else {
-				newParties.push(party);
+				return false;
 			}
-		}
-		newParties.push("ANDRE"); // always last
-		parties = newParties;
-	}
-
-	// Make ANDRE always appear last
-	if (parties.includes("ANDRE")) {
-		parties.splice(parties.indexOf("ANDRE"), 1);
+			return true;
+		});
 		parties.push("ANDRE");
 	}
 
@@ -808,16 +797,10 @@ function update() {
 };
 
 function showTab(tab) {
-	voteTab.style["display"] = tab == "votes" ? "block" : "none";
-	seatTab.style["display"] = tab == "seats" ? "block" : "none";
-	teamTab.style["display"] = tab == "teams" ? "block" : "none";
-	distTab.style["display"] = tab == "dists" ? "block" : "none";
-	calcTab.style["display"] = tab == "calcs" ? "block" : "none";
-	voteLink.style["color"] = tab == "votes" ? "black" : "gray";
-	seatLink.style["color"] = tab == "seats" ? "black" : "gray";
-	teamLink.style["color"] = tab == "teams" ? "black" : "gray";
-	distLink.style["color"] = tab == "dists" ? "black" : "gray";
-	calcLink.style["color"] = tab == "calcs" ? "black" : "gray";
+	for (var i = 0; i < tabs.length; i++) {
+		tabs[i].style["display"] = tab == i ? "block" : "none";
+		links[i].style["color"] = tab == i ? "black" : "gray";
+	}
 };
 
 // Add all input element IDs and their values to the URL query parameters
@@ -841,7 +824,7 @@ function setInputsFromURL(url) {
 	}
 }
 
-showTab("votes"); // show vote tab by default
+showTab(1); // show vote tab by default
 const url = new URL(window.location.href); // save URL before update() in setElection() modifies it
 setInputsFromURL(url); // some URL parameters must take effect before setting election (e.g. "election")
 setElection(); // run once on page load, but don't set input fields from URL parameters
