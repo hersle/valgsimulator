@@ -798,8 +798,13 @@ function update() {
 
 function showTab(tab) {
 	for (var i = 0; i < tabs.length; i++) {
-		tabs[i].style["display"] = tab == i ? "block" : "none";
-		links[i].style["color"] = tab == i ? "black" : "gray";
+		if (tab == i) {
+			tabs[i].style["display"] = "block";
+			links[i].className = "activetab";
+		} else {
+			tabs[i].style["display"] = "none";
+			links[i].removeAttribute("class");
+		}
 	}
 };
 

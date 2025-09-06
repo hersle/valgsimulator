@@ -109,6 +109,16 @@ h2 > a:not(:last-child) {
 	margin-right: 0.3em;
 }
 
+h2 > a {
+	color: gray;
+}
+h2 > a:hover {
+	color: dimgray;
+}
+h2 > a.activetab {
+	color: black;
+}
+
 ul {
 	list-style-position: inside;
 	list-style-type: square;
