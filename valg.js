@@ -3,7 +3,7 @@ var elections = {
 	"2013": election2013,
 	"2017": election2017,
 	"2021": election2021,
-	"2025*": election2025,
+	"2025": election2025,
 };
 var election;
 
