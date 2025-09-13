@@ -631,8 +631,6 @@ function update() {
 	parties.sort();
 	var fullParties = parties.slice(); // always refers to full party list (copy for safety)
 
-	var decimals = parseInt(document.getElementById("decimals").value);
-
 	// Compute statistics (before any merging of parties takes place)
 	var LSq = 0.0;
 	var LH = 0.0;
@@ -646,7 +644,7 @@ function update() {
 	LSq = Math.sqrt(LSq / 2);
 	LH = LH / 2;
 	var data = {"LSq": {"Verdi": LSq*100}, "LH": {"Verdi": LH*100}};
-	printTable(statTable, data, ["LSq", "LH"], ["Verdi"], "Variabel", false, x => truncate(x, decimals).toFixed(decimals).toLocaleString(LANG) + " %");
+	printTable(statTable, data, ["LSq", "LH"], ["Verdi"], "Variabel", false, x => truncate(x, 1).toFixed(1).toLocaleString(LANG) + " %");
 
 	// Merge parties with no seats as "ANDRE", if requested
 	var groupOtherParties = document.getElementById("groupotherparties").checked;
@@ -748,7 +746,7 @@ function update() {
 			teams[name]["Overrepresentasjon"] = teams[name]["Andel mandater"] - teams[name]["Andel stemmer"];
 			teams[name]["Stemmer per mandat"] = Math.ceil(teams[name]["Stemmer"] / teams[name]["Posisjon"]);
 		}
-		printTable(teamTable, teams, Object.keys(teams), ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon", "Stemmer per mandat", "Distriktsmandater", "Utjevningsmandater", "Stemmer"], "Partier i posisjon", false, (x, i) => i >= 2 && i <= 4 ? truncate(100*x, decimals).toFixed(decimals).toLocaleString(LANG) + " %" : x.toLocaleString(LANG));
+		printTable(teamTable, teams, Object.keys(teams), ["Posisjon", "Opposisjon", "Andel mandater", "Andel stemmer", "Overrepresentasjon", "Stemmer per mandat", "Distriktsmandater", "Utjevningsmandater", "Stemmer"], "Partier i posisjon", false, (x, i) => i >= 2 && i <= 4 ? truncate(100*x, 1).toFixed(1).toLocaleString(LANG) + " %" : x.toLocaleString(LANG));
 	}
 
 	printTable(voteTable, votes, districtList, parties, "Valgdistrikt", true, x => x.toLocaleString(LANG), voteTable.showFraction);
@@ -770,7 +768,7 @@ function update() {
 		districts[district]["Folketall"] = districts[district]["population"];
 		districts[district]["Areal / km²"] = districts[district]["area"];
 	}
-	printTable(distTable, districts, districtList, ["Folketall", "Areal / km²", "Fordelingstall", "Mandater", "Distriktsmandater", "Utjevningsmandater", "Innbyggere per mandat", "Mandatandel", "Befolkningsandel", "Overrepresentasjon"], "Valgdistrikt", false, (x, i) => i >= 7 && i <= 9 ? truncate(100*x, decimals).toFixed(decimals).toLocaleString(LANG) + " %" : x.toLocaleString(LANG));
+	printTable(distTable, districts, districtList, ["Folketall", "Areal / km²", "Fordelingstall", "Mandater", "Distriktsmandater", "Utjevningsmandater", "Innbyggere per mandat", "Mandatandel", "Befolkningsandel", "Overrepresentasjon"], "Valgdistrikt", false, (x, i) => i >= 7 && i <= 9 ? truncate(100*x, 1).toFixed(1).toLocaleString(LANG) + " %" : x.toLocaleString(LANG));
 
 	extraPartyInput.innerHTML = "";
 	for (var party of fullParties) {
