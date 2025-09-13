@@ -1,34 +1,7 @@
 // https://valgresultat.no/valg/2025/st (preliminary, as of Sept 9th 15:22)
 // https://www.regjeringen.no/no/aktuelt/fordeling-av-mandatene-for-stortingsvalget-i-2025/id3040582/
-var election2025 = {
-	"votes": {},
 
-	"districts": {
-		"Akershus": {"population": 728803, "area": 5895, "eligible": 478947, "showup": 79.1},
-		"Aust-Agder": {"population": 122968, "area": 9155, "eligible": 91255, "showup": 75.8},
-		"Buskerud": {"population": 269819, "area": 14694, "eligible": 242919, "showup": 75.2},
-		"Finnmark": {"population": 75053, "area": 48638, "eligible": 54558, "showup": 72.0},
-		"Hedmark": {"population": 202048, "area": 27398, "eligible": 155046, "showup": 76.1},
-		"Hordaland": {"population": 541875, "area": 15438, "eligible": 409396, "showup": 79.9},
-		"Møre og Romsdal": {"population": 270624, "area": 14356, "eligible": 196435, "showup": 77.6},
-		"Nord-Trøndelag": {"population": 135440, "area": 21945, "eligible": 102344, "showup": 76.5},
-		"Nordland": {"population": 243081, "area": 38155, "eligible": 181787, "showup": 74.2},
-		"Oppland": {"population": 174256, "area": 24675, "eligible": 133249, "showup": 75.0},
-		"Oslo": {"population": 717710, "area": 454, "eligible": 516704, "showup": 78.5},
-		"Rogaland": {"population": 499417, "area": 9377, "eligible": 349960, "showup": 78.1},
-		"Sogn og Fjordane": {"population": 109424, "area": 18433, "eligible": 66785, "showup": 79.7},
-		"Sør-Trøndelag": {"population": 347516, "area": 20258, "eligible": 257314, "showup": 78.5},
-		"Telemark": {"population": 177093, "area": 15298, "eligible": 133883, "showup": 74.5},
-		"Troms": {"population": 169610, "area": 26189, "eligible": 126281, "showup": 74.9},
-		"Vest-Agder": {"population": 196882, "area": 7278, "eligible": 144818, "showup": 76.9},
-		"Vestfold": {"population": 256432, "area": 2168, "eligible": 191454, "showup": 76.5},
-		"Østfold": {"population": 312152, "area": 4004, "eligible": 220797, "showup": 72.9},
-	},
-
-	"defaults": merge3({"friends": "R+SV+AP+SP+MDG, KRF+V+H+FRP"}, DEFAULTS_AFTER_2025, DEFAULTS_COMMON),
-};
-
-var str = `03;Oslo;;;;;A;Arbeiderpartiet;25,66091;518619;70553;37715;108268;2,69831;5;0;
+const file2025 = `03;Oslo;;;;;A;Arbeiderpartiet;25,66091;518619;70553;37715;108268;2,69831;5;0;
 03;Oslo;;;;;SV;SV - Sosialistisk Venstreparti;10,70848;518619;30164;15017;45181;-2,56514;2;0;
 03;Oslo;;;;;RØDT;Rødt;7,1521;518619;20849;9327;30176;-1,10788;2;1;
 03;Oslo;;;;;SP;Senterpartiet;0,75038;518619;1972;1194;3166;-2,39875;0;0;
@@ -374,7 +347,7 @@ var str = `03;Oslo;;;;;A;Arbeiderpartiet;25,66091;518619;70553;37715;108268;2,69
 56;Finnmark Finnmárku;;;;;PS;Partiet Sentrum;0,09505;54604;23;15;38;;0;0;
 56;Finnmark Finnmárku;;;;;PASF;Pasientfokus;10,441;54604;2958;1216;4174;;0;0;`;
 
-const translate = {
+const translate2025 = {
 	"Finnmark Finnmárku": "Finnmark",
 	"Troms Romsa": "Troms",
 	"A": "AP",
@@ -388,19 +361,30 @@ const translate = {
 	"ENSOM": "EN",
 };
 
-for (const line of str.split('\n')) {
-	const cols = line.split(';');
-	let district = cols[1];
-	let party = cols[6];
-	const votes = parseInt(cols[12]);
-	if (district in translate) {
-		district = translate[district];
-	}
-	if (party in translate) {
-		party = translate[party];
-	}
-	if (!(district in election2025.votes)) {
-		election2025.votes[district] = {};
-	}
-	election2025.votes[district][party] = votes;
-}
+const election2025 = {
+	"defaults": merge3({"friends": "R+SV+AP+SP+MDG, KRF+V+H+FRP"}, DEFAULTS_AFTER_2025, DEFAULTS_COMMON),
+
+	"districts": {
+		"Akershus": {"population": 728803, "area": 5895, "eligible": 478947, "showup": 79.1},
+		"Aust-Agder": {"population": 122968, "area": 9155, "eligible": 91255, "showup": 75.8},
+		"Buskerud": {"population": 269819, "area": 14694, "eligible": 242919, "showup": 75.2},
+		"Finnmark": {"population": 75053, "area": 48638, "eligible": 54558, "showup": 72.0},
+		"Hedmark": {"population": 202048, "area": 27398, "eligible": 155046, "showup": 76.1},
+		"Hordaland": {"population": 541875, "area": 15438, "eligible": 409396, "showup": 79.9},
+		"Møre og Romsdal": {"population": 270624, "area": 14356, "eligible": 196435, "showup": 77.6},
+		"Nord-Trøndelag": {"population": 135440, "area": 21945, "eligible": 102344, "showup": 76.5},
+		"Nordland": {"population": 243081, "area": 38155, "eligible": 181787, "showup": 74.2},
+		"Oppland": {"population": 174256, "area": 24675, "eligible": 133249, "showup": 75.0},
+		"Oslo": {"population": 717710, "area": 454, "eligible": 516704, "showup": 78.5},
+		"Rogaland": {"population": 499417, "area": 9377, "eligible": 349960, "showup": 78.1},
+		"Sogn og Fjordane": {"population": 109424, "area": 18433, "eligible": 66785, "showup": 79.7},
+		"Sør-Trøndelag": {"population": 347516, "area": 20258, "eligible": 257314, "showup": 78.5},
+		"Telemark": {"population": 177093, "area": 15298, "eligible": 133883, "showup": 74.5},
+		"Troms": {"population": 169610, "area": 26189, "eligible": 126281, "showup": 74.9},
+		"Vest-Agder": {"population": 196882, "area": 7278, "eligible": 144818, "showup": 76.9},
+		"Vestfold": {"population": 256432, "area": 2168, "eligible": 191454, "showup": 76.5},
+		"Østfold": {"population": 312152, "area": 4004, "eligible": 220797, "showup": 72.9},
+	},
+
+	"votes": parseVotes(file2025, translate2025),
+};

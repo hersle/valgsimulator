@@ -1,405 +1,379 @@
-var election2021 = {
-	"votes": {
-		"Østfold": {
-			"AP": 49345,
-			"SV": 9840,
-			"R": 7418,
-			"SP": 22849,
-			"KRF": 5414,
-			"MDG": 4782,
-			"V": 4771,
-			"H": 30211,
-			"FRP": 20527,
-			"AAN": 172,
-			"ND": 2348,
-			"FNB": 285,
-			"HELSE": 393,
-			"INP": 230,
-			"PDK": 688,
-			"LIB": 263,
-			"PIR": 155,
-			"PP": 1869,
-			"PS": 336,
-		},
-		"Akershus": {
-			"AP": 95609,
-			"SV": 25240,
-			"R": 14572,
-			"SP": 32584,
-			"KRF": 7580,
-			"MDG": 17461,
-			"V": 25393,
-			"H": 101439,
-			"FRP": 38779,
-			"AAN": 309,
-			"ND": 4007,
-			"FNB": 634,
-			"HELSE": 1161,
-			"INP": 489,
-			"PDK": 719,
-			"LIB": 636,
-			"PIR": 338,
-			"PP": 2286,
-			"PS": 953,
-			"GEN": 112,
-		},
-		"Oslo": {
-			"AP": 87158,
-			"SV": 50382,
-			"R": 31352,
-			"SP": 11953,
-			"KRF": 6922,
-			"MDG": 32198,
-			"V": 38142,
-			"H": 89342,
-			"FRP": 22784,
-			"AAN": 232,
-			"ND": 2585,
-			"FNB": 1072,
-			"HELSE": 593,
-			"INP": 234,
-			"PDK": 474,
-			"KYST": 64,
-			"LIB": 665,
-			"NKP": 123,
-			"PIR": 336,
-			"PP": 1312,
-			"PS": 1367,
-			"FI": 275,
-		},
-		"Hedmark": {
-			"AP": 38136,
-			"SV": 7902,
-			"R": 3876,
-			"SP": 32286,
-			"KRF": 1876,
-			"MDG": 2382,
-			"V": 2642,
-			"H": 12191,
-			"FRP": 9696,
-			"AAN": 100,
-			"ND": 1355,
-			"FNB": 81,
-			"HELSE": 293,
-			"INP": 172,
-			"PDK": 219,
-			"LIB": 135,
-			"PP": 1482,
-			"PS": 210,
-			"RN": 97,
-		},
-		"Oppland": {
-			"AP": 34552,
-			"SV": 5508,
-			"R": 3534,
-			"SP": 25619,
-			"KRF": 1537,
-			"MDG": 2289,
-			"V": 2370,
-			"H": 12323,
-			"FRP": 8459,
-			"AAN": 81,
-			"ND": 930,
-			"FNB": 66,
-			"HELSE": 185,
-			"INP": 128,
-			"PDK": 212,
-			"LIB": 91,
-			"PIR": 65,
-			"PP": 528,
-			"PS": 184,
-		},
-		"Buskerud": {
-			"AP": 40575,
-			"SV": 8062,
-			"R": 4941,
-			"SP": 23068,
-			"KRF": 3319,
-			"MDG": 4251,
-			"V": 5207,
-			"H": 31544,
-			"FRP": 17509,
-			"AAN": 147,
-			"ND": 1976,
-			"FNB": 126,
-			"HELSE": 421,
-			"INP": 275,
-			"PDK": 330,
-			"LIB": 244,
-			"PIR": 115,
-			"PP": 520,
-			"PS": 440,
-		},
-		"Vestfold": {
-			"AP": 37518,
-			"SV": 8670,
-			"R": 6155,
-			"SP": 13775,
-			"KRF": 4861,
-			"MDG": 5428,
-			"V": 5771,
-			"H": 34831,
-			"FRP": 17271,
-			"AAN": 146,
-			"ND": 1826,
-			"FNB": 71,
-			"HELSE": 383,
-			"INP": 403,
-			"PDK": 662,
-			"LIB": 198,
-			"PIR": 125,
-			"PP": 562,
-			"PS": 381,
-		},
-		"Telemark": {
-			"AP": 29883,
-			"SV": 5934,
-			"R": 4506,
-			"SP": 15963,
-			"KRF": 4327,
-			"MDG": 2729,
-			"V": 2203,
-			"H": 15198,
-			"FRP": 12297,
-			"AAN": 107,
-			"ND": 1379,
-			"FNB": 87,
-			"HELSE": 193,
-			"INP": 596,
-			"PDK": 631,
-			"LIB": 110,
-			"PIR": 85,
-			"PP": 419,
-			"PS": 263,
-		},
-		"Aust-Agder": {
-			"AP": 16147,
-			"SV": 3644,
-			"R": 2456,
-			"SP": 8907,
-			"KRF": 5749,
-			"MDG": 1976,
-			"V": 2136,
-			"H": 13305,
-			"FRP": 8728,
-			"AAN": 45,
-			"ND": 917,
-			"HELSE": 190,
-			"INP": 279,
-			"PDK": 573,
-			"LIB": 102,
-			"PIR": 71,
-			"PP": 380,
-			"PS": 230,
-		},
-		"Vest-Agder": {
-			"AP": 21845,
-			"SV": 5615,
-			"R": 3355,
-			"SP": 10859,
-			"KRF": 14598,
-			"MDG": 3330,
-			"V": 3834,
-			"H": 22359,
-			"FRP": 13821,
-			"AAN": 53,
-			"ND": 2709,
-			"FNB": 62,
-			"HELSE": 167,
-			"INP": 360,
-			"PDK": 969,
-			"LIB": 164,
-			"PIR": 78,
-			"PP": 492,
-			"PS": 478,
-		},
-		"Rogaland": {
-			"AP": 57969,
-			"SV": 13261,
-			"R": 9620,
-			"SP": 26955,
-			"KRF": 20859,
-			"MDG": 6152,
-			"V": 9106,
-			"H": 61992,
-			"FRP": 43382,
-			"AAN": 212,
-			"ND": 2634,
-			"FNB": 316,
-			"HELSE": 500,
-			"INP": 1646,
-			"PDK": 1400,
-			"LIB": 424,
-			"PIR": 202,
-			"PP": 1327,
-			"PS": 911,
-		},
-		"Hordaland": {
-			"AP": 68945,
-			"SV": 26901,
-			"R": 14150,
-			"SP": 29981,
-			"KRF": 14724,
-			"MDG": 11940,
-			"V": 13163,
-			"H": 74282,
-			"FRP": 38352,
-			"AAN": 206,
-			"ND": 2876,
-			"FNB": 403,
-			"HELSE": 490,
-			"INP": 1738,
-			"PDK": 1384,
-			"KYST": 107,
-			"LIB": 527,
-			"NKP": 77,
-			"PIR": 262,
-			"PP": 2286,
-			"PS": 591,
-			"GEN": 87, // valgresultater.no displays Generasjonspartiet in Akershus and Hordaland with different abbreviations; this is manually fixed here (https://no.wikipedia.org/wiki/Stortingsvalget_2021#cite_note-ReferenceA-5)
-		},
-		"Sogn og Fjordane": {
-			"AP": 16426,
-			"SV": 3675,
-			"R": 2489,
-			"SP": 17634,
-			"KRF": 2389,
-			"MDG": 1542,
-			"V": 2135,
-			"H": 8529,
-			"FRP": 5771,
-			"AAN": 43,
-			"ND": 453,
-			"HELSE": 89,
-			"INP": 293,
-			"PDK": 253,
-			"LIB": 47,
-			"PP": 173,
-			"PS": 141,
-		},
-		"Møre og Romsdal": {
-			"AP": 29928,
-			"SV": 9341,
-			"R": 4933,
-			"SP": 25938,
-			"KRF": 7905,
-			"MDG": 3697,
-			"V": 4364,
-			"H": 24123,
-			"FRP": 32746,
-			"AAN": 126,
-			"ND": 1752,
-			"FNB": 79,
-			"HELSE": 280,
-			"INP": 1096,
-			"PDK": 812,
-			"LIB": 175,
-			"PP": 790,
-			"PS": 325,
-		},
-		"Sør-Trøndelag": {
-			"AP": 57621,
-			"SV": 17635,
-			"R": 10852,
-			"SP": 29181,
-			"KRF": 4211,
-			"MDG": 9268,
-			"V": 8435,
-			"H": 31837,
-			"FRP": 16650,
-			"AAN": 216,
-			"ND": 1723,
-			"HELSE": 330,
-			"INP": 658,
-			"PDK": 305,
-			"LIB": 247,
-			"NKP": 63,
-			"PIR": 212,
-			"PP": 3351,
-			"PS": 442,
-		},
-		"Nord-Trøndelag": {
-			"AP": 25730,
-			"SV": 4389,
-			"R": 3035,
-			"SP": 22089,
-			"KRF": 1726,
-			"MDG": 1424,
-			"V": 1557,
-			"H": 8121,
-			"FRP": 6146,
-			"AAN": 79,
-			"ND": 754,
-			"FNB": 23,
-			"HELSE": 145,
-			"INP": 359,
-			"PDK": 179,
-			"LIB": 60,
-			"PIR": 55,
-			"PP": 643,
-			"PS": 129,
-		},
-		"Nordland": {
-			"AP": 38611,
-			"SV": 9620,
-			"R": 7273,
-			"SP": 28465,
-			"KRF": 2637,
-			"MDG": 3138,
-			"V": 3342,
-			"H": 20532,
-			"FRP": 16338,
-			"AAN": 99,
-			"ND": 1807,
-			"HELSE": 339,
-			"INP": 577,
-			"PDK": 314,
-			"LIB": 175,
-			"NKP": 38,
-			"PIR": 126,
-			"PP": 586,
-			"PS": 211,
-		},
-		"Troms": {
-			"AP": 25168,
-			"SV": 10029,
-			"R": 4455,
-			"SP": 17698,
-			"KRF": 2062,
-			"MDG": 2768,
-			"V": 2298,
-			"H": 12493,
-			"FRP": 12998,
-			"AAN": 66,
-			"ND": 1370,
-			"FNB": 130,
-			"HELSE": 225,
-			"INP": 319,
-			"PDK": 186,
-			"LIB": 187,
-			"PIR": 83,
-			"PS": 175,
-		},
-		"Finnmark": {
-			"AP": 12228,
-			"SV": 2415,
-			"R": 1959,
-			"SP": 7157,
-			"KRF": 648,
-			"MDG": 892,
-			"V": 564,
-			"H": 2664,
-			"FRP": 4220,
-			"AAN": 50,
-			"ND": 667,
-			"HELSE": 113,
-			"INP": 179,
-			"PDK": 138,
-			"LIB": 70,
-			"PS": 69,
-			"PF": 4950,
-		},
-	},
+const file2021 = `01;Østfold;;;;;A;Arbeiderpartiet;30,47944;224004;24817;24528;49345;-1,57192;3;0;
+01;Østfold;;;;;SV;SV - Sosialistisk Venstreparti;6,07798;224004;5525;4315;9840;1,7029;1;1;
+01;Østfold;;;;;RØDT;Rødt;4,58195;224004;4258;3160;7418;2,44603;0;0;
+01;Østfold;;;;;SP;Senterpartiet;14,11338;224004;10082;12767;22849;5,44344;2;0;
+01;Østfold;;;;;KRF;Kristelig Folkeparti;3,34412;224004;2576;2838;5414;-0,89105;0;0;
+01;Østfold;;;;;MDG;Miljøpartiet De Grønne;2,95375;224004;2974;1808;4782;0,34711;0;0;
+01;Østfold;;;;;V;Venstre;2,94695;224004;2408;2363;4771;0,53556;0;0;
+01;Østfold;;;;;H;Høyre;18,66075;224004;15598;14613;30211;-5,13232;2;0;
+01;Østfold;;;;;FRP;Fremskrittspartiet;12,67913;224004;9329;11198;20527;-4,84419;1;0;
+01;Østfold;;;;;AAN;Alliansen - Alternativ for Norge;0,10624;224004;78;94;172;0,10624;0;0;
+01;Østfold;;;;;DEMN;Demokratene;1,45031;224004;1252;1096;2348;1,33217;0;0;
+01;Østfold;;;;;FNB;Folkeaksjonen Nei til mer bompenger;0,17604;224004;144;141;285;0,17604;0;0;
+01;Østfold;;;;;HELSE;Helsepartiet;0,24275;224004;208;185;393;-0,25843;0;0;
+01;Østfold;;;;;INP;Industri- og Næringspartiet;0,14207;224004;115;115;230;0,14207;0;0;
+01;Østfold;;;;;KRISTNE;Partiet De Kristne;0,42496;224004;364;324;688;0,10286;0;0;
+01;Østfold;;;;;LIBS;Liberalistene;0,16245;224004;119;144;263;-0,05705;0;0;
+01;Østfold;;;;;PIR;Piratpartiet;0,09574;224004;73;82;155;0,09574;0;0;
+01;Østfold;;;;;PP;Pensjonistpartiet;1,15444;224004;1147;722;1869;0,3094;0;0;
+01;Østfold;;;;;PS;Partiet Sentrum;0,20754;224004;175;161;336;0,20754;0;0;
+02;Akershus;;;;;A;Arbeiderpartiet;25,81927;471262;55346;40263;95609;-0,49576;5;0;
+02;Akershus;;;;;SV;SV - Sosialistisk Venstreparti;6,81608;471262;15889;9351;25240;1,51711;1;0;
+02;Akershus;;;;;RØDT;Rødt;3,93518;471262;9124;5448;14572;1,99409;1;0;
+02;Akershus;;;;;SP;Senterpartiet;8,79933;471262;17296;15288;32584;2,80012;2;0;
+02;Akershus;;;;;KRF;Kristelig Folkeparti;2,04698;471262;4388;3192;7580;-0,27894;0;0;
+02;Akershus;;;;;MDG;Miljøpartiet De Grønne;4,71535;471262;12362;5099;17461;1,01863;1;0;
+02;Akershus;;;;;V;Venstre;6,85739;471262;15224;10169;25393;0,37336;1;0;
+02;Akershus;;;;;H;Høyre;27,39366;471262;64224;37215;101439;-3,59813;6;1;
+02;Akershus;;;;;FRP;Fremskrittspartiet;10,47229;471262;21035;17744;38779;-4,58313;2;0;
+02;Akershus;;;;;AAN;Alliansen - Alternativ for Norge;0,08345;471262;146;163;309;0,08345;0;0;
+02;Akershus;;;;;DEMN;Demokratene;1,08209;471262;2407;1600;4007;1,00257;0;0;
+02;Akershus;;;;;FNB;Folkeaksjonen Nei til mer bompenger;0,17121;471262;296;338;634;0,17121;0;0;
+02;Akershus;;;;;HELSE;Helsepartiet;0,31353;471262;660;501;1161;-0,29532;0;0;
+02;Akershus;;;;;INP;Industri- og Næringspartiet;0,13205;471262;287;202;489;0,13205;0;0;
+02;Akershus;;;;;KRISTNE;Partiet De Kristne;0,19417;471262;429;290;719;0,06955;0;0;
+02;Akershus;;;;;LIBS;Liberalistene;0,17175;471262;338;298;636;-0,00568;0;0;
+02;Akershus;;;;;PIR;Piratpartiet;0,09128;471262;154;184;338;-0,07636;0;0;
+02;Akershus;;;;;PP;Pensjonistpartiet;0,61734;471262;1588;698;2286;0,03756;0;0;
+02;Akershus;;;;;PS;Partiet Sentrum;0,25736;471262;548;405;953;0,25736;0;0;
+02;Akershus;;;;;GENE;Generasjonspartiet;0,03025;471262;71;41;112;0,03025;0;0;
+03;Oslo;;;;;A;Arbeiderpartiet;22,9626;485801;50857;36301;87158;-5,39172;4;0;
+03;Oslo;;;;;SV;SV - Sosialistisk Venstreparti;13,27362;485801;32789;17593;50382;3,99769;3;0;
+03;Oslo;;;;;RØDT;Rødt;8,25998;485801;20299;11053;31352;1,97207;2;0;
+03;Oslo;;;;;SP;Senterpartiet;3,14913;485801;7097;4856;11953;1,03037;0;0;
+03;Oslo;;;;;KRF;Kristelig Folkeparti;1,82367;485801;4222;2700;6922;-0,3128;0;0;
+03;Oslo;;;;;MDG;Miljøpartiet De Grønne;8,48287;485801;22134;10064;32198;2,53001;2;0;
+03;Oslo;;;;;V;Venstre;10,04887;485801;21881;16261;38142;1,62258;3;1;
+03;Oslo;;;;;H;Høyre;23,538;485801;55643;33699;89342;-2,9084;5;0;
+03;Oslo;;;;;FRP;Fremskrittspartiet;6,00266;485801;13593;9191;22784;-3,54158;1;0;
+03;Oslo;;;;;AAN;Alliansen - Alternativ for Norge;0,06112;485801;138;94;232;0,06112;0;0;
+03;Oslo;;;;;DEMN;Demokratene;0,68104;485801;1679;906;2585;0,59224;0;0;
+03;Oslo;;;;;FNB;Folkeaksjonen Nei til mer bompenger;0,28243;485801;611;461;1072;0,28243;0;0;
+03;Oslo;;;;;HELSE;Helsepartiet;0,15623;485801;376;217;593;-0,1663;0;0;
+03;Oslo;;;;;INP;Industri- og Næringspartiet;0,06165;485801;135;99;234;0,06165;0;0;
+03;Oslo;;;;;KRISTNE;Partiet De Kristne;0,12488;485801;289;185;474;0,03145;0;0;
+03;Oslo;;;;;KYST;Kystpartiet;0,01686;485801;37;27;64;0,01686;0;0;
+03;Oslo;;;;;LIBS;Liberalistene;0,1752;485801;389;276;665;-0,00649;0;0;
+03;Oslo;;;;;NKP;Norges Kommunistiske Parti;0,03241;485801;85;38;123;-0,00001;0;0;
+03;Oslo;;;;;PIR;Piratpartiet;0,08852;485801;176;160;336;-0,08309;0;0;
+03;Oslo;;;;;PP;Pensjonistpartiet;0,34566;485801;915;397;1312;-0,018;0;0;
+03;Oslo;;;;;PS;Partiet Sentrum;0,36015;485801;708;659;1367;0,36015;0;0;
+03;Oslo;;;;;FI;Feministisk Initiativ;0,07245;485801;214;61;275;-0,01635;0;0;
+04;Hedmark;;;;;A;Arbeiderpartiet;33,12401;152259;20746;17390;38136;-2,43087;3;0;
+04;Hedmark;;;;;SV;SV - Sosialistisk Venstreparti;6,86349;152259;4686;3216;7902;1,14119;0;0;
+04;Hedmark;;;;;RØDT;Rødt;3,3666;152259;2342;1534;3876;2,1017;0;0;
+04;Hedmark;;;;;SP;Senterpartiet;28,04284;152259;15307;16979;32286;5,86893;2;0;
+04;Hedmark;;;;;KRF;Kristelig Folkeparti;1,62945;152259;966;910;1876;-0,16841;0;0;
+04;Hedmark;;;;;MDG;Miljøpartiet De Grønne;2,06895;152259;1652;730;2382;0,12733;0;0;
+04;Hedmark;;;;;V;Venstre;2,29478;152259;1437;1205;2642;-0,03604;0;0;
+04;Hedmark;;;;;H;Høyre;10,58881;152259;6657;5534;12191;-4,71098;1;0;
+04;Hedmark;;;;;FRP;Fremskrittspartiet;8,42171;152259;4393;5303;9696;-3,30339;1;1;
+04;Hedmark;;;;;AAN;Alliansen - Alternativ for Norge;0,08686;152259;56;44;100;0,08686;0;0;
+04;Hedmark;;;;;DEMN;Demokratene;1,17692;152259;765;590;1355;1,00862;0;0;
+04;Hedmark;;;;;FNB;Folkeaksjonen Nei til mer bompenger;0,07035;152259;30;51;81;0,07035;0;0;
+04;Hedmark;;;;;HELSE;Helsepartiet;0,25449;152259;150;143;293;-0,05757;0;0;
+04;Hedmark;;;;;INP;Industri- og Næringspartiet;0,1494;152259;76;96;172;0,1494;0;0;
+04;Hedmark;;;;;KRISTNE;Partiet De Kristne;0,19022;152259;107;112;219;0,04558;0;0;
+04;Hedmark;;;;;LIBS;Liberalistene;0,11726;152259;70;65;135;-0,02738;0;0;
+04;Hedmark;;;;;PP;Pensjonistpartiet;1,28723;152259;980;502;1482;0,14505;0;0;
+04;Hedmark;;;;;PS;Partiet Sentrum;0,1824;152259;108;102;210;0,1824;0;0;
+04;Hedmark;;;;;RN;Redd Naturen;0,08425;152259;43;54;97;0,08425;0;0;
+05;Oppland;;;;;A;Arbeiderpartiet;35,02093;132395;18488;16064;34552;-0,05372;2;0;
+05;Oppland;;;;;SV;SV - Sosialistisk Venstreparti;5,58275;132395;3457;2051;5508;0,94865;0;0;
+05;Oppland;;;;;RØDT;Rødt;3,58196;132395;2216;1318;3534;1,90178;0;0;
+05;Oppland;;;;;SP;Senterpartiet;25,96669;132395;12223;13396;25619;4,77775;2;0;
+05;Oppland;;;;;KRF;Kristelig Folkeparti;1,55786;132395;834;703;1537;-0,54444;0;0;
+05;Oppland;;;;;MDG;Miljøpartiet De Grønne;2,32007;132395;1609;680;2289;-0,03016;0;0;
+05;Oppland;;;;;V;Venstre;2,40216;132395;1321;1049;2370;-0,15636;0;0;
+05;Oppland;;;;;H;Høyre;12,49024;132395;6721;5602;12323;-4,24985;1;0;
+05;Oppland;;;;;FRP;Fremskrittspartiet;8,5738;132395;3798;4661;8459;-3,67044;1;1;
+05;Oppland;;;;;AAN;Alliansen - Alternativ for Norge;0,0821;132395;44;37;81;0,0821;0;0;
+05;Oppland;;;;;DEMN;Demokratene;0,94262;132395;499;431;930;0,82096;0;0;
+05;Oppland;;;;;FNB;Folkeaksjonen Nei til mer bompenger;0,0669;132395;34;32;66;0,0669;0;0;
+05;Oppland;;;;;HELSE;Helsepartiet;0,18751;132395;103;82;185;-0,23184;0;0;
+05;Oppland;;;;;INP;Industri- og Næringspartiet;0,12974;132395;72;56;128;0,12974;0;0;
+05;Oppland;;;;;KRISTNE;Partiet De Kristne;0,21488;132395;115;97;212;0,04529;0;0;
+05;Oppland;;;;;LIBS;Liberalistene;0,09224;132395;47;44;91;-0,04233;0;0;
+05;Oppland;;;;;PIR;Piratpartiet;0,06588;132395;37;28;65;0,06588;0;0;
+05;Oppland;;;;;PP;Pensjonistpartiet;0,53517;132395;330;198;528;0,11765;0;0;
+05;Oppland;;;;;PS;Partiet Sentrum;0,1865;132395;109;75;184;0,1865;0;0;
+06;Buskerud;;;;;A;Arbeiderpartiet;28,36024;191682;25258;15317;40575;0,08699;3;0;
+06;Buskerud;;;;;SV;SV - Sosialistisk Venstreparti;5,635;191682;5469;2593;8062;0,62691;1;1;
+06;Buskerud;;;;;RØDT;Rødt;3,45355;191682;3373;1568;4941;1,97249;0;0;
+06;Buskerud;;;;;SP;Senterpartiet;16,12358;191682;12690;10378;23068;5,34589;1;0;
+06;Buskerud;;;;;KRF;Kristelig Folkeparti;2,31984;191682;2008;1311;3319;-0,29823;0;0;
+06;Buskerud;;;;;MDG;Miljøpartiet De Grønne;2,97127;191682;3065;1186;4251;0,27652;0;0;
+06;Buskerud;;;;;V;Venstre;3,63948;191682;3149;2058;5207;-0,03304;0;0;
+06;Buskerud;;;;;H;Høyre;22,04795;191682;19806;11738;31544;-4,82812;2;0;
+06;Buskerud;;;;;FRP;Fremskrittspartiet;12,23807;191682;9651;7858;17509;-5,07531;1;0;
+06;Buskerud;;;;;AAN;Alliansen - Alternativ for Norge;0,10275;191682;98;49;147;0,10275;0;0;
+06;Buskerud;;;;;DEMN;Demokratene;1,38114;191682;1240;736;1976;1,24942;0;0;
+06;Buskerud;;;;;FNB;Folkeaksjonen Nei til mer bompenger;0,08807;191682;64;62;126;0,08807;0;0;
+06;Buskerud;;;;;HELSE;Helsepartiet;0,29426;191682;253;168;421;-0,26605;0;0;
+06;Buskerud;;;;;INP;Industri- og Næringspartiet;0,19221;191682;167;108;275;0,19221;0;0;
+06;Buskerud;;;;;KRISTNE;Partiet De Kristne;0,23066;191682;211;119;330;0,05044;0;0;
+06;Buskerud;;;;;LIBS;Liberalistene;0,17055;191682;147;97;244;-0,03785;0;0;
+06;Buskerud;;;;;PIR;Piratpartiet;0,08038;191682;54;61;115;0,08038;0;0;
+06;Buskerud;;;;;PP;Pensjonistpartiet;0,36346;191682;379;141;520;0,36346;0;0;
+06;Buskerud;;;;;PS;Partiet Sentrum;0,30754;191682;251;189;440;0,30754;0;0;
+07;Vestfold;;;;;A;Arbeiderpartiet;26,98418;182992;20232;17286;37518;-0,97162;2;0;
+07;Vestfold;;;;;SV;SV - Sosialistisk Venstreparti;6,23575;182992;5358;3312;8670;1,28535;1;1;
+07;Vestfold;;;;;RØDT;Rødt;4,42688;182992;3947;2208;6155;2,56735;0;0;
+07;Vestfold;;;;;SP;Senterpartiet;9,90743;182992;6993;6782;13775;3,63492;1;0;
+07;Vestfold;;;;;KRF;Kristelig Folkeparti;3,49619;182992;2616;2245;4861;-0,1907;0;0;
+07;Vestfold;;;;;MDG;Miljøpartiet De Grønne;3,904;182992;3752;1676;5428;0,96892;0;0;
+07;Vestfold;;;;;V;Venstre;4,15069;182992;3296;2475;5771;0,31086;0;0;
+07;Vestfold;;;;;H;Høyre;25,0516;182992;19573;15258;34831;-5,09175;2;0;
+07;Vestfold;;;;;FRP;Fremskrittspartiet;12,42187;182992;8475;8796;17271;-4,46395;1;0;
+07;Vestfold;;;;;AAN;Alliansen - Alternativ for Norge;0,10501;182992;82;64;146;0,10501;0;0;
+07;Vestfold;;;;;DEMN;Demokratene;1,31332;182992;1084;742;1826;1,19897;0;0;
+07;Vestfold;;;;;FNB;Folkeaksjonen Nei til mer bompenger;0,05107;182992;35;36;71;0,05107;0;0;
+07;Vestfold;;;;;HELSE;Helsepartiet;0,27547;182992;220;163;383;-0,20478;0;0;
+07;Vestfold;;;;;INP;Industri- og Næringspartiet;0,28985;182992;235;168;403;0,28985;0;0;
+07;Vestfold;;;;;KRISTNE;Partiet De Kristne;0,47613;182992;376;286;662;0,18813;0;0;
+07;Vestfold;;;;;LIBS;Liberalistene;0,14241;182992;117;81;198;-0,07842;0;0;
+07;Vestfold;;;;;PIR;Piratpartiet;0,0899;182992;81;44;125;-0,06518;0;0;
+07;Vestfold;;;;;PP;Pensjonistpartiet;0,40421;182992;364;198;562;0,40421;0;0;
+07;Vestfold;;;;;PS;Partiet Sentrum;0,27403;182992;228;153;381;0,27403;0;0;
+08;Telemark;;;;;A;Arbeiderpartiet;30,83583;130960;15004;14879;29883;-1,09558;2;0;
+08;Telemark;;;;;SV;SV - Sosialistisk Venstreparti;6,12321;130960;3450;2484;5934;1,16796;0;0;
+08;Telemark;;;;;RØDT;Rødt;4,64967;130960;2656;1850;4506;2,54266;1;1;
+08;Telemark;;;;;SP;Senterpartiet;16,47198;130960;6909;9054;15963;3,61208;1;0;
+08;Telemark;;;;;KRF;Kristelig Folkeparti;4,46497;130960;2299;2028;4327;-0,51609;0;0;
+08;Telemark;;;;;MDG;Miljøpartiet De Grønne;2,81601;130960;1853;876;2729;0,34665;0;0;
+08;Telemark;;;;;V;Venstre;2,27324;130960;1221;982;2203;-0,40156;0;0;
+08;Telemark;;;;;H;Høyre;15,68259;130960;8144;7054;15198;-4,39132;1;0;
+08;Telemark;;;;;FRP;Fremskrittspartiet;12,68909;130960;5392;6905;12297;-3,84182;1;0;
+08;Telemark;;;;;AAN;Alliansen - Alternativ for Norge;0,11041;130960;60;47;107;0,11041;0;0;
+08;Telemark;;;;;DEMN;Demokratene;1,42297;130960;707;672;1379;1,2898;0;0;
+08;Telemark;;;;;FNB;Folkeaksjonen Nei til mer bompenger;0,08977;130960;40;47;87;0,08977;0;0;
+08;Telemark;;;;;HELSE;Helsepartiet;0,19915;130960;101;92;193;-0,1663;0;0;
+08;Telemark;;;;;INP;Industri- og Næringspartiet;0,615;130960;300;296;596;0,615;0;0;
+08;Telemark;;;;;KRISTNE;Partiet De Kristne;0,65112;130960;352;279;631;0,09675;0;0;
+08;Telemark;;;;;LIBS;Liberalistene;0,11351;130960;62;48;110;-0,02379;0;0;
+08;Telemark;;;;;PIR;Piratpartiet;0,08771;130960;41;44;85;0,08771;0;0;
+08;Telemark;;;;;PP;Pensjonistpartiet;0,43236;130960;262;157;419;0,43236;0;0;
+08;Telemark;;;;;PS;Partiet Sentrum;0,27139;130960;144;119;263;0,27139;0;0;
+09;Aust-Agder;;;;;A;Arbeiderpartiet;24,52647;87312;8454;7693;16147;-0,9166;1;0;
+09;Aust-Agder;;;;;SV;SV - Sosialistisk Venstreparti;5,53505;87312;2248;1396;3644;1,57988;0;0;
+09;Aust-Agder;;;;;RØDT;Rødt;3,73054;87312;1498;958;2456;2,48471;0;0;
+09;Aust-Agder;;;;;SP;Senterpartiet;13,52928;87312;4107;4800;8907;5,21601;1;0;
+09;Aust-Agder;;;;;KRF;Kristelig Folkeparti;8,73244;87312;3073;2676;5749;-1,07366;0;0;
+09;Aust-Agder;;;;;MDG;Miljøpartiet De Grønne;3,00144;87312;1333;643;1976;0,41406;0;0;
+09;Aust-Agder;;;;;V;Venstre;3,24447;87312;1178;958;2136;-0,02989;0;0;
+09;Aust-Agder;;;;;H;Høyre;20,20961;87312;7331;5974;13305;-5,43877;1;0;
+09;Aust-Agder;;;;;FRP;Fremskrittspartiet;13,25739;87312;3845;4883;8728;-4,02525;1;1;
+09;Aust-Agder;;;;;AAN;Alliansen - Alternativ for Norge;0,06835;87312;19;26;45;0,06835;0;0;
+09;Aust-Agder;;;;;DEMN;Demokratene;1,39288;87312;530;387;917;1,23541;0;0;
+09;Aust-Agder;;;;;HELSE;Helsepartiet;0,2886;87312;104;86;190;-0,0958;0;0;
+09;Aust-Agder;;;;;INP;Industri- og Næringspartiet;0,42379;87312;164;115;279;0,42379;0;0;
+09;Aust-Agder;;;;;KRISTNE;Partiet De Kristne;0,87036;87312;338;235;573;0,14478;0;0;
+09;Aust-Agder;;;;;LIBS;Liberalistene;0,15493;87312;49;53;102;-0,03341;0;0;
+09;Aust-Agder;;;;;PIR;Piratpartiet;0,10785;87312;37;34;71;-0,04962;0;0;
+09;Aust-Agder;;;;;PP;Pensjonistpartiet;0,5772;87312;248;132;380;-0,12213;0;0;
+09;Aust-Agder;;;;;PS;Partiet Sentrum;0,34936;87312;164;66;230;0,34936;0;0;
+10;Vest-Agder;;;;;A;Arbeiderpartiet;20,77548;137484;12894;8951;21845;-0,26162;1;0;
+10;Vest-Agder;;;;;SV;SV - Sosialistisk Venstreparti;5,34009;137484;3763;1852;5615;1,04808;0;0;
+10;Vest-Agder;;;;;RØDT;Rødt;3,19074;137484;2215;1140;3355;1,82776;0;0;
+10;Vest-Agder;;;;;SP;Senterpartiet;10,32735;137484;5733;5126;10859;3,84723;1;0;
+10;Vest-Agder;;;;;KRF;Kristelig Folkeparti;13,88329;137484;8490;6108;14598;1,25687;1;0;
+10;Vest-Agder;;;;;MDG;Miljøpartiet De Grønne;3,16696;137484;2320;1010;3330;0,2835;0;0;
+10;Vest-Agder;;;;;V;Venstre;3,64629;137484;2319;1515;3834;0,02685;1;1;
+10;Vest-Agder;;;;;H;Høyre;21,26431;137484;13455;8904;22359;-6,61544;1;0;
+10;Vest-Agder;;;;;FRP;Fremskrittspartiet;13,14433;137484;7361;6460;13821;-3,97617;1;0;
+10;Vest-Agder;;;;;AAN;Alliansen - Alternativ for Norge;0,05041;137484;26;27;53;0,05041;0;0;
+10;Vest-Agder;;;;;DEMN;Demokratene;2,57637;137484;1587;1122;2709;1,83544;0;0;
+10;Vest-Agder;;;;;FNB;Folkeaksjonen Nei til mer bompenger;0,05896;137484;30;32;62;0,05896;0;0;
+10;Vest-Agder;;;;;HELSE;Helsepartiet;0,15882;137484;101;66;167;-0,06504;0;0;
+10;Vest-Agder;;;;;INP;Industri- og Næringspartiet;0,34237;137484;226;134;360;0,34237;0;0;
+10;Vest-Agder;;;;;KRISTNE;Partiet De Kristne;0,92156;137484;635;334;969;0,13606;0;0;
+10;Vest-Agder;;;;;LIBS;Liberalistene;0,15597;137484;95;69;164;-0,05303;0;0;
+10;Vest-Agder;;;;;PIR;Piratpartiet;0,07418;137484;37;41;78;-0,07737;0;0;
+10;Vest-Agder;;;;;PP;Pensjonistpartiet;0,46791;137484;356;136;492;0,04396;0;0;
+10;Vest-Agder;;;;;PS;Partiet Sentrum;0,4546;137484;300;178;478;0,4546;0;0;
+11;Rogaland;;;;;A;Arbeiderpartiet;22,39327;333528;33085;24884;57969;-0,0433;3;0;
+11;Rogaland;;;;;SV;SV - Sosialistisk Venstreparti;5,12269;333528;8466;4795;13261;1,18215;1;0;
+11;Rogaland;;;;;RØDT;Rødt;3,71618;333528;6036;3584;9620;2,56329;1;1;
+11;Rogaland;;;;;SP;Senterpartiet;10,41264;333528;13879;13076;26955;2,8872;2;0;
+11;Rogaland;;;;;KRF;Kristelig Folkeparti;8,05777;333528;11890;8969;20859;-0,3418;1;0;
+11;Rogaland;;;;;MDG;Miljøpartiet De Grønne;2,3765;333528;4297;1855;6152;-0,18973;0;0;
+11;Rogaland;;;;;V;Venstre;3,51762;333528;5254;3852;9106;-0,00716;0;0;
+11;Rogaland;;;;;H;Høyre;23,94734;333528;37182;24810;61992;-4,80563;4;0;
+11;Rogaland;;;;;FRP;Fremskrittspartiet;16,75835;333528;23656;19726;43382;-2,93477;2;0;
+11;Rogaland;;;;;AAN;Alliansen - Alternativ for Norge;0,0819;333528;121;91;212;0,0819;0;0;
+11;Rogaland;;;;;DEMN;Demokratene;1,01751;333528;1654;980;2634;0,92193;0;0;
+11;Rogaland;;;;;FNB;Folkeaksjonen Nei til mer bompenger;0,12207;333528;155;161;316;0,12207;0;0;
+11;Rogaland;;;;;HELSE;Helsepartiet;0,19315;333528;278;222;500;-0,01792;0;0;
+11;Rogaland;;;;;INP;Industri- og Næringspartiet;0,63585;333528;1037;609;1646;0,63585;0;0;
+11;Rogaland;;;;;KRISTNE;Partiet De Kristne;0,54082;333528;759;641;1400;0,04063;0;0;
+11;Rogaland;;;;;LIBS;Liberalistene;0,16379;333528;229;195;424;-0,09267;0;0;
+11;Rogaland;;;;;PIR;Piratpartiet;0,07803;333528;92;110;202;-0,09878;0;0;
+11;Rogaland;;;;;PP;Pensjonistpartiet;0,51262;333528;961;366;1327;0,02438;0;0;
+11;Rogaland;;;;;PS;Partiet Sentrum;0,35192;333528;553;358;911;0,35192;0;0;
+12;Hordaland;;;;;A;Arbeiderpartiet;22,71874;382372;41994;26951;68945;-0,11974;4;0;
+12;Hordaland;;;;;SV;SV - Sosialistisk Venstreparti;8,86441;382372;17592;9309;26901;1,84558;1;0;
+12;Hordaland;;;;;RØDT;Rødt;4,6627;382372;9491;4659;14150;2,51868;1;0;
+12;Hordaland;;;;;SP;Senterpartiet;9,87933;382372;16588;13393;29981;2,31261;2;0;
+12;Hordaland;;;;;KRF;Kristelig Folkeparti;4,85185;382372;8869;5855;14724;-0,67835;1;0;
+12;Hordaland;;;;;MDG;Miljøpartiet De Grønne;3,93447;382372;8542;3398;11940;0,42606;0;0;
+12;Hordaland;;;;;V;Venstre;4,33747;382372;7899;5264;13163;-0,02527;1;1;
+12;Hordaland;;;;;H;Høyre;24,47738;382372;45860;28422;74282;-5,90906;4;0;
+12;Hordaland;;;;;FRP;Fremskrittspartiet;12,63774;382372;21324;17028;38352;-2,45283;2;0;
+12;Hordaland;;;;;AAN;Alliansen - Alternativ for Norge;0,06788;382372;113;93;206;0,06788;0;0;
+12;Hordaland;;;;;DEMN;Demokratene;0,9477;382372;1911;965;2876;0,83785;0;0;
+12;Hordaland;;;;;FNB;Folkeaksjonen Nei til mer bompenger;0,1328;382372;228;175;403;0,1328;0;0;
+12;Hordaland;;;;;HELSE;Helsepartiet;0,16146;382372;315;175;490;-0,08804;0;0;
+12;Hordaland;;;;;INP;Industri- og Næringspartiet;0,57271;382372;1129;609;1738;0,57271;0;0;
+12;Hordaland;;;;;KRISTNE;Partiet De Kristne;0,45606;382372;879;505;1384;0,0016;0;0;
+12;Hordaland;;;;;KYST;Kystpartiet;0,03526;382372;69;38;107;-0,1131;0;0;
+12;Hordaland;;;;;LIBS;Liberalistene;0,17366;382372;299;228;527;-0,02762;0;0;
+12;Hordaland;;;;;NKP;Norges Kommunistiske Parti;0,02537;382372;48;29;77;0,02537;0;0;
+12;Hordaland;;;;;PIR;Piratpartiet;0,08633;382372;149;113;262;-0,07643;0;0;
+12;Hordaland;;;;;PP;Pensjonistpartiet;0,75328;382372;1731;555;2286;0,75328;0;0;
+12;Hordaland;;;;;PS;Partiet Sentrum;0,19475;382372;369;222;591;0,19475;0;0;
+12;Hordaland;;;;;GT;Generasjonspartiet;0,02867;382372;50;37;87;0,02867;0;0;
+14;Sogn og Fjordane;;;;;A;Arbeiderpartiet;26,45855;78297;9420;7006;16426;1,90116;1;0;
+14;Sogn og Fjordane;;;;;SV;SV - Sosialistisk Venstreparti;5,91959;78297;2440;1235;3675;1,44364;0;0;
+14;Sogn og Fjordane;;;;;RØDT;Rødt;4,00921;78297;1618;871;2489;2,73773;0;0;
+14;Sogn og Fjordane;;;;;SP;Senterpartiet;28,40437;78297;9413;8221;17634;-1,28404;1;0;
+14;Sogn og Fjordane;;;;;KRF;Kristelig Folkeparti;3,84814;78297;1378;1011;2389;-0,47009;0;0;
+14;Sogn og Fjordane;;;;;MDG;Miljøpartiet De Grønne;2,48381;78297;1078;464;1542;0,21445;0;0;
+14;Sogn og Fjordane;;;;;V;Venstre;3,439;78297;1263;872;2135;-0,63619;1;1;
+14;Sogn og Fjordane;;;;;H;Høyre;13,73828;78297;4903;3626;8529;-4,88658;1;0;
+14;Sogn og Fjordane;;;;;FRP;Fremskrittspartiet;9,29577;78297;2990;2781;5771;-0,60734;0;0;
+14;Sogn og Fjordane;;;;;AAN;Alliansen - Alternativ for Norge;0,06926;78297;24;19;43;0,06926;0;0;
+14;Sogn og Fjordane;;;;;DEMN;Demokratene;0,72968;78297;278;175;453;0,66047;0;0;
+14;Sogn og Fjordane;;;;;HELSE;Helsepartiet;0,14336;78297;55;34;89;-0,03368;0;0;
+14;Sogn og Fjordane;;;;;INP;Industri- og Næringspartiet;0,47196;78297;184;109;293;0,47196;0;0;
+14;Sogn og Fjordane;;;;;KRISTNE;Partiet De Kristne;0,40753;78297;161;92;253;-0,00289;0;0;
+14;Sogn og Fjordane;;;;;LIBS;Liberalistene;0,07571;78297;22;25;47;-0,01442;0;0;
+14;Sogn og Fjordane;;;;;PP;Pensjonistpartiet;0,27866;78297;115;58;173;0,27866;0;0;
+14;Sogn og Fjordane;;;;;PS;Partiet Sentrum;0,22712;78297;83;58;141;0,22712;0;0;
+15;Møre og Romsdal;;;;;A;Arbeiderpartiet;20,16576;192416;18340;11588;29928;-1,16818;2;0;
+15;Møre og Romsdal;;;;;SV;SV - Sosialistisk Venstreparti;6,29405;192416;6079;3262;9341;2,3849;1;1;
+15;Møre og Romsdal;;;;;RØDT;Rødt;3,3239;192416;3406;1527;4933;2,09298;0;0;
+15;Møre og Romsdal;;;;;SP;Senterpartiet;17,47726;192416;14611;11327;25938;4,51753;2;0;
+15;Møre og Romsdal;;;;;KRF;Kristelig Folkeparti;5,32646;192416;4685;3220;7905;-0,8091;0;0;
+15;Møre og Romsdal;;;;;MDG;Miljøpartiet De Grønne;2,49107;192416;2722;975;3697;0,33611;0;0;
+15;Møre og Romsdal;;;;;V;Venstre;2,9405;192416;2662;1702;4364;-0,52159;0;0;
+15;Møre og Romsdal;;;;;H;Høyre;16,2543;192416;14780;9343;24123;-7,36253;1;0;
+15;Møre og Romsdal;;;;;FRP;Fremskrittspartiet;22,06455;192416;18591;14155;32746;-0,21997;2;0;
+15;Møre og Romsdal;;;;;AAN;Alliansen - Alternativ for Norge;0,0849;192416;68;58;126;0,0849;0;0;
+15;Møre og Romsdal;;;;;DEMN;Demokratene;1,18051;192416;1191;561;1752;1,09274;0;0;
+15;Møre og Romsdal;;;;;FNB;Folkeaksjonen Nei til mer bompenger;0,05323;192416;43;36;79;0,05323;0;0;
+15;Møre og Romsdal;;;;;HELSE;Helsepartiet;0,18867;192416;173;107;280;0,18867;0;0;
+15;Møre og Romsdal;;;;;INP;Industri- og Næringspartiet;0,73849;192416;744;352;1096;0,73849;0;0;
+15;Møre og Romsdal;;;;;KRISTNE;Partiet De Kristne;0,54713;192416;478;334;812;0,04292;0;0;
+15;Møre og Romsdal;;;;;LIBS;Liberalistene;0,11792;192416;100;75;175;-0,00116;0;0;
+15;Møre og Romsdal;;;;;PP;Pensjonistpartiet;0,53231;192416;612;178;790;-0,01068;0;0;
+15;Møre og Romsdal;;;;;PS;Partiet Sentrum;0,21899;192416;204;121;325;0,21899;0;0;
+16;Sør-Trøndelag;;;;;A;Arbeiderpartiet;29,81882;247589;35581;22040;57621;-2,97068;3;0;
+16;Sør-Trøndelag;;;;;SV;SV - Sosialistisk Venstreparti;9,1261;247589;12386;5249;17635;1,42076;1;0;
+16;Sør-Trøndelag;;;;;RØDT;Rødt;5,6159;247589;7435;3417;10852;2,67634;1;1;
+16;Sør-Trøndelag;;;;;SP;Senterpartiet;15,10115;247589;14988;14193;29181;4,42489;2;0;
+16;Sør-Trøndelag;;;;;KRF;Kristelig Folkeparti;2,17919;247589;2562;1649;4211;-0,55684;0;0;
+16;Sør-Trøndelag;;;;;MDG;Miljøpartiet De Grønne;4,79618;247589;6995;2273;9268;0,90061;0;0;
+16;Sør-Trøndelag;;;;;V;Venstre;4,36511;247589;5258;3177;8435;0,30286;0;0;
+16;Sør-Trøndelag;;;;;H;Høyre;16,47562;247589;19737;12100;31837;-4,27236;2;0;
+16;Sør-Trøndelag;;;;;FRP;Fremskrittspartiet;8,61636;247589;9183;7467;16650;-3,07146;1;0;
+16;Sør-Trøndelag;;;;;AAN;Alliansen - Alternativ for Norge;0,11178;247589;146;70;216;0,11178;0;0;
+16;Sør-Trøndelag;;;;;DEMN;Demokratene;0,89165;247589;1085;638;1723;0,79924;0;0;
+16;Sør-Trøndelag;;;;;HELSE;Helsepartiet;0,17077;247589;203;127;330;-0,052;0;0;
+16;Sør-Trøndelag;;;;;INP;Industri- og Næringspartiet;0,34051;247589;407;251;658;0,34051;0;0;
+16;Sør-Trøndelag;;;;;KRISTNE;Partiet De Kristne;0,15784;247589;178;127;305;0,03407;0;0;
+16;Sør-Trøndelag;;;;;LIBS;Liberalistene;0,12782;247589;150;97;247;-0,0746;0;0;
+16;Sør-Trøndelag;;;;;NKP;Norges Kommunistiske Parti;0,0326;247589;35;28;63;0,0326;0;0;
+16;Sør-Trøndelag;;;;;PIR;Piratpartiet;0,10971;247589;112;100;212;-0,08886;0;0;
+16;Sør-Trøndelag;;;;;PP;Pensjonistpartiet;1,73414;247589;2542;809;3351;0,03828;0;0;
+16;Sør-Trøndelag;;;;;PS;Partiet Sentrum;0,22873;247589;264;178;442;0,22873;0;0;
+17;Nord-Trøndelag;;;;;A;Arbeiderpartiet;33,57123;100649;15325;10405;25730;-0,63265;2;0;
+17;Nord-Trøndelag;;;;;SV;SV - Sosialistisk Venstreparti;5,72655;100649;2878;1511;4389;0,68817;0;0;
+17;Nord-Trøndelag;;;;;RØDT;Rødt;3,95992;100649;1966;1069;3035;2,32509;0;0;
+17;Nord-Trøndelag;;;;;SP;Senterpartiet;28,82064;100649;10875;11214;22089;4,39385;2;0;
+17;Nord-Trøndelag;;;;;KRF;Kristelig Folkeparti;2,252;100649;1057;669;1726;-0,44509;0;0;
+17;Nord-Trøndelag;;;;;MDG;Miljøpartiet De Grønne;1,85796;100649;1047;377;1424;0,09051;0;0;
+17;Nord-Trøndelag;;;;;V;Venstre;2,0315;100649;910;647;1557;-0,21034;1;1;
+17;Nord-Trøndelag;;;;;H;Høyre;10,59588;100649;4795;3326;8121;-4,15584;0;0;
+17;Nord-Trøndelag;;;;;FRP;Fremskrittspartiet;8,019;100649;3238;2908;6146;-3,47581;0;0;
+17;Nord-Trøndelag;;;;;AAN;Alliansen - Alternativ for Norge;0,10308;100649;47;32;79;0,10308;0;0;
+17;Nord-Trøndelag;;;;;DEMN;Demokratene;0,98378;100649;481;273;754;0,85881;0;0;
+17;Nord-Trøndelag;;;;;FNB;Folkeaksjonen Nei til mer bompenger;0,03001;100649;14;9;23;0,03001;0;0;
+17;Nord-Trøndelag;;;;;HELSE;Helsepartiet;0,18919;100649;77;68;145;-0,187;0;0;
+17;Nord-Trøndelag;;;;;INP;Industri- og Næringspartiet;0,46841;100649;212;147;359;0,46841;0;0;
+17;Nord-Trøndelag;;;;;KRISTNE;Partiet De Kristne;0,23355;100649;120;59;179;0,01804;0;0;
+17;Nord-Trøndelag;;;;;LIBS;Liberalistene;0,07829;100649;30;30;60;-0,02118;0;0;
+17;Nord-Trøndelag;;;;;PIR;Piratpartiet;0,07176;100649;28;27;55;-0,07106;0;0;
+17;Nord-Trøndelag;;;;;PP;Pensjonistpartiet;0,83895;100649;459;184;643;0,24853;0;0;
+17;Nord-Trøndelag;;;;;PS;Partiet Sentrum;0,16831;100649;84;45;129;0,16831;0;0;
+18;Nordland;;;;;A;Arbeiderpartiet;28,76524;182097;22033;16578;38611;2,73173;3;0;
+18;Nordland;;;;;SV;SV - Sosialistisk Venstreparti;7,16691;182097;5853;3767;9620;0,16443;1;0;
+18;Nordland;;;;;RØDT;Rødt;5,41839;182097;4565;2708;7273;2,52997;1;1;
+18;Nordland;;;;;SP;Senterpartiet;21,20645;182097;14556;13909;28465;2,56153;2;0;
+18;Nordland;;;;;KRF;Kristelig Folkeparti;1,96457;182097;1401;1236;2637;-0,46452;0;0;
+18;Nordland;;;;;MDG;Miljøpartiet De Grønne;2,33781;182097;2061;1077;3138;0,16909;0;0;
+18;Nordland;;;;;V;Venstre;2,48979;182097;1928;1414;3342;-0,10572;0;0;
+18;Nordland;;;;;H;Høyre;15,29636;182097;11563;8969;20532;-4,87672;1;0;
+18;Nordland;;;;;FRP;Fremskrittspartiet;12,17183;182097;8278;8060;16338;-4,2844;1;0;
+18;Nordland;;;;;AAN;Alliansen - Alternativ for Norge;0,07376;182097;55;44;99;0,07376;0;0;
+18;Nordland;;;;;DEMN;Demokratene;1,34622;182097;1066;741;1807;1,20864;0;0;
+18;Nordland;;;;;HELSE;Helsepartiet;0,25256;182097;167;172;339;-0,20234;0;0;
+18;Nordland;;;;;INP;Industri- og Næringspartiet;0,42987;182097;328;249;577;0,42987;0;0;
+18;Nordland;;;;;KRISTNE;Partiet De Kristne;0,23393;182097;194;120;314;0,0209;0;0;
+18;Nordland;;;;;LIBS;Liberalistene;0,13038;182097;80;95;175;-0,0686;0;0;
+18;Nordland;;;;;NKP;Norges Kommunistiske Parti;0,02831;182097;17;21;38;-0,01533;0;0;
+18;Nordland;;;;;PIR;Piratpartiet;0,09387;182097;60;66;126;-0,06146;0;0;
+18;Nordland;;;;;PP;Pensjonistpartiet;0,43657;182097;373;213;586;0,43657;0;0;
+18;Nordland;;;;;PS;Partiet Sentrum;0,1572;182097;124;87;211;0,1572;0;0;
+19;Troms Romsa;;;;;A;Arbeiderpartiet;27,14702;124791;12874;12294;25168;3,11935;2;0;
+19;Troms Romsa;;;;;SV;SV - Sosialistisk Venstreparti;10,8176;124791;5950;4079;10029;0,70121;1;1;
+19;Troms Romsa;;;;;RØDT;Rødt;4,80531;124791;2571;1884;4455;2,52025;0;0;
+19;Troms Romsa;;;;;SP;Senterpartiet;19,08963;124791;8154;9544;17698;4,11214;1;0;
+19;Troms Romsa;;;;;KRF;Kristelig Folkeparti;2,22414;124791;913;1149;2062;-0,41998;0;0;
+19;Troms Romsa;;;;;MDG;Miljøpartiet De Grønne;2,98565;124791;1774;994;2768;0,14388;0;0;
+19;Troms Romsa;;;;;V;Venstre;2,4787;124791;1221;1077;2298;-0,45751;0;0;
+19;Troms Romsa;;;;;H;Høyre;13,47535;124791;6736;5757;12493;-7,06818;1;0;
+19;Troms Romsa;;;;;FRP;Fremskrittspartiet;14,02006;124791;5977;7021;12998;-4,21207;1;0;
+19;Troms Romsa;;;;;AAN;Alliansen - Alternativ for Norge;0,07119;124791;33;33;66;0,07119;0;0;
+19;Troms Romsa;;;;;DEMN;Demokratene;1,47773;124791;788;582;1370;1,34706;0;0;
+19;Troms Romsa;;;;;FNB;Folkeaksjonen Nei til mer bompenger;0,14022;124791;47;83;130;0,14022;0;0;
+19;Troms Romsa;;;;;HELSE;Helsepartiet;0,24269;124791;107;118;225;-0,07465;0;0;
+19;Troms Romsa;;;;;INP;Industri- og Næringspartiet;0,34408;124791;168;151;319;0,34408;0;0;
+19;Troms Romsa;;;;;KRISTNE;Partiet De Kristne;0,20063;124791;104;82;186;0,02494;0;0;
+19;Troms Romsa;;;;;LIBS;Liberalistene;0,2017;124791;85;102;187;-0,12771;0;0;
+19;Troms Romsa;;;;;PIR;Piratpartiet;0,08953;124791;34;49;83;0,08953;0;0;
+19;Troms Romsa;;;;;PS;Partiet Sentrum;0,18876;124791;84;91;175;0,18876;0;0;
+20;Finnmark Finnmárku;;;;;A;Arbeiderpartiet;31,36752;54617;7253;4975;12228;-0,60452;2;0;
+20;Finnmark Finnmárku;;;;;SV;SV - Sosialistisk Venstreparti;6,19501;54617;1541;874;2415;-2,63842;0;0;
+20;Finnmark Finnmárku;;;;;RØDT;Rødt;5,02527;54617;1297;662;1959;3,47807;0;0;
+20;Finnmark Finnmárku;;;;;SP;Senterpartiet;18,35928;54617;4033;3124;7157;3,47841;1;0;
+20;Finnmark Finnmárku;;;;;KRF;Kristelig Folkeparti;1,66226;54617;377;271;648;-0,41438;0;0;
+20;Finnmark Finnmárku;;;;;MDG;Miljøpartiet De Grønne;2,28818;54617;665;227;892;0,13957;0;0;
+20;Finnmark Finnmárku;;;;;V;Venstre;1,44678;54617;349;215;564;-2,77846;0;0;
+20;Finnmark Finnmárku;;;;;H;Høyre;6,83375;54617;1644;1020;2664;-7,55881;0;0;
+20;Finnmark Finnmárku;;;;;FRP;Fremskrittspartiet;10,82523;54617;2289;1931;4220;-7,15004;1;1;
+20;Finnmark Finnmárku;;;;;AAN;Alliansen - Alternativ for Norge;0,12826;54617;31;19;50;0,12826;0;0;
+20;Finnmark Finnmárku;;;;;DEMN;Demokratene;1,711;54617;412;255;667;1,52853;0;0;
+20;Finnmark Finnmárku;;;;;HELSE;Helsepartiet;0,28987;54617;74;39;113;-0,06737;0;0;
+20;Finnmark Finnmárku;;;;;INP;Industri- og Næringspartiet;0,45917;54617;119;60;179;0,45917;0;0;
+20;Finnmark Finnmárku;;;;;KRISTNE;Partiet De Kristne;0,354;54617;71;67;138;-0,00838;0;0;
+20;Finnmark Finnmárku;;;;;LIBS;Liberalistene;0,17957;54617;46;24;70;-0,04146;0;0;
+20;Finnmark Finnmárku;;;;;PS;Partiet Sentrum;0,177;54617;44;25;69;0,177;0;0;
+20;Finnmark Finnmárku;;;;;PF;Pasientfokus;12,69784;54617;3548;1402;4950;12,69784;1;0;`;
+
+const translate2021 = {
+	"Finnmark Finnmárku": "Finnmark",
+	"Troms Romsa": "Troms",
+	"A": "AP",
+	"KRISTNE": "PDK",
+	"RØDT": "R",
+	"LIBS": "LIB",
+	"DEMN": "ND",
+	"GENE": "GEN",
+	"GT": "GEN", // both GENE and GT maps to GEN (there is an error in the official results that counts Generasjonspartiet as two different parties in two different districts)
+};
+
+const election2021 = {
+	"defaults": merge3({"friends": "SV+AP+SP, KRF+V+H+FRP"}, DEFAULTS_BEFORE_2025, DEFAULTS_COMMON),
 
 	// https://www.regjeringen.no/no/dokumentarkiv/regjeringen-solberg/aktuelt-regjeringen-solberg/kmd/pressemeldinger/2020/fordeling-av-mandatene-ved-neste-stortingsvalg/id2699589/
 	"districts": {
@@ -424,5 +398,5 @@ var election2021 = {
 		"Finnmark": {"population": 75472, "area": 48631},
 	},
 
-	"defaults": merge3({"friends": "SV+AP+SP, KRF+V+H+FRP"}, DEFAULTS_BEFORE_2025, DEFAULTS_COMMON),
+	"votes": parseVotes(file2021, translate2021),
 };
