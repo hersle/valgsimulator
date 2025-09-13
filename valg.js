@@ -812,7 +812,9 @@ function showTab(tab) {
 function setURLFromInputs() {
 	const url = new URL(window.location.href);
 	for (const el of document.querySelectorAll("input, select")) {
-		url.searchParams.set(el.id, el.value);
+		if (el.id) { // avoid e.g. reset button with no ID
+			url.searchParams.set(el.id, el.value);
+		}
 	}
 	window.history.pushState({}, "", url.toString());
 }

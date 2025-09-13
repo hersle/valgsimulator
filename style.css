@@ -146,6 +146,16 @@ input, select {
 	border-radius: 0.25em;
 	box-sizing: border-box;
 }
+input[type="button"] {
+	border-color: transparent; /* same as background-color */
+	background-color: color-mix(in srgb, red, black 0%);
+}
+input[type="button"]:hover {
+	background-color: color-mix(in srgb, red, black 10%);
+}
+input[type="button"]:active {
+	background-color: color-mix(in srgb, red, black 20%);
+}
 
 input:invalid {
 	background-color: red;
