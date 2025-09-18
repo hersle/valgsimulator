@@ -111,6 +111,7 @@ h2 > a:not(:last-child) {
 
 h2 > a {
 	color: gray;
+	text-decoration: none;
 }
 h2 > a:hover {
 	color: dimgray;
